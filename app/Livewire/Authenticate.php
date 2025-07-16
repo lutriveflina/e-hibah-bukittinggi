@@ -2,6 +2,8 @@
 
 namespace App\Livewire;
 
+use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Authenticate extends Component
@@ -20,11 +22,15 @@ class Authenticate extends Component
     {
         $this->validate();
 
-        // Logic for authentication goes here
-        // For example, using Laravel's Auth facade:
-        // if (Auth::attempt(['email' => $this->email, 'password' => $this->password], $this->remember)) {
-        //     return redirect()->intended('dashboard');
-        // }
+        $credentials = [
+            'email' => $this->email,
+            'password' => $this->password,
+        ];
+        
+        if(Auth::attempt($credentials, $this->remember)) {
+            session()->regenerate();
+            return redirect()->route('dashboard');
+        }
 
         session()->flash('error', 'Invalid credentials.');
     }
@@ -32,10 +38,6 @@ class Authenticate extends Component
     public function mount()
     {
         // Initialize any properties or perform actions when the component is mounted
-    }
-
-    public function authentication(){
-        
     }
 
     public function render()

@@ -1,5 +1,3 @@
-
-
 $(function() {
 	"use strict";
 
@@ -11,11 +9,13 @@ $(function() {
 
 
 	$(function() {
+		
 		for (var e = window.location, o = $(".sidebar-wrapper .tab-content a").filter(function() {
 				return this.href == e
 			}).addClass("active");
-
+			
 			o.is("a");)
+			
 			
 			o = o.parent("").parent("").addClass("active show");
 			console.log(o[0].id.toString())
@@ -122,13 +122,6 @@ $(function() {
 		$("html").addClass("color-header headercolor8"), $("html").removeClass("headercolor1 headercolor2 headercolor4 headercolor5 headercolor6 headercolor7 headercolor3")
 	})
 
-
-	new PerfectScrollbar(".iconmenu")
-    new PerfectScrollbar(".textmenu")
-
-
-	new PerfectScrollbar(".header-message-list")
-    new PerfectScrollbar(".header-notifications-list")
 
 
 
