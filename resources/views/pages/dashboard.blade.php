@@ -340,3 +340,7 @@
         </div>
     </div><!--end row-->
 @endsection
+
+@push('scripts')
+    <script src="/assets/js/index5.js"></script>
+@endpush

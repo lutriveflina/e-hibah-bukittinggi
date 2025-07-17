@@ -9,4 +9,16 @@ class MainController extends Controller
     public function dasboard(){
         return view('pages.dashboard');
     }
+
+    public function permission(){
+        return view('pages.permission');
+    }
+
+    public function role(){
+        return view('pages.role');
+    }
+
+    public function roleCreate(){
+        return view('pages.role');
+    }
 }

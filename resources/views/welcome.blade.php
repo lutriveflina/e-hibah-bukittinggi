@@ -20,7 +20,7 @@
     <!-- loader-->
     <link href="/assets/css/pace.min.css" rel="stylesheet" />
 
-    <title>Skodash - Bootstrap 5 Admin Template</title>
+    <title>E-Hibah | Login</title>
 </head>
 
 <body>

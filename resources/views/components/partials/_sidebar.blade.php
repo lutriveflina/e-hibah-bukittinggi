@@ -85,8 +85,14 @@
                         </div>
                         <small class="mb-0">Halamant Utama</small>
                     </div>
-                    <a href="{{ route('dashboard') }}" class="list-group-item active"><i class="bi bi-house"></i>
+                    <a href="{{ route('dashboard') }}" class="list-group-item"><i class="bi bi-house"></i>
                         Dashboard</a>
+                    <a href="{{ route('permission') }}" class="list-group-item"><i class="bi bi-person-lock"></i>
+                        Permission</a>
+                    <a href="{{ route('role') }}" class="list-group-item"><i class="bi bi-person-badge"></i>
+                        Role</a>
+                    <a href="{{ route('user.index') }}" class="list-group-item"><i class="bi bi-people"></i>
+                        Pengguna</a>
                 </div>
             </div>
             <div class="tab-pane fade" id="pills-application">
