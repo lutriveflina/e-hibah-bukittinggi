@@ -31,9 +31,9 @@
                                             <input wire:model='name' type="text" class="form-control"
                                                 id="permissionName" placeholder="Masukkan nama permission">
                                         </div>
-                                        <div class="mb-3">
+                                        <div wire:ignore class="mb-3">
                                             <label for="selectedPermissions" class="form-label">Permission</label>
-                                            <select wire:ignore class="multiple-select" id="selectedPermissions"
+                                            <select class="multiple-select" id="selectedPermissions"
                                                 data-placeholder="Choose anything" multiple="multiple">
                                                 @foreach ($permissions as $item)
                                                     <option value="{{ $item->name }}">{{ $item->name }}</option>
@@ -82,7 +82,7 @@
                             <tr wire:key="{{ $item->id }}">
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->guard_name }}</td>
-                                <td><button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#editRole"><i
+                                <td><button wire:click='edit({{ $item->id }})' class="btn btn-sm btn-warning"><i
                                             class="bi bi-pencil-square"></i> Edit</button>
                                 </td>
                             </tr>
@@ -100,35 +100,114 @@
         </div>
     </div>
 
+    <div wire:ignore.self class="modal fade" id="editRole" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Ubah Data Role</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="roleName" class="form-label">Nama Role</label>
+                                <input wire:model='name' type="text" class="form-control" id="permissionName"
+                                    placeholder="Masukkan nama permission">
+                            </div>
+                            <div wire:ignore class="mb-3">
+                                <label for="selectedPermissions" class="form-label">Permission</label>
+                                <select class="multiple-select" id="selectedPermissions"
+                                    data-placeholder="Choose anything" multiple="multiple">
+                                    @foreach ($permissions as $item)
+                                        <option value="{{ $item->name }}"
+                                            @if (in_array($item->name, $selectedPermissions)) selected @endif>{{ $item->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="guard_name" class="form-label">Guard Name</label>
+                                <select wire:model='guard_name' class="form-control" id="guard_name">
+                                    <option value="web">Pilih Guard Name</option>
+                                    <option selected value="web">Web</option>
+                                    <option value="api">API</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button wire:click.prevent='updateRole' type="button" class="btn btn-warning">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 </div>
 @push('scripts')
     <script>
-        document.addEventListener('livewire:load', function() {
-            const modal = $('#createRole');
-            const select = $('#selectedPermissions');
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM is ready, init Select2 manually here.');
 
-            modal.on('shown.bs.modal', function() {
-                select.select2({
-                    dropdownParent: modal,
+            // Bisa langsung inisialisasi Select2 juga di sini
+            $('#createRole').on('shown.bs.modal', function() {
+                $('#selectedPermissions').select2({
+                    dropdownParent: $('#createRole'),
                     placeholder: 'Choose anything',
+                    allowClear: true,
+                    width: '100%'
+                }).on('change', function() {
+                    const selected = $(this).val();
+                    console.log(selected);
+
+                    Livewire.dispatch('select2-updated', {
+                        data: $(this).val()
+                    });
+
+                    // Ketika modal ditutup, reset select2 jika perlu
+                    $('#createRole').on('hidden.bs.modal', function() {
+                        selectEl.val(null).trigger('change');
+                    });
+                });
+            });
+
+            const selectEl = $('#editSelectedPermissions');
+
+            function initSelect2() {
+                selectEl.select2({
+                    dropdownParent: $('#editRole'),
+                    placeholder: 'Pilih permissions',
                     allowClear: true,
                     width: '100%'
                 });
 
-                // 🧠 Kirim data ke Livewire secara manual
-                select.on('change', function() {
-                    const selectedValues = $(this).val(); // array of value
-                    console.log(selectedValues);
-
-                    @this.set('selectedPermissions', selectedValues);
+                selectEl.on('change', function() {
+                    Livewire.dispatch('select2-updated', {
+                        value: $(this).val()
+                    });
                 });
+            }
+
+            // buka modal setelah data terload
+            Livewire.on('show-edit-modal', () => {
+                $('#editRole').modal('show');
+                setTimeout(() => {
+                    initSelect2();
+                    selectEl.val(@this.get('selectedPermissions')).trigger('change');
+                }, 200);
             });
 
-            // Optional: Destroy select2 saat modal ditutup
-            modal.on('hidden.bs.modal', function() {
-                select.select2('destroy');
+            // tutup modal setelah update
+            Livewire.on('close-edit-modal', () => {
+                $('#editRole').modal('hide');
+                selectEl.off('change');
+                selectEl.select2('destroy');
             });
+
         });
     </script>
 @endpush

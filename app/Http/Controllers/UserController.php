@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -9,7 +10,10 @@ class UserController extends Controller
     public function index()
     {
         // Logic to retrieve and display user information
-        return view('pages.user.index');
+        $users = User::with('has_role', 'lembaga', 'skpd')->orderBy('id_role')->get();
+        return view('pages.user.index', [
+            'users' => $users,
+        ]);
     }
 
     public function create(){

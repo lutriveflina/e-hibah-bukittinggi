@@ -4,16 +4,21 @@ namespace App\Livewire;
 
 use App\Models\Permission;
 use App\Models\Role as ModelsRole;
+use Livewire\Attributes\On;
 use Livewire\Component;
 
 class Role extends Component
 {
     public $roles;
-    public $permissions;
+    public $permissions = [];
+    public $selectedPermissions = [];
 
+    public $roleId;
     public $name;
-    public $selectedPermissions;
     public $guard_name;
+    
+    protected $listeners = ['show-edit-modal'];
+    // protected $listeners = ['select2Updated' => 'updateSelectedPermissions'];
 
     public function mount()
     {
@@ -26,14 +31,18 @@ class Role extends Component
         return view('livewire.pages.role');
     }
 
-    public function save(){
-        // $this->validate([
-        //     'name' => 'required|string|max:255',
-        //     'guard_name' => 'required|string|max:255',
-        //     'selectedPermissions' => 'array',
-        // ]);
+    #[On('select2-updated')]
+    public function updateSelectedPermissions($data)
+    {
+        $this->selectedPermissions = $data;
+    }
 
-        dd($this->selectedPermissions);
+    public function save(){
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'guard_name' => 'required|string|max:255',
+            'selectedPermissions' => 'array',
+        ]);
 
         ModelsRole::create([
             'name' => $this->name,
@@ -44,7 +53,36 @@ class Role extends Component
         $this->reset(['name', 'guard_name', 'selectedPermissions']);
     }
 
-    public function edit($roleID){
+    public function edit($roleId)
+    {
+        $role = ModelsRole::findOrFail($roleId);
 
+        $this->roleId = $role->id;
+        $this->name = $role->name;
+        $this->guard_name = $role->guard_name;
+        $this->selectedPermissions = $role->permissions->pluck('name')->toArray();
+
+        // buka modal setelah data siap
+        $this->dispatch('show-edit-modal');
+    }
+
+    public function updateRole()
+    {
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'guard_name' => 'required|string',
+            'selectedPermissions' => 'array',
+        ]);
+
+        $role = ModelsRole::findOrFail($this->roleId);
+        $role->update([
+            'name' => $this->name,
+            'guard_name' => $this->guard_name,
+        ]);
+
+        $role->syncPermissions($this->selectedPermissions);
+
+        session()->flash('message', 'Role berhasil diperbarui.');
+        $this->dispatch('close-edit-modal');
     }
 }

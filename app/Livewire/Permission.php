@@ -28,7 +28,7 @@ class Permission extends Component
         ]);
 
         ModelsPermission::create([
-            'name' => $this->name,
+            'name' => ucwords($this->name),
             'guard_name' => $this->guard_name,
         ]);
 

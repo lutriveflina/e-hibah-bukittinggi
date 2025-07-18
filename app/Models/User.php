@@ -55,6 +55,11 @@ class User extends Authenticatable
     //     return $this->belongsTo(Role::class, 'id_role');
     // }
 
+    public function has_role()
+    {
+        return $this->belongsTo(Role::class, 'id_role');
+    }
+
     public function skpd()
     {
         return $this->belongsTo(Skpd::class, 'id_skpd');

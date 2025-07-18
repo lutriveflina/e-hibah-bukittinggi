@@ -17,8 +17,4 @@ class MainController extends Controller
     public function role(){
         return view('pages.role');
     }
-
-    public function roleCreate(){
-        return view('pages.role');
-    }
 }

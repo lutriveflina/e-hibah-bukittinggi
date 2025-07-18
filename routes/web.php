@@ -14,5 +14,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
     Route::get('/permission', [MainController::class, 'permission'])->name('permission');
     Route::get('/role', [MainController::class, 'role'])->name('role');
-    Route::get('/role-create', [MainController::class, 'roleCreate'])->name('role.create');
 });
