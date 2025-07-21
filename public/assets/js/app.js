@@ -1,4 +1,5 @@
 $(function() {
+	
 	"use strict";
 
   // Tooltops
@@ -9,17 +10,31 @@ $(function() {
 
 
 	$(function() {
+
+		var e = window.location, o = $(".sidebar-wrapper .tab-content a");
+		o.each(function(){
+			if(this.href == e || this.href == e.origin + "/" + e.pathname.split("/")[1]) {
+				$(this).addClass("active");
+				var t = o.is("a");
+				var parent_app = $(this).parent("").parent("");
+				
+				
+				parent_app.addClass("active show");
+				var tab = "#" + parent_app[0].id.toString()
+				$("[data-bs-target='" + tab + "']").addClass('active')
+			}
+		})
 		
-		for (var e = window.location, o = $(".sidebar-wrapper .tab-content a").filter(function() {
-				return this.href == e
-			}).addClass("active");
+		// for (var e = window.location, o = $(".sidebar-wrapper .tab-content a").filter(function() {
+		// 		return this.href == e || this.href == e.origin + "/" + e.pathname.split("/")[1]
+		// 	}).addClass("active");
 			
-			o.is("a");)
+		// 	o.is("a");)
 			
 			
-			o = o.parent("").parent("").addClass("active show");
-			var tab = "#" + o[0].id.toString()
-			$("[data-bs-target='" + tab + "']").addClass('active')
+		// 	o = o.parent("").parent("").addClass("active show");
+		// 	var tab = "#" + o[0].id.toString()
+		// 	$("[data-bs-target='" + tab + "']").addClass('active')
 			
 		}); 
 

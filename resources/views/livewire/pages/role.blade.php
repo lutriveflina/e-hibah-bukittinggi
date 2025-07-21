@@ -68,7 +68,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <div wire:ignore class="table-responsive">
                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
@@ -100,7 +100,7 @@
         </div>
     </div>
 
-    <div wire:ignore.self class="modal fade" id="editRole" tabindex="-1" aria-hidden="true">
+    <div wire:ignore.self class="modal fade" id="editRoleModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-warning">
@@ -117,7 +117,7 @@
                             </div>
                             <div wire:ignore class="mb-3">
                                 <label for="selectedPermissions" class="form-label">Permission</label>
-                                <select class="multiple-select" id="selectedPermissions"
+                                <select class="multiple-select" id="editSelectedPermissions"
                                     data-placeholder="Choose anything" multiple="multiple">
                                     @foreach ($permissions as $item)
                                         <option value="{{ $item->name }}"
@@ -151,8 +151,6 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOM is ready, init Select2 manually here.');
-
             // Bisa langsung inisialisasi Select2 juga di sini
             $('#createRole').on('shown.bs.modal', function() {
                 $('#selectedPermissions').select2({
@@ -162,7 +160,6 @@
                     width: '100%'
                 }).on('change', function() {
                     const selected = $(this).val();
-                    console.log(selected);
 
                     Livewire.dispatch('select2-updated', {
                         data: $(this).val()
@@ -175,37 +172,29 @@
                 });
             });
 
-            const selectEl = $('#editSelectedPermissions');
+            Livewire.on('editRole', function() {
+                $('#editRoleModal').modal('show');
 
-            function initSelect2() {
-                selectEl.select2({
-                    dropdownParent: $('#editRole'),
-                    placeholder: 'Pilih permissions',
-                    allowClear: true,
-                    width: '100%'
+                $('#editRoleModal').on('shown.bs.modal', function() {
+                    $('#editSelectedPermissions').select2({
+                        dropdownParent: $('#editRoleModal'),
+                        placeholder: 'Choose anything',
+                        allowClear: true,
+                        width: '100%'
+                    }).on('change', function() {
+                        const selected = $(this).val();
+
+                        Livewire.dispatch('select2-updated', {
+                            data: $(this).val()
+                        });
+                    }).val(@this.get('selectedPermissions')).trigger('change');
                 });
 
-                selectEl.on('change', function() {
-                    Livewire.dispatch('select2-updated', {
-                        value: $(this).val()
-                    });
-                });
-            }
-
-            // buka modal setelah data terload
-            Livewire.on('show-edit-modal', () => {
-                $('#editRole').modal('show');
-                setTimeout(() => {
-                    initSelect2();
-                    selectEl.val(@this.get('selectedPermissions')).trigger('change');
-                }, 200);
             });
 
-            // tutup modal setelah update
-            Livewire.on('close-edit-modal', () => {
-                $('#editRole').modal('hide');
-                selectEl.off('change');
-                selectEl.select2('destroy');
+            Livewire.on('closeModal', function() {
+                $('#createRole').modal('hide');
+                $('#editRoleModal').modal('hide');
             });
 
         });

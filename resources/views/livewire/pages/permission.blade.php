@@ -45,8 +45,9 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button wire:click.prevent='save' type="button" class="btn btn-primary">Save
-                                    changes</button>
+                                <button wire:click.prevent='save' type="button" class="btn btn-primary">Simpan dan
+                                    Tambah</button>
+                                <button wire:click.prevent='save' type="button" class="btn btn-success">Simpan</button>
                             </div>
                         </div>
                     </div>
@@ -59,7 +60,7 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="table-responsive">
+            <div wire:ignore class="table-responsive">
                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                     <thead>
                         <tr>
@@ -73,7 +74,9 @@
                             <tr wire:key="{{ $item->id }}">
                                 <td>{{ $item->name }}</td>
                                 <td>{{ $item->guard_name }}</td>
-                                <td></td>
+                                <td><button wire:click='edit({{ $item->id }})' class="btn btn-sm btn-warning"><i
+                                            class="bi bi-pencil-square"></i>
+                                        Edit</button></td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -88,4 +91,54 @@
             </div>
         </div>
     </div>
+    <div wire:ignore.self class="modal fade" id="editModalPermission" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title text-light">Ubah permission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="mb-3">
+                                <label for="permissionName" class="form-label">Nama Permission</label>
+                                <input wire:model='name' type="text" class="form-control" id="permissionName"
+                                    placeholder="Masukkan nama permission">
+                            </div>
+                            <div class="mb-3">
+                                <label for="guard_name" class="form-label">Guard Name</label>
+                                <select wire:model='guard_name' class="form-control" id="guard_name">
+                                    <option value="web">Pilih Guard Name</option>
+                                    <option selected value="web">Web</option>
+                                    <option value="api">API</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button wire:click.prevent='save' type="button" class="btn btn-primary">Save
+                        changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Livewire.on('editPermission', function() {
+                $('#editModalPermission').modal('show');
+            });
+
+            Livewire.on('closeModal', function() {
+                $("#exampleLargeModal").modal('hide');
+                $('#editModalPermission').modal('hide');
+            });
+        })
+    </script>
+@endpush

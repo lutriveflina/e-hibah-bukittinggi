@@ -17,7 +17,7 @@ class Role extends Component
     public $name;
     public $guard_name;
     
-    protected $listeners = ['show-edit-modal'];
+    protected $listeners = ['editRole', 'closeModal'];
     // protected $listeners = ['select2Updated' => 'updateSelectedPermissions'];
 
     public function mount()
@@ -63,7 +63,7 @@ class Role extends Component
         $this->selectedPermissions = $role->permissions->pluck('name')->toArray();
 
         // buka modal setelah data siap
-        $this->dispatch('show-edit-modal');
+        $this->dispatch('editRole');
     }
 
     public function updateRole()
@@ -82,7 +82,8 @@ class Role extends Component
 
         $role->syncPermissions($this->selectedPermissions);
 
+        $this->reset(['roleId', 'name', 'guard_name', 'selectedPermissions']);
         session()->flash('message', 'Role berhasil diperbarui.');
-        $this->dispatch('close-edit-modal');
+        $this->dispatch('closeModal');
     }
 }

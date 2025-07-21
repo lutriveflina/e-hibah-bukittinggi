@@ -12,6 +12,12 @@ class UserPolicy
      */
     public function viewAny(User $user): bool
     {
+        
+    // \Log::info('UserPolicy::viewAny dipanggil untuk user ' . $user->id, [
+    //     'hasPermission' => $user->hasPermissionTo('View All User'),
+    // ]);
+
+    // return $user->hasPermissionTo('View All User');
         return $user->hasPermissionTo('View All User');
     }
 
