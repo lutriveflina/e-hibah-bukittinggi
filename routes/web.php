@@ -5,6 +5,7 @@ use App\Http\Controllers\LembagaController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
+use App\Livewire\Lembagas\IndexLembaga;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;

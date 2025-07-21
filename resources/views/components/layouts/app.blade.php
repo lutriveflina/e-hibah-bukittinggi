@@ -18,7 +18,8 @@
 
         @include('components.partials._sidebar')
         <main class="page-content">
-            @yield('content')
+            {{-- @yield('content') --}}
+            {{ $slot }}
         </main>
 
         <!--start overlay-->
