@@ -35,10 +35,10 @@
                         Permission</a>
                     <a href="{{ route('role') }}" class="list-group-item"><i class="bi bi-person-badge"></i>
                         Role</a>
-                    @can('viewAny', Auth::user())
+                    {{-- @can('viewAny', Auth::user()) --}}
                         <a href="{{ route('user.index') }}" class="list-group-item"><i class="bi bi-people"></i>
                             Pengguna</a>
-                    @endcan
+                    {{-- @endcan --}}
 
                 </div>
             </div>

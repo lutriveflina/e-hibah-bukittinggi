@@ -11,6 +11,7 @@ use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 Route::get('/', [AuthController::class, 'Authenticate'])->name('login');
 Route::middleware(['auth'])->group(function () {
@@ -23,4 +24,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
     Route::get('/lembaga/create', [LembagaController::class, 'create'])->name('lembaga.create');
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
+});
+
+Route::get('testing', function(){
+    $user = Auth::user();
+    $role = Role::find(1);
+    return [
+        'user' => $user,
+        'has_role' => $user->roles,
+        'role' => $role,
+    ];
 });

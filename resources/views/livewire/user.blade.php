@@ -113,8 +113,8 @@
     <div wire:ignore.self class="modal fade" id="edit-modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary">
-                    <h5 class="modal-title text-light">Ubah Data Pengguna</h5>
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title">Ubah Data Pengguna</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -152,8 +152,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button wire:click.prevent='store' type="button" class="btn btn-primary">Save
-                        changes</button>
+                    <button wire:click.prevent='update' type="button" class="btn btn-warning">Simpan Perubahan</button>
                 </div>
             </div>
         </div>
