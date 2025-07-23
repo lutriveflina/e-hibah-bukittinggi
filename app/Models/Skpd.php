@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Skpd extends Model
+class Skpd extends BaseModel
 {
+    
     protected $fillable = [
         'name',
     ];
@@ -18,5 +17,10 @@ class Skpd extends Model
     public function lembagas()
     {
         return $this->hasMany(Lembaga::class, 'id_skpd');
+    }
+
+    public function has_urusan()
+    {
+        return $this->hasMany(UrusanSkpd::class, 'id_skpd');
     }
 }

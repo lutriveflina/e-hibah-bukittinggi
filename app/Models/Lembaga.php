@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Lembaga extends Model
+class Lembaga extends BaseModel
 {
     protected $fillable = [
         'name',

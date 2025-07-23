@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Helpers\General;
 use App\Mail\SendUserPassword;
 use App\Models\Role;
+use App\Models\Skpd;
 use App\Models\User as ModelsUser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +18,7 @@ class User extends Component
     use AuthorizesRequests;
 
     public $users;
+    public $user;
     public $roles;
     public $skpds;
     public $userId;
@@ -29,14 +31,14 @@ class User extends Component
     public $role;
     public $skpd;
 
-    protected $listeners = ['editModal', 'closeModal'];
+    protected $listeners = ['createModal', 'editModal', 'closeModal', 'verifyingDelete'];
 
     public function mount()
     {
         // Authorize the user to view any user
         // $this->authorize('viewAny', Auth::user());
         $this->roles = Role::all();
-        $this->skpds = [];
+        $this->skpds = Skpd::orderBy('id', 'ASC')->get();
 
     }
 
@@ -46,21 +48,31 @@ class User extends Component
         return view('livewire.user');
     }
 
+    public function create()
+    {
+        $this->reset(['name', 'email', 'role', 'skpd']);
+        $this->dispatch('createModal');
+    }
+
     public function store(){
         $this->validate();
 
         $new_password = General::GeneratePassword(10);
 
-        // Optionally, send an email with the password
-        Mail::to($this->email)->send(new SendUserPassword($new_password));
-
         $role = Role::findOrFail($this->role);
+
+        // Optionally, send an email with the password
+        if($role->name == 'Admin Lembaga'){
+            Mail::to($this->email)->queue(new SendUserPassword($new_password));
+        }
+
         ModelsUser::create([
             'name' => $this->name,
             'email' => $this->email,
             'id_role' => $this->role,
             'password' => bcrypt($new_password),
-        ])->assigbnRoles([$role->name]);
+            'id_skpd' => $this->skpd ? $this->skpd : null,
+        ])->assignRole([$role->name]);
 
         $this->reset(['name', 'email', 'role']);
         session()->flash('message', 'User created successfully.');
@@ -74,6 +86,7 @@ class User extends Component
         $this->name = $user->name;
         $this->email = $user->email;
         $this->role = $user->id_role;
+        $this->skpd = $user->id_skpd;
 
         // Open the modal for editing
         $this->dispatch('editModal');
@@ -87,11 +100,27 @@ class User extends Component
             'name' => $this->name,
             'email' => $this->email,
             'id_role' => $this->role,
+            'id_skpd' => $this->skpd ? $this->skpd : null,
         ])->syncRoles([$role->name]);
 
         $this->reset(['roleId','name', 'email', 'role']);
         session()->flash('message', 'User created successfully.');
         $this->dispatch('closeModal');
+    }
+
+    public function delete()
+    {
+        $this->user->delete();
+
+        $this->reset(['user']);
+        session()->flash('message', 'User deleted successfully.');
+        $this->dispatch('closeModal');
+    }
+
+    public function verifyDelete($id)
+    {
+        $this->user = ModelsUser::with(['has_role', 'skpd', 'lembaga'])->where('id', $id)->first();
+        $this->dispatch('verifyingDelete');
     }
 
 

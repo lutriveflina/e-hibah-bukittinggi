@@ -27,7 +27,7 @@ class Role extends Component
 
     public function render()
     {
-        $this->roles = ModelsRole::all(); // Assuming you have a Role model
+        $this->roles = ModelsRole::orderBy('id', 'ASC')->get(); // Assuming you have a Role model
         return view('livewire.pages.role');
     }
 

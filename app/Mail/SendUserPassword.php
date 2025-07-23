@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendUserPassword extends Mailable
+class SendUserPassword extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 

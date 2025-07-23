@@ -45,7 +45,8 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button wire:click.prevent='save' type="button" class="btn btn-primary">Simpan dan
+                                <button wire:click.prevent='saveAndMore' type="button" class="btn btn-primary">Simpan
+                                    dan
                                     Tambah</button>
                                 <button wire:click.prevent='save' type="button" class="btn btn-success">Simpan</button>
                             </div>

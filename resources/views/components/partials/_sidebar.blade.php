@@ -31,14 +31,21 @@
                     </div>
                     <a href="{{ route('dashboard') }}" class="list-group-item"><i class="bi bi-house"></i>
                         Dashboard</a>
-                    <a href="{{ route('permission') }}" class="list-group-item"><i class="bi bi-person-lock"></i>
-                        Permission</a>
-                    <a href="{{ route('role') }}" class="list-group-item"><i class="bi bi-person-badge"></i>
-                        Role</a>
-                    {{-- @can('viewAny', Auth::user()) --}}
+                    @can('viewAny', App\Models\Permission::class)
+                        <a href="{{ route('permission') }}" class="list-group-item"><i class="bi bi-person-lock"></i>
+                            Permission</a>
+                    @endcan
+                    @can('viewAny', App\Models\Role::class)
+                        <a href="{{ route('role') }}" class="list-group-item"><i class="bi bi-person-badge"></i>
+                            Role</a>
+                    @endcan
+                    @can('viewAny', App\Models\Skpd::class)
+                        <a href="{{ route('skpd') }}" class="list-group-item"><i class="bi bi-building"></i>SKPD</a>
+                    @endcan
+                    @can('viewAny', App\Models\User::class)
                         <a href="{{ route('user.index') }}" class="list-group-item"><i class="bi bi-people"></i>
                             Pengguna</a>
-                    {{-- @endcan --}}
+                    @endcan
 
                 </div>
             </div>
