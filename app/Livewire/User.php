@@ -36,7 +36,7 @@ class User extends Component
     public function mount()
     {
         // Authorize the user to view any user
-        // $this->authorize('viewAny', Auth::user());
+        $this->authorize('viewAny', User::class);
         $this->roles = Role::all();
         $this->skpds = Skpd::orderBy('id', 'ASC')->get();
 
@@ -64,6 +64,8 @@ class User extends Component
         // Optionally, send an email with the password
         if($role->name == 'Admin Lembaga'){
             Mail::to($this->email)->queue(new SendUserPassword($new_password));
+        }else{
+            $new_password = 'bukittinggi2025';
         }
 
         ModelsUser::create([
@@ -101,7 +103,7 @@ class User extends Component
             'email' => $this->email,
             'id_role' => $this->role,
             'id_skpd' => $this->skpd ? $this->skpd : null,
-        ])->syncRoles([$role->name]);
+        ])->assignRole([$role->name]);
 
         $this->reset(['roleId','name', 'email', 'role']);
         session()->flash('message', 'User created successfully.');

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('phone')->length(15);
             $table->text('alamat');
             $table->integer('npwp')->length(20);
-            $table->string('akta_kumham');
+            $table->string('no_akta_kumham');
             $table->date('date_akta_kumham');
             $table->string('file_akta_kumham');
             $table->string('no_domisili');

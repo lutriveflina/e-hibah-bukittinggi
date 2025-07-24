@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\SKPD;
 use App\Livewire\User;
+use App\Models\Lembaga;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +25,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user', User::class)->name('user.index');
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
-    Route::get('/lembaga/create', [LembagaController::class, 'create'])->name('lembaga.create');
+    Route::get('/lembaga/uncreate', [LembagaController::class, 'uncreate'])->name('lembaga.uncreate');
+    Route::get('/lembaga/{id}', [LembagaController::class, 'show'])->name('lembaga.show');
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
 });
 

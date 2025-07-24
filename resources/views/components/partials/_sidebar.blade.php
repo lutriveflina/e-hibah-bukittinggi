@@ -27,11 +27,11 @@
                         <div class="d-flex w-100 justify-content-between">
                             <h5 class="mb-0">Dashboards</h5>
                         </div>
-                        <small class="mb-0">Halamant Utama</small>
+                        <small class="mb-0">Halaman Utama</small>
                     </div>
                     <a href="{{ route('dashboard') }}" class="list-group-item"><i class="bi bi-house"></i>
                         Dashboard</a>
-                    @can('viewAny', App\Models\Permission::class)
+                    @can('viewAny', Auth::user())
                         <a href="{{ route('permission') }}" class="list-group-item"><i class="bi bi-person-lock"></i>
                             Permission</a>
                     @endcan
@@ -56,9 +56,15 @@
                             <h5 class="mb-0">Lembaga</h5>
                         </div>
                         <small class="mb-0">Menu Untuk Lembaga</small>
+                        <small class="mb-0">lembaga ? {{ Auth::user()->lembaga }}</small>
                     </div>
-                    <a href="{{ route('lembaga') }}" class="list-group-item"><i class="bi bi-building"></i>Data
-                        Lembaga</a>
+                    @can('viewAny', App\Models\Lembaga::class)
+                        <a href="{{ route('lembaga') }}" class="list-group-item"><i class="bi bi-building"></i>
+                            Lembaga</a>
+                    @elsecan('view', App\Models\Lembaga::class)
+                        <a href="{{ route('lembaga.uncreate') }}" class="list-group-item"><i class="bi bi-building"></i>
+                            Lembaga</a>
+                    @endcan
                     <a href="javascript::" class="list-group-item"><i class="bi bi-chat-left-text"></i>Permohonan</a>
                     <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
                         Manager</a>

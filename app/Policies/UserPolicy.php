@@ -18,7 +18,7 @@ class UserPolicy
     // ]);
 
     // return $user->hasPermissionTo('View All User');
-        return $user->hasPermissionTo('View All User');
+        return $user->hasPermissionTo('View Any User');
     }
 
     /**

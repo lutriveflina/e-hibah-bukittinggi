@@ -71,6 +71,6 @@ class User extends Authenticatable
 
     public function lembaga()
     {
-        return $this->belongsTo(Skpd::class, 'id_lembaga');
+        return $this->belongsTo(Lembaga::class, 'id_lembaga');
     }
 }

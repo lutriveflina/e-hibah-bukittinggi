@@ -15,9 +15,11 @@
         </div>
         <div class="ms-auto">
             <div class="btn-group">
-                <a href="{{ route('lembaga.create') }}">
-                    <button type="button" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Tambah Lembaga</button>
-                </a>
+                @can('create', App\Models\Lembaga::class)
+                    <a href="{{ route('lembaga.create') }}">
+                        <button type="button" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Tambah Lembaga</button>
+                    </a>
+                @endcan
 
                 <button type="button" class="btn btn-warning"><i class="bi bi-pencil-square"></i> Edit</button>
                 <button type="button" class="btn btn-warning split-bg-warning dropdown-toggle dropdown-toggle-split"
@@ -39,7 +41,7 @@
                 <div class="card-body">
                     <div class="col col-12">
                         <div class="mb-3">
-                            <label for="search" class="form-label">Cari Lembaga</label>
+                            <label for="search" class="form-label">Nama Lembaga</label>
                             <input type="text" class="form-control" disabled>
                         </div>
                         <div class="row">
