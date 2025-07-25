@@ -78,17 +78,18 @@ class LembagaController extends Controller
 
         $lembaga->pengurus()->create($data_pimpinan);
 
-        User::where('id', auth()->user()->id)->update([
+        User::where('id', Auth::user()->id)->update([
             'id_lembaga' => $lembaga->id,
         ]);
         
         return redirect()->route('lembaga.index')->with('success', 'Lembaga created successfully.');
     }
 
-    public function show($id)
+    public function show()
     {
+        $id_lembaga = Auth::user()->id_lembaga;
         // Logic to retrieve a specific lembaga by ID
-        $lembaga = Lembaga::with('pengurus')->findOrFail($id);
+        $lembaga = Lembaga::with(['pengurus'])->findOrFail($id_lembaga);
         return view('pages.lembaga.show', [
             'lembaga' => $lembaga
         ]);

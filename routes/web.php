@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LembagaController;
 use App\Http\Controllers\MainController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\UserController;
 use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\SKPD;
@@ -26,8 +27,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
     Route::get('/lembaga/uncreate', [LembagaController::class, 'uncreate'])->name('lembaga.uncreate');
-    Route::get('/lembaga/{id}', [LembagaController::class, 'show'])->name('lembaga.show');
+    Route::get('/lembaga/show', [LembagaController::class, 'show'])->name('lembaga.show');
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
+    Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan');
+    Route::get('/permohonan/create', [PermohonanController::class, 'create'])->name('permohonan.create');
 });
 
 Route::get('testing', function(){

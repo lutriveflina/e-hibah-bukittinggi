@@ -56,16 +56,19 @@
                             <h5 class="mb-0">Lembaga</h5>
                         </div>
                         <small class="mb-0">Menu Untuk Lembaga</small>
-                        <small class="mb-0">lembaga ? {{ Auth::user()->lembaga }}</small>
                     </div>
-                    @can('viewAny', App\Models\Lembaga::class)
-                        <a href="{{ route('lembaga') }}" class="list-group-item"><i class="bi bi-building"></i>
-                            Lembaga</a>
-                    @elsecan('view', App\Models\Lembaga::class)
+                    @if (Auth::user()->hasRole('Admin Lembaga') && Auth::user()->id_lembaga == null)
                         <a href="{{ route('lembaga.uncreate') }}" class="list-group-item"><i class="bi bi-building"></i>
                             Lembaga</a>
-                    @endcan
-                    <a href="javascript::" class="list-group-item"><i class="bi bi-chat-left-text"></i>Permohonan</a>
+                    @elseif (Auth::user()->hasRole('Super Admin'))
+                        <a href="{{ route('lembaga') }}" class="list-group-item"><i class="bi bi-building"></i>
+                            Lembaga</a>
+                    @else
+                        <a href="{{ route('lembaga.show') }}" class="list-group-item"><i class="bi bi-building"></i>
+                            Lembaga</a>
+                    @endif
+                    <a href="{{ route('permohonan') }}" class="list-group-item"><i
+                            class="bi bi-chat-left-text"></i>Permohonan</a>
                     <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
                         Manager</a>
                     <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-ruled"></i>Laporan</a>
