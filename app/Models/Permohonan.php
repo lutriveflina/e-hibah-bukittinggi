@@ -23,6 +23,7 @@ class Permohonan extends Model
         'latar_belakang',
         'maksud_tujuan',
         'keterangan',
+        'file_proposal',
         'nominal_rab',
         'id_status',
         'nominal_rekomendasi',
@@ -30,4 +31,12 @@ class Permohonan extends Model
         'catatan_rekomendasi',
         'file_pemberitahuan'
     ];
+
+    public function skpd(){
+        return $this->belongsTo(Skpd::class, 'id_skpd');
+    }
+
+    public function status(){
+        return $this->belongsTo(Status_permohonan::class, 'id_status');
+    }
 }

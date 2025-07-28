@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('perihal_mohon');
             $table->string('file_mohon');
             $table->string('no_proposal');
-            $table->unsignedBigInteger('tanggal_proposal');
-            $table->unsignedBigInteger('title');
+            $table->date('tanggal_proposal');
+            $table->string('title');
             $table->unsignedBigInteger('urusan');
             $table->unsignedBigInteger('id_skpd');
             $table->date('awal_laksana');

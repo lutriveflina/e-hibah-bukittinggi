@@ -65,7 +65,7 @@ class PermohonanPolicy
     }
 
     public function view_dukung(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('View Dukung Permohonan');
     }
 
     /**

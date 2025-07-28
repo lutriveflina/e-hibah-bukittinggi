@@ -2,7 +2,10 @@
 
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-        <div class="breadcrumb-title pe-3">Permohonan</div>
+        <div class="breadcrumb-title pe-3">Permohonan @can('view_dukung', \App\Models\Status_permohonan::class)
+                cobaan
+            @endcan
+        </div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb mb-0 p-0">
@@ -38,7 +41,7 @@
                             <th>Nominal Pengajuan Anggaran</th>
                             <th>Nominal Rekomendasi</th>
                             <th>Nominal APBD</th>
-                            <th>Nominal Status Pengajuan</th>
+                            <th>Status Pengajuan</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -46,20 +49,21 @@
                         @foreach ($permohonan as $key => $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->perihal_mohon }}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                <td>{{ $item->tanggal_mohon }}</td>
+                                <td>{{ $item->usulan_apbd }}</td>
+                                <td>{{ $item->skpd->name }}</td>
+                                <td>Rp. {{ $item->nominal_rab ?? 0 }}</td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>Rp. {{ $item->nominal_rekomendasi ?? 0 }}</td>
+                                <td>
+                                    @buttons([$item->status->status_button, App\Models\Status_permohonan::class])
+                                </td>
                                 <td></td>
                             </tr>
                         @endforeach

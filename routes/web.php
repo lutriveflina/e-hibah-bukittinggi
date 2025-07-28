@@ -6,6 +6,7 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\UserController;
+use App\Livewire\Lembaga\CreateOrUpdate;
 use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\SKPD;
 use App\Livewire\User;
@@ -30,7 +31,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lembaga/show', [LembagaController::class, 'show'])->name('lembaga.show');
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
     Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan');
-    Route::get('/permohonan/create', [PermohonanController::class, 'create'])->name('permohonan.create');
+    Route::get('/permohonan/create', CreateOrUpdate::class)->name('permohonan.create');
 });
 
 Route::get('testing', function(){
