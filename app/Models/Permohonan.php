@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Blameable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Permohonan extends Model
 {
+    use SoftDeletes, Blameable;
     protected $fillable = [
         'id_lembaga',
         'no_mohon',
@@ -29,7 +32,11 @@ class Permohonan extends Model
         'nominal_rekomendasi',
         'tanggal_rekomendasi',
         'catatan_rekomendasi',
-        'file_pemberitahuan'
+        'file_pemberitahuan',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     public function skpd(){

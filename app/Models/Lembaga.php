@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Blameable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Lembaga extends BaseModel
 {
+    use SoftDeletes, Blameable;
     protected $fillable = [
         'name',
         'id_skpd',
@@ -27,6 +31,10 @@ class Lembaga extends BaseModel
         'atas_nama',
         'no_rekening',
         'photo_rek',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     public function skpd()

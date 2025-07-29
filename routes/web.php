@@ -6,8 +6,9 @@ use App\Http\Controllers\MainController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PermohonanController;
 use App\Http\Controllers\UserController;
-use App\Livewire\Lembaga\CreateOrUpdate;
+use App\Livewire\Permohonan\CreateOrUpdate;
 use App\Livewire\Lembagas\IndexLembaga;
+use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\SKPD;
 use App\Livewire\User;
 use App\Models\Lembaga;
@@ -32,14 +33,23 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
     Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan');
     Route::get('/permohonan/create', CreateOrUpdate::class)->name('permohonan.create');
+    Route::get('/permohonan/show', [PermohonanController::class, 'show'])->name('permohonan.show');
+    Route::get('/permhonan/isi_pendukung', IsiPendukung::class)->name('permohonan.isi_pendukung');
 });
 
-Route::get('testing', function(){
-    $user = Auth::user();
-    $role = Role::find(1);
-    return [
-        'user' => $user,
-        'has_role' => $user->roles,
-        'role' => $role,
-    ];
-});
+
+// Route::get('/testing', function () {
+//     $user = auth()->user();
+
+//     if (!$user) {
+//         return 'Tidak ada user yang login.';
+//     }
+
+//     return [
+//         'user_id'       => $user->id,
+//         'roles'         => $user->getRoleNames(),       // daftar role
+//         'permissions'   => $user->getAllPermissions()->pluck('name'), // daftar permission
+//         'has_role_admin' => $user->hasRole('Admin Lembaga'),    // cek role admin
+//         'can_check_permohonan'  => $user->can('view_dukung', App\Models\Status_permohonan::class),   // cek permission view users
+//     ];
+// })->middleware('auth');

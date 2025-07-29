@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Blameable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pengurus extends Model
 {
+    use SoftDeletes, Blameable;
     protected $fillable = [
         'name',
         'jabatan',
@@ -14,6 +17,10 @@ class Pengurus extends Model
         'email',
         'alamat',
         'scan_ktp',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     public function lembaga()

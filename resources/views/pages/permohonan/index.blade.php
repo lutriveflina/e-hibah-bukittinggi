@@ -21,6 +21,9 @@
             </a>
         </div>
     </div>
+    <div>
+        {{ auth()->user()->can('view_dukung', App\Models\Status_permohonan::class) }}
+    </div>
     <!--end breadcrumb-->
     <div class="card">
         <div class="card-body">
@@ -55,16 +58,18 @@
                                 <td></td>
                                 <td></td>
                                 <td>{{ $item->tanggal_mohon }}</td>
-                                <td>{{ $item->usulan_apbd }}</td>
+                                <td>{{ $item->tahun_apbd }}</td>
                                 <td>{{ $item->skpd->name }}</td>
                                 <td>Rp. {{ $item->nominal_rab ?? 0 }}</td>
                                 <td></td>
                                 <td></td>
                                 <td>Rp. {{ $item->nominal_rekomendasi ?? 0 }}</td>
                                 <td>
-                                    @buttons([$item->status->status_button, App\Models\Status_permohonan::class])
+                                    @status_buttons([$item->status->status_button, App\Models\Status_permohonan::class, $item->id])
                                 </td>
-                                <td></td>
+                                <td>
+                                    @status_buttons([$item->status->action_buttons, App\Models\Status_permohonan::class, $item->id])
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

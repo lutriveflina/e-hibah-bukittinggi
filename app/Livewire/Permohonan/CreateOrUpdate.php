@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Lembaga;
+namespace App\Livewire\Permohonan;
 
 use App\Models\Permohonan;
 use App\Models\Skpd;
@@ -109,7 +109,7 @@ class CreateOrUpdate extends Component
     
     public function render()
     {
-        return view('livewire.lembaga.create-or-update');
+        return view('livewire.permohonan.create-or-update');
     }
 
     #[On('updated_id_skpd')]

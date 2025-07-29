@@ -29,6 +29,10 @@ class User extends Authenticatable
         'id_role',
         'id_skpd',
         'id_lembaga',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     /**
