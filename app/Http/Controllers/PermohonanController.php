@@ -27,4 +27,8 @@ class PermohonanController extends Controller
             'permohonan' => $permohonan,
         ]);
     }
+
+    public function show($id_permohonan){
+        dd('permohonan.show()');
+    }
 }

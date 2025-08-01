@@ -14,7 +14,7 @@
 @endphp
 
 @can($buttonsArray['permission'] ?? '', $model)
-    <a href="{{ route($buttonsArray['url'], ['id_permohona' => $id]) ?? '#' }}">
+    <a href="{{ route($buttonsArray['url'], ['id_permohonan' => $id]) ?? '#' }}">
         <button class="btn btn-sm btn-{{ $buttonsArray['color'] ?? 'primary' }}">
             @if (!empty($buttonsArray['icon']))
                 <i class="{{ $buttonsArray['icon'] }}"></i>

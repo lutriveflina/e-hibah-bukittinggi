@@ -129,10 +129,10 @@ class CreateOrUpdate extends Component
         $this->validate();
 
         $ext_mohon = $this->file_mohon->getclientOriginalExtension();
-        $mohon_path = $this->file_mohon->storeAs('permohonan', 'surat_permohonan_'.Auth::user()->id.$this->id_lembaga.date('now').'.'.$ext_mohon);
+        $mohon_path = $this->file_mohon->storeAs('permohonan', 'surat_permohonan_'.Auth::user()->id.$this->id_lembaga.date('now').'.'.$ext_mohon, 'public');
 
         $ext_proposal = $this->file_proposal->getclientOriginalExtension();
-        $proposal_path = $this->file_mohon->storeAs('permohonan', 'proposal_permohonan_'.Auth::user()->id.$this->id_lembaga.date('now').'.'.$ext_proposal);
+        $proposal_path = $this->file_mohon->storeAs('permohonan', 'proposal_permohonan_'.Auth::user()->id.$this->id_lembaga.date('now').'.'.$ext_proposal, 'public');
 
         Permohonan::updateOrCreate(
             ['id' => $this->id_permohonan],

@@ -33,8 +33,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
     Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan');
     Route::get('/permohonan/create', CreateOrUpdate::class)->name('permohonan.create');
-    Route::get('/permohonan/show', [PermohonanController::class, 'show'])->name('permohonan.show');
-    Route::get('/permhonan/isi_pendukung', IsiPendukung::class)->name('permohonan.isi_pendukung');
+    Route::get('/permohonan/show/{id_permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
+    Route::get('/permhonan/isi_pendukung/{id_permohonan}', IsiPendukung::class)->name('permohonan.isi_pendukung');
+    Route::get('/permhonan/isi_rab/{id_permohonan}', IsiPendukung::class)->name('permohonan.isi_rab');
 });
 
 
