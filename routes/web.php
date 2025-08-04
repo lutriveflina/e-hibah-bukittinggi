@@ -11,6 +11,7 @@ use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\SKPD;
 use App\Livewire\User;
+use App\Livewire\User\ChangePassword;
 use App\Models\Lembaga;
 use App\Models\Permission;
 use App\Models\Role;
@@ -26,6 +27,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/role', [MainController::class, 'role'])->name('role');
     Route::get('/skpd', SKPD::class)->name('skpd');
     Route::get('/user', User::class)->name('user.index');
+    Route::get('/user/change_password', ChangePassword::class)->name('user.change_password');
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
     Route::get('/lembaga/uncreate', [LembagaController::class, 'uncreate'])->name('lembaga.uncreate');

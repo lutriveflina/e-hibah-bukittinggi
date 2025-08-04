@@ -31,6 +31,8 @@
                     </div>
                     <a href="{{ route('dashboard') }}" class="list-group-item"><i class="bi bi-house"></i>
                         Dashboard</a>
+                    <a href="{{ route('user.change_password') }}" class="list-group-item"><i class="bi bi-key"></i>
+                        Ubah Sandi</a>
                     @can('viewAny', Auth::user())
                         <a href="{{ route('permission') }}" class="list-group-item"><i class="bi bi-person-lock"></i>
                             Permission</a>
