@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Livewire\Permohonan\CreateOrUpdate;
 use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\Permohonan\IsiPendukung;
+use App\Livewire\Permohonan\IsiRab;
 use App\Livewire\SKPD;
 use App\Livewire\User;
 use App\Livewire\User\ChangePassword;
@@ -37,7 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan/create', CreateOrUpdate::class)->name('permohonan.create');
     Route::get('/permohonan/show/{id_permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
     Route::get('/permhonan/isi_pendukung/{id_permohonan}', IsiPendukung::class)->name('permohonan.isi_pendukung');
-    Route::get('/permhonan/isi_rab/{id_permohonan}', IsiPendukung::class)->name('permohonan.isi_rab');
+    Route::get('/permohonan/isi_rab/{id_permohonan}', IsiRab::class)->name('permohonan.isi_rab');
 });
 
 

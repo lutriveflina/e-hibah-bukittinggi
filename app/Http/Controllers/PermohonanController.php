@@ -29,6 +29,9 @@ class PermohonanController extends Controller
     }
 
     public function show($id_permohonan){
-        dd('permohonan.show()');
+        $permohonan = Permohonan::with(['lembaga', 'skpd', 'status', 'pendukung'])->where('id', $id_permohonan)->first();
+        return view('pages.permohonan.show', [
+            'permohonan' => $permohonan
+        ]);
     }
 }

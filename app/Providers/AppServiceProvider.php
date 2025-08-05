@@ -21,7 +21,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Blade::directive('status_buttons', function($expression){
-            return "<?php echo view('components.permohonan_buttons', ['json' => $expression])->render(); ?>";
+            return "<?php echo view('components.status_buttons', ['json' => $expression])->render(); ?>";
+        });
+        Blade::directive('action_buttons', function($expression){
+            return "<?php echo view('components.action_buttons', ['json' => $expression])->render(); ?>";
         });
     }
 }

@@ -3,14 +3,14 @@
     $buttonsArray = [];
     if (!empty($json[0])) {
         $raw = $json[0]; // data JSON
-        $model = $json[1] ?? null; // model class
-        $id = $json[2];
 
         $buttonsArray = is_string($raw) ? json_decode($raw, true) : $raw;
         if (!is_array($buttonsArray)) {
             $buttonsArray = [];
         }
     }
+    $model = $json[1] ?? null; // model class
+    $id = $json[2];
 @endphp
 
 @can($buttonsArray['permission'] ?? '', $model)

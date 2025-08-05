@@ -39,11 +39,19 @@ class Permohonan extends Model
         'deleted_by',
     ];
 
+    public function lembaga(){
+        return $this->belongsTo(Lembaga::class, 'id_lembaga');
+    }
+
     public function skpd(){
         return $this->belongsTo(Skpd::class, 'id_skpd');
     }
 
     public function status(){
         return $this->belongsTo(Status_permohonan::class, 'id_status');
+    }
+
+    public function pendukung(){
+        return $this->hasOne(PendukungPermohonan::class, 'id_permohonan');
     }
 }

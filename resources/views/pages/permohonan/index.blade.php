@@ -68,7 +68,7 @@
                                     @status_buttons([$item->status->status_button, App\Models\Status_permohonan::class, $item->id])
                                 </td>
                                 <td class="text-center">
-                                    @status_buttons([$item->status->action_buttons, App\Models\Status_permohonan::class, $item->id])
+                                    @action_buttons([$item->status->action_buttons, App\Models\Status_permohonan::class, $item->id])
                                 </td>
                             </tr>
                         @endforeach
