@@ -36,4 +36,8 @@ class General {
         // Acak urutan karakter
         return str_shuffle($password);
     }
+
+    public static function GetOneDataFromModel($model, array $with, $column, $param){
+        return $model::with($with)->where($column, $param)->first();
+    }
 }

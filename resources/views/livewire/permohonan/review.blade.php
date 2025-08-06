@@ -1,6 +1,5 @@
-@extends('components.layouts.app')
+<div>
 
-@section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">
             <h4>Permohonan</h4>
@@ -30,7 +29,8 @@
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="pill" href="#data_proposal" role="tab" aria-selected="false">
+                    <a class="nav-link" data-bs-toggle="pill" href="#data_proposal" role="tab"
+                        aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Proposal</div>
                         </div>
@@ -53,9 +53,10 @@
                         </a>
                     </li>
                 @endif
-                @if ($permohonan->id_status >= 5)
+                @if ($permohonan->id_status >= 4)
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="pill" href="#berita_acara" role="tab" aria-selected="false">
+                        <a class="nav-link" data-bs-toggle="pill" href="#berita_acara" role="tab"
+                            aria-selected="false">
                             <div class="d-flex align-items-center">
                                 <div class="tab-title">Berita Acara</div>
                             </div>
@@ -73,7 +74,8 @@
                     <div class="col col-12">
                         <div class="mb-3">
                             <label for="search" class="form-label">Nama Lembaga</label>
-                            <input type="text" class="form-control" value="{{ $permohonan->lembaga->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ $permohonan->lembaga->name }}"
+                                disabled>
                         </div>
                         <div class="row">
                             <div class="col col-6">
@@ -88,8 +90,8 @@
                                     <label for="filter" class="form-label">No. Telp</label>
                                     <div class="input-group flex-nowrap">
                                         <span class="input-group-text">+62</span>
-                                        <input type="text" class="form-control" value="{{ $permohonan->lembaga->phone }}"
-                                            disabled>
+                                        <input type="text" class="form-control"
+                                            value="{{ $permohonan->lembaga->phone }}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -126,11 +128,12 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label">No Surat <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" value="{{ $permohonan->no_mohon }}"
-                                            disabled>
+                                        <input type="text" class="form-control"
+                                            value="{{ $permohonan->no_mohon }}" disabled>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Perihal Surat <span class="text-danger">*</span></label>
+                                        <label class="form-label">Perihal Surat <span
+                                                class="text-danger">*</span></label>
                                         <input type="text" class="form-control"
                                             value="{{ $permohonan->perihal_mohon }}" disabled>
                                     </div>
@@ -169,13 +172,14 @@
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label">No Proposal <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $permohonan->no_proposal }}"
-                                        disabled>
+                                    <input type="text" class="form-control"
+                                        value="{{ $permohonan->no_proposal }}" disabled>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Tanggal Pengajuan <span class="text-danger">*</span></label>
+                                    <label class="form-label">Tanggal Pengajuan <span
+                                            class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-calendar"></i></span>
                                         <input type="date" class="form-control"
@@ -298,8 +302,10 @@
                                             <td class="text-start">{{ $rincian->keterangan }}</td>
                                             <td>{{ $rincian->volume }}</td>
                                             <td class="text-start">{{ $rincian->satuan->name }}</td>
-                                            <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}</td>
-                                            <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}</td>
+                                            <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
+                                            </td>
                                         </tr>
                                     @endforeach
                                 @endforeach
@@ -345,7 +351,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="surat_domisili" class="label-form">Proposal</label><br>
-                                <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                <button class="btn btn-warning w-100" data-bs-toggle="modal"
+                                    data-bs-target="#fileModal"
                                     data-file-url="{{ Storage::url($permohonan->file_proposal) }}"">Lihat
                                     Dokumen</button>
                             </div>
@@ -375,16 +382,123 @@
             </div>
         </div>
         <div class="tab-pane fade" id="berita_acara" role="tabpanel">
-            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic
-                lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork
-                tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica.
-                DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh
-                mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog.
-                Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown.
-                Pitchfork sustainable tofu synth chambray yr.</p>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center fw-bold">
+                        Checklist Kesesuaian Data Antara Dokumen Tertulis Dan SoftCopy <br>
+                        <small>(Berdasarkan Pergub 27 Tahun 2023)</small>
+                    </h5>
+
+                    <div class="table-responsive">
+                        <table class="table table-bordered mt-4">
+                            <thead class="table-secondary text-center align-middle">
+                                <tr>
+                                    <th style="width: 5%;">No</th>
+                                    <th>Data Administrasi</th>
+                                    <th style="width: 10%;">Ada</th>
+                                    <th style="width: 10%;">Sesuai</th>
+                                    <th style="width: 30%;">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-warning fw-bold">
+                                    <td colspan="5">Kelengkapan Proposal Usulan Hibah/Bansos</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">1</td>
+                                    <td>Identitas dan Alamat Pengusul</td>
+                                    <td class="text-center"><input type="radio" name="ada_1"></td>
+                                    <td class="text-center"><input type="radio" name="sesuai_1"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">2</td>
+                                    <td>Latar Belakang</td>
+                                    <td class="text-center"><input type="radio" name="ada_2"></td>
+                                    <td class="text-center"><input type="radio" name="sesuai_2"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center">3</td>
+                                    <td>Maksud dan Tujuan</td>
+                                    <td class="text-center"><input type="radio" name="ada_3"></td>
+                                    <td class="text-center"><input type="radio" name="sesuai_3"></td>
+                                    <td><input type="text" class="form-control"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-danger small mt-3">
+                        ⚠️ Dengan ini saya menyatakan proposal ini telah dilakukan verifikasi kesesuaian, kelengkapan,
+                        keabsahan antar dokumen tertulis & software (Berdasarkan pergub 27 tahun 2023) serta kelayakan
+                        usulan hibahnya
+                    </p>
+
+                    <div class="mt-4">
+                        <p class="fw-bold">Apakah Data telah diverifikasi kelengkapan keabsahan dan kelayakan usulan
+                            hibahnya?</p>
+                        <div class="btn-group" role="group">
+                            <button class="btn btn-primary">Ya</button>
+                            <button class="btn btn-danger">Tidak</button>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-center mb-3">Berita Acara Kelengkapan Administrasi</h6>
+                            <div class="mb-2 d-grid">
+                                <button class="btn btn-primary">Lihat Dokumen</button>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Kelengkapan Administrasi *</label>
+                                <input type="file" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">No *</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Tanggal *</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-warning">Lihat Dokumen</button>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <h6 class="fw-bold text-center mb-3">Berita Acara Peninjauan Lapangan</h6>
+                            <div class="mb-2 d-grid">
+                                <button class="btn btn-primary">Lihat Dokumen</button>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Peninjauan Lapangan *</label>
+                                <input type="file" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">No *</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Tanggal *</label>
+                                <input type="date" class="form-control">
+                            </div>
+                            <div class="d-grid">
+                                <button class="btn btn-warning">Lihat Dokumen</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary px-5">Simpan</button>
+                    </div>
+                </div>
+            </div>
+
         </div>
-    </div>
-    </div>
     </div>
 
     <div class="modal fade" id="fileModal" tabindex="-1" aria-hidden="true">
@@ -400,7 +514,8 @@
             </div>
         </div>
     </div>
-@endsection
+</div>
+
 
 @push('scripts')
     <script>

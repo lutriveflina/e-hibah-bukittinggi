@@ -64,8 +64,8 @@
                                 <td></td>
                                 <td></td>
                                 <td>Rp. {{ $item->nominal_rekomendasi ?? 0 }}</td>
-                                <td class="text-center">
-                                    @status_buttons([$item->status->status_button, App\Models\Status_permohonan::class, $item->id])
+                                <td>
+                                    @status_buttons([$item->status->status_button, App\Models\Status_permohonan::class, $item->id_status])
                                 </td>
                                 <td class="text-center">
                                     @action_buttons([$item->status->action_buttons, App\Models\Status_permohonan::class, $item->id])

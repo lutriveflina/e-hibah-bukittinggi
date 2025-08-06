@@ -37,7 +37,7 @@ class PermohonanPolicy
      */
     public function update(User $user, Permohonan $permohonan): bool
     {
-        return false;
+        return $user->hasPermissionTo('Update Permohonan');
     }
 
     /**
@@ -98,4 +98,5 @@ class PermohonanPolicy
     public function upload_rab(User $user) : bool {
         return false;
     }
+    
 }

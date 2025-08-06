@@ -13,13 +13,19 @@
     $id = $json[2];
 @endphp
 
-@can($buttonsArray['permission'] ?? '', $model)
-    <a href="{{ route($buttonsArray['url'], ['id_permohonan' => $id]) ?? '#' }}">
-        <button class="btn btn-sm btn-{{ $buttonsArray['color'] ?? 'primary' }}">
-            @if (!empty($buttonsArray['icon']))
-                <i class="{{ $buttonsArray['icon'] }}"></i>
-            @endif
-            {{ $buttonsArray['text'] ?? '' }}
-        </button>
-    </a>
-@endcan
+@if ($buttonsArray)
+    @can($buttonsArray['permission'] ?? '', $model)
+        <center>
+            <a href="{{ route($buttonsArray['url'], ['id_permohonan' => $id]) ?? '#' }}">
+                <button class="btn btn-sm btn-{{ $buttonsArray['color'] ?? 'primary' }}">
+                    @if (!empty($buttonsArray['icon']))
+                        <i class="{{ $buttonsArray['icon'] }}"></i>
+                    @endif
+                    {{ $buttonsArray['text'] ?? '' }}
+                </button>
+            </a>
+        </center>
+    @endcan
+@else
+    {{ App\Helpers\General::GetOneDataFromModel(App\Models\Status_permohonan::class, [], 'id', $id)->name }}
+@endif

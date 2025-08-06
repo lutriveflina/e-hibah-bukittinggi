@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permohonan;
+use App\Models\RabPermohonan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,15 +11,15 @@ class PermohonanController extends Controller
 {
     public function index()
     {
-        if(Auth::user()->has_role('Super Admin')){
+        if(Auth::user()->hasRole('Super Admin')){
             $permohonan = Permohonan::all();
         }
 
-        if(Auth::user()->has_role('Admin SKPD') || Auth::user()->has_role('Reviewer') || Auth::user()->has_role('Verifikator')){
-            $permohonan = Permohonan::where('id_skpd', Auth::user()->id_skpd)->get();
+        if(Auth::user()->hasRole('Admin SKPD') || Auth::user()->hasRole('Reviewer') || Auth::user()->hasRole('Verifikator')){
+            $permohonan = Permohonan::with(['skpd'])->where('id_skpd', Auth::user()->id_skpd)->get();
         }
         
-        if(Auth::user()->has_role('Admin Lembaga')){
+        if(Auth::user()->hasRole('Admin Lembaga')){
             $permohonan = Permohonan::with(['skpd'])->where('id_lembaga', Auth::user()->id_lembaga)->get();
         }
 
@@ -30,8 +31,16 @@ class PermohonanController extends Controller
 
     public function show($id_permohonan){
         $permohonan = Permohonan::with(['lembaga', 'skpd', 'status', 'pendukung'])->where('id', $id_permohonan)->first();
+        $kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', $id_permohonan)->get();
         return view('pages.permohonan.show', [
-            'permohonan' => $permohonan
+            'permohonan' => $permohonan,
+            'kegiatans' => $kegiatans,
         ]);
+    }
+
+    public function send($id_permohonan){
+        Permohonan::where('id', $id_permohonan)->increment('id_status');
+
+        return redirect()->route('permohonan');
     }
 }
