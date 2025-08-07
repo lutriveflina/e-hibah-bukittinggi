@@ -59,16 +59,15 @@
                         </div>
                         <small class="mb-0">Menu Untuk Lembaga</small>
                     </div>
-                    @if (Auth::user()->hasRole('Admin Lembaga') && Auth::user()->id_lembaga == null)
-                        <a href="{{ route('lembaga.uncreate') }}" class="list-group-item"><i class="bi bi-building"></i>
-                            Lembaga</a>
-                    @elseif (Auth::user()->hasRole('Super Admin'))
+                    @can('viewAny', App\Models\Lembaga::class)
                         <a href="{{ route('lembaga') }}" class="list-group-item"><i class="bi bi-building"></i>
                             Lembaga</a>
-                    @else
-                        <a href="{{ route('lembaga.show') }}" class="list-group-item"><i class="bi bi-building"></i>
+                    @endcan
+                    @can('viewLembaga', App\Models\Lembaga::class)
+                        <a href="{{ route('lembaga.admin', ['id_lembaga' => Auth::user()->id_lembaga]) }}"
+                            class="list-group-item"><i class="bi bi-building"></i>
                             Lembaga</a>
-                    @endif
+                    @endcan
                     <a href="{{ route('permohonan') }}" class="list-group-item"><i
                             class="bi bi-chat-left-text"></i>Permohonan</a>
                     <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD

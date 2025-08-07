@@ -16,6 +16,11 @@ class LembagaPolicy
         return $user->hasPermissionTo('View Any Lembaga');
     }
 
+    public function viewLembaga(User $user): bool
+    {
+        return $user->hasPermissionTo('View Admin Lembaga');
+    }
+
     /**
      * Determine whether the user can view the model.
      */
@@ -35,7 +40,7 @@ class LembagaPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Lembaga $lembaga): bool
+    public function update(User $user): bool
     {
         return $user->hasPermissionTo('Update Lembaga');
     }
@@ -43,7 +48,7 @@ class LembagaPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Lembaga $lembaga): bool
+    public function delete(User $user): bool
     {
         return $user->hasPermissionTo('Delete Lembaga');
     }
@@ -51,7 +56,7 @@ class LembagaPolicy
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, Lembaga $lembaga): bool
+    public function restore(User $user): bool
     {
         return $user->hasPermissionTo('Restore Lembaga');
     }
@@ -59,7 +64,7 @@ class LembagaPolicy
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, Lembaga $lembaga): bool
+    public function forceDelete(User $user): bool
     {
         return false;
     }

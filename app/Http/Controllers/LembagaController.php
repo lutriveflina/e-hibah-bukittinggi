@@ -12,11 +12,21 @@ class LembagaController extends Controller
     public function index()
     {
         // Logic to retrieve and display lembaga information
-        return view('pages.lembaga.index');
+        if(Auth::user()->hasRole("Super Admin")){
+            $lembaga = Lembaga::orderBy('created_at')->get();
+        }else if(!Auth::user()->hasRole('Admin Lembaga')){
+            $lembaga = Lembaga::where('id_skpd', Auth::user()->id_skpd)->orderBy('created_at')->get();
+        }
+        return view('pages.lembaga.index', [
+            'lembaga' => $lembaga
+        ]);
     }
 
-    public function uncreate(){
-        return view('pages.lembaga.index');
+    public function admin($id_lembaga = ''){
+        $lembaga = Lembaga::find($id_lembaga);
+        return view('pages.lembaga.admin', [
+            'lembaga' => $lembaga
+        ]);
     }
 
     public function create()

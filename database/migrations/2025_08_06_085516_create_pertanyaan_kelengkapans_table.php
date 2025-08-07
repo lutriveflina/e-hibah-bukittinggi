@@ -13,9 +13,14 @@ return new class extends Migration
     {
         Schema::create('pertanyaan_kelengkapans', function (Blueprint $table) {
             $table->id();
-            $table->text('pertanyaan');
-            $table->integer('kelompok');
+            $table->text('question');
+            $table->unsignedBigInteger('id_parent');
+            $table->integer('order');
             $table->timestamps();
+            $table->softDeletes();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('deleted_by')->nullable()->constrained('users')->nullOnDelete();
         });
     }
 

@@ -1,0 +1,66 @@
+<div>
+    <form wire:submit='update'>
+        <div class="row">
+            <div class="col col-md-9 p-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col col-12">
+                            <div class="mb-3">
+                                <label for="search" class="form-label">Nama Lembaga</label>
+                                <input wire:model='name' type="text" class="form-control">
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="search" class="form-label">SKPD</label>
+                                        <select wire:model='id_skpd' class="form-control">
+                                            <option value="">--- Pilih SKPD ---</option>
+                                            @foreach ($skpd as $key => $item)
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label for="search" class="form-label">Urusan</label>
+                                        <select wire:model='id_urusan' class="form-control">
+                                            <option value="">--- Pilih Urusan ---</option>
+                                            @foreach ($urusan as $key => $item)
+                                                <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-6">
+                                    <div class="mb-3">
+                                        <label for="filter" class="form-label">Email</label>
+                                        <input wire:model='email' type="text" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="col col-6">
+                                    <div class="mb-3">
+                                        <label for="filter" class="form-label">No. Telp</label>
+                                        <div class="input-group flex-nowrap">
+                                            <span class="input-group-text">+62</span>
+                                            <input wire:model='phone' type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="alamat" class="form-label">Alamat</label>
+                                <textarea wire:model='alamat' class="form-control" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <button type="submit" class="btn btn-primary w-100">Ubah Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
