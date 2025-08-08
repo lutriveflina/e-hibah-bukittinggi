@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pertanyaan_kelengkapans', function (Blueprint $table) {
+        Schema::create('kelengkapan_berita_acaras', function (Blueprint $table) {
             $table->id();
-            $table->text('question');
-            $table->unsignedBigInteger('id_parent')->nullable();
-            $table->integer('order');
+            $table->unsignedBigInteger('id_berita_acara');
+            $table->unsignedBigInteger('id_pertanyaan');
+            $table->boolean('is_ada')->default(false);
+            $table->boolean('is_sesuai')->default(false);
+            $table->text('keterangan')->nullable();
             $table->timestamps();
             $table->softDeletes();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
@@ -29,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pertanyaan_kelengkapans');
+        Schema::dropIfExists('kelengkapan_berita_acaras');
     }
 };

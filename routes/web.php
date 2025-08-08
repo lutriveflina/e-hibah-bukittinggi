@@ -14,6 +14,7 @@ use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\Permohonan\IsiRab;
 use App\Livewire\Permohonan\Review;
+use App\Livewire\PertanyaanKelengkapan;
 use App\Livewire\SKPD;
 use App\Livewire\User;
 use App\Livewire\User\ChangePassword;
@@ -34,6 +35,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user', User::class)->name('user.index');
     Route::get('/user/change_password', ChangePassword::class)->name('user.change_password');
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
+    Route::get('/pertanyaan', PertanyaanKelengkapan::class)->name('pertanyaan');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
     Route::get('/lembaga/uncreate', [LembagaController::class, 'uncreate'])->name('lembaga.uncreate');
     Route::get('/lembaga/admin/{id_lembaga}', [LembagaController::class, 'admin'])->name('lembaga.admin');

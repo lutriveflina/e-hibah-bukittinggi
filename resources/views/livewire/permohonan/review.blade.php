@@ -21,8 +21,7 @@
         <div class="card-body">
             <ul class="nav nav-pills" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-bs-toggle="pill" href="#data_lembaga" role="tab"
-                        aria-selected="true">
+                    <a class="nav-link" data-bs-toggle="pill" href="#data_lembaga" role="tab" aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Lembaga</div>
                         </div>
@@ -55,8 +54,8 @@
                 @endif
                 @if ($permohonan->id_status >= 4)
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="pill" href="#berita_acara" role="tab"
-                            aria-selected="false">
+                        <a class="nav-link active" data-bs-toggle="pill" href="#berita_acara" role="tab"
+                            aria-selected="true">
                             <div class="d-flex align-items-center">
                                 <div class="tab-title">Berita Acara</div>
                             </div>
@@ -67,7 +66,7 @@
         </div>
     </div>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="data_lembaga" role="tabpanel">
+        <div class="tab-pane fade" id="data_lembaga" role="tabpanel">
 
             <div class="card">
                 <div class="card-body">
@@ -381,7 +380,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="berita_acara" role="tabpanel">
+        <div class="tab-pane fade show active" id="berita_acara" role="tabpanel">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center fw-bold">
@@ -389,7 +388,7 @@
                         <small>(Berdasarkan Pergub 27 Tahun 2023)</small>
                     </h5>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive mb-4">
                         <table class="table table-bordered mt-4">
                             <thead class="table-secondary text-center align-middle">
                                 <tr>
@@ -401,99 +400,135 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="table-warning fw-bold">
-                                    <td colspan="5">Kelengkapan Proposal Usulan Hibah/Bansos</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">1</td>
-                                    <td>Identitas dan Alamat Pengusul</td>
-                                    <td class="text-center"><input type="radio" name="ada_1"></td>
-                                    <td class="text-center"><input type="radio" name="sesuai_1"></td>
-                                    <td><input type="text" class="form-control"></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">2</td>
-                                    <td>Latar Belakang</td>
-                                    <td class="text-center"><input type="radio" name="ada_2"></td>
-                                    <td class="text-center"><input type="radio" name="sesuai_2"></td>
-                                    <td><input type="text" class="form-control"></td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center">3</td>
-                                    <td>Maksud dan Tujuan</td>
-                                    <td class="text-center"><input type="radio" name="ada_3"></td>
-                                    <td class="text-center"><input type="radio" name="sesuai_3"></td>
-                                    <td><input type="text" class="form-control"></td>
-                                </tr>
+                                @foreach ($questions as $item)
+                                    <tr wire:key="parent-{{ $item->id }}" class="bg-warning">
+                                        <td colspan="2">{{ $item->question }}</td>
+                                        <td class="text-center"><input type="checkbox" name="ada_1"></td>
+                                        <td class="text-center"><input type="checkbox" name="sesuai_1"></td>
+                                        <td></td>
+                                    </tr>
+                                    @foreach ($item->children as $child)
+                                        <tr wire:key="child-{{ $child->id }}">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $child->question }}</td>
+                                            <td class="text-center"><input type="checkbox" name="ada_1"></td>
+                                            <td class="text-center"><input type="checkbox" name="sesuai_1"></td>
+                                            <td><input type="text" class="form-control"></td>
+                                        </tr>
+                                    @endforeach
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
 
-                    <p class="text-danger small mt-3">
-                        ⚠️ Dengan ini saya menyatakan proposal ini telah dilakukan verifikasi kesesuaian, kelengkapan,
-                        keabsahan antar dokumen tertulis & software (Berdasarkan pergub 27 tahun 2023) serta kelayakan
-                        usulan hibahnya
-                    </p>
-
-                    <div class="mt-4">
-                        <p class="fw-bold">Apakah Data telah diverifikasi kelengkapan keabsahan dan kelayakan usulan
-                            hibahnya?</p>
-                        <div class="btn-group" role="group">
-                            <button class="btn btn-primary">Ya</button>
+                    <div class="mb-4">
+                        <div class="row">
+                            <div class="col-1 text-center">
+                                <input type="checkbox">
+                            </div>
+                            <div class="col-11">
+                                <p>Dengan ini saya menyatakan proposal ini telah dilakukan verifikasi kesesuaian,
+                                    kelengkapan,
+                                    keabsahan antar dokumen tertulis & software (Berdasarkan pergub 27 tahun 2023) serta
+                                    kelayakan
+                                    usulan hibahnya</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="mb-4 text-center">
+                        <div class="fw-bold mb-3">Apakah Data telah diverifikasi kelengkapan keabsahan dan kelayakan
+                            usulan
+                            hibahnya?</div>
+                        <div>
+                            <button class="btn btn-primary me-4">Ya</button>
                             <button class="btn btn-danger">Tidak</button>
                         </div>
                     </div>
+                </div>
+            </div>
 
-                    <hr class="my-4">
-
+            <div class="card">
+                <div class="card-body">
                     <div class="row">
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-center mb-3">Berita Acara Kelengkapan Administrasi</h6>
-                            <div class="mb-2 d-grid">
-                                <button class="btn btn-primary">Lihat Dokumen</button>
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Kelengkapan Administrasi *</label>
-                                <input type="file" class="form-control">
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">No *</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="mb-2">
-                                <label class="form-label">Tanggal *</label>
-                                <input type="date" class="form-control">
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-warning">Lihat Dokumen</button>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">Berita Acara Kelengkapan Administrasi</label>
+                                <button class="btn btn-primary w-100">Lihat Dokumen</button>
                             </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <h6 class="fw-bold text-center mb-3">Berita Acara Peninjauan Lapangan</h6>
-                            <div class="mb-2 d-grid">
-                                <button class="btn btn-primary">Lihat Dokumen</button>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">Berita Acara Peninjauan Lapangan</label>
+                                <button class="btn btn-primary w-100">Lihat Dokumen</button>
                             </div>
-                            <div class="mb-2">
-                                <label class="form-label">Peninjauan Lapangan *</label>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">Kelengkapan Administrasi <span
+                                        class="text-danger">*</span></label>
                                 <input type="file" class="form-control">
                             </div>
-                            <div class="mb-2">
-                                <label class="form-label">No *</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">No <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control">
                             </div>
-                            <div class="mb-2">
-                                <label class="form-label">Tanggal *</label>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">Tanggal <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control">
-                            </div>
-                            <div class="d-grid">
-                                <button class="btn btn-warning">Lihat Dokumen</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="text-center mt-4">
-                        <button class="btn btn-primary px-5">Simpan</button>
+                    <div class="row mb-4">
+                        <div class="col-3">
+                            <button class="btn btn-warning">Lihat Dokumen</button>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">Berita Acara Peninjauan Lapangan <span
+                                        class="text-danger">*</span></label>
+                                <input type="file" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">No <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label class="form-label">Tanggal <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="c0l-3">
+                            <button class="btn btn-warning">Lihat Dokumen</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        <button class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </div>
             </div>
