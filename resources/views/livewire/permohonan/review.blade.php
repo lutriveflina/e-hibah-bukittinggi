@@ -21,7 +21,8 @@
         <div class="card-body">
             <ul class="nav nav-pills" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="pill" href="#data_lembaga" role="tab" aria-selected="false">
+                    <a class="nav-link active" data-bs-toggle="pill" href="#data_lembaga" role="tab"
+                        aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Lembaga</div>
                         </div>
@@ -54,7 +55,7 @@
                 @endif
                 @if ($permohonan->id_status >= 4)
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link active" data-bs-toggle="pill" href="#berita_acara" role="tab"
+                        <a class="nav-link" data-bs-toggle="pill" href="#berita_acara" role="tab"
                             aria-selected="true">
                             <div class="d-flex align-items-center">
                                 <div class="tab-title">Berita Acara</div>
@@ -66,7 +67,7 @@
         </div>
     </div>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade" id="data_lembaga" role="tabpanel">
+        <div class="tab-pane fade show active" id="data_lembaga" role="tabpanel">
 
             <div class="card">
                 <div class="card-body">
@@ -98,6 +99,12 @@
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
                             <textarea class="form-control" rows="3" disabled>{{ $permohonan->lembaga->alamat }}"</textarea>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="checkbox" wire:model='is_lembaga_verif' id="is_lembaga_verif_checkbox">
+                                <span class="text-start ms-3">Data Lembaga Telah Dilakukan Pengecekan</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -257,11 +264,12 @@
                             <label class="form-label">Keterangan</label>
                             <textarea class="form-control" rows="3" disabled>{{ $permohonan->keterangan }}</textarea>
                         </div>
-
-                        <div>
-                            <button type="submit" class="btn btn-primary w-100">
-                                Simpan
-                            </button>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="checkbox" wire:model='is_proposal_verif'
+                                    id="is_proposal_verif_checkbox">
+                                <span class="text-start ms-3">Data Proposal Telah Dilakukan Pengecekan</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -376,11 +384,18 @@
                                 <button class="btn btn-warning w-100">Lihat Dokumen</button>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="checkbox" wire:model='is_proposal_verif'
+                                    id="is_proposal_verif_checkbox">
+                                <span class="text-start ms-3">Data Pendukung Telah Dilakukan Pengecekan</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade show active" id="berita_acara" role="tabpanel">
+        <div class="tab-pane fade" id="berita_acara" role="tabpanel">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center fw-bold">
@@ -411,9 +426,14 @@
                                         <tr wire:key="child-{{ $child->id }}">
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $child->question }}</td>
-                                            <td class="text-center"><input type="checkbox" name="ada_1"></td>
-                                            <td class="text-center"><input type="checkbox" name="sesuai_1"></td>
-                                            <td><input type="text" class="form-control"></td>
+                                            <td class="text-center"><input type="checkbox"
+                                                    wire:model='answer.{{ $child->id }}.is_ada'>
+                                            </td>
+                                            <td class="text-center"><input type="checkbox"
+                                                    wire:model='answer.{{ $child->id }}.is_sesuai'></td>
+                                            <td><input type="text"
+                                                    wire:model='answer.{{ $child->id }}.keterangan'
+                                                    class="form-control"></td>
                                         </tr>
                                     @endforeach
                                 @endforeach
@@ -424,7 +444,7 @@
                     <div class="mb-4">
                         <div class="row">
                             <div class="col-1 text-center">
-                                <input type="checkbox">
+                                <input wire:model='agreement' type="checkbox">
                             </div>
                             <div class="col-11">
                                 <p>Dengan ini saya menyatakan proposal ini telah dilakukan verifikasi kesesuaian,
@@ -444,26 +464,28 @@
                             usulan
                             hibahnya?</div>
                         <div>
-                            <button class="btn btn-primary me-4">Ya</button>
-                            <button class="btn btn-danger">Tidak</button>
+                            <button wire:click='hasVeriffied' class="btn btn-primary me-4">Ya</button>
+                            <button wire:click='store(0)' class="btn btn-danger">Tidak</button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="card">
+            <div x-show="$wire.veriffied == true" class="card">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">Berita Acara Kelengkapan Administrasi</label>
-                                <button class="btn btn-primary w-100">Lihat Dokumen</button>
+                                <a href="{{ Storage::url('/base/Contoh berita acara - kelengkapan berkas.pdf') }}"
+                                    target="_blank"><button class="btn btn-primary w-100">Lihat Dokumen</button></a>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">Berita Acara Peninjauan Lapangan</label>
-                                <button class="btn btn-primary w-100">Lihat Dokumen</button>
+                                <a href="{{ Storage::url('/base/Contoh berita acara - peninjauan lapangan.pdf') }}"
+                                    target="_blank"><button class="btn btn-primary w-100">Lihat Dokumen</button></a>
                             </div>
                         </div>
                     </div>
@@ -528,7 +550,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center">
-                        <button class="btn btn-primary w-100">Simpan</button>
+                        <button wire:click='store(1)' class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -576,6 +598,11 @@
                     modalContent.innerHTML = `<p class="text-danger">Jenis file tidak didukung.</p>`;
                 }
             });
+
+            $("#is_lembaga_verif_checkbox, #is_proposal_verif_checkbox, #is_pendukung_verif_checkbox").on("change",
+                function() {
+                    Livewire.dispatch("updateStatement");
+                })
         });
     </script>
 @endpush
