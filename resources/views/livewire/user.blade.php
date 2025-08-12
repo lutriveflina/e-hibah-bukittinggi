@@ -44,7 +44,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div x-show="$wire.role == 2" class="mb-3">
+                                        <div x-show="$wire.role != 1 || $wire.role != 5" class="mb-3">
                                             <label for="skpd" class="form-label">Instansi</label>
                                             <select wire:model='skpd' id="skpd" class="form-select">
                                                 <option value="">--- Pilih SKPD ---</option>
@@ -138,7 +138,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div x-show="$wire.role == 2" class="mb-3">
+                            <div x-show="$wire.role != 1 || $wire.role != 5" class="mb-3">
                                 <label for="skpd" class="form-label">Instansi</label>
                                 <select wire:model='skpd' id="skpd" class="form-select">
                                     <option value="">--- Pilih SKPD ---</option>

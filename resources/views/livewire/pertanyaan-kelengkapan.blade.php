@@ -13,13 +13,15 @@
         <div class="ms-auto">
             <div class="btn-group">
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#create_modal"><i
-                        class="bi bi-plus-lg"></i> Tambah Pertanyaan</button>
+                        class="bi bi-plus-lg"></i>
+                    Tambah Pertanyaan</button>
+
                 <!-- Modal -->
                 <div wire:ignore.self class="modal fade" id="create_modal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div class="modal-header bg-primary">
-                                <h5 class="modal-title text-light">Tambah Role</h5>
+                            <div class="modal-header bg-primary" id="modalHeader">
+                                <h5 class="modal-title text-light">Tambah Pertanyaan</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -54,13 +56,13 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button wire:click.prevent='store' type="button" class="btn btn-primary">Save
+                                <button wire:click.prevent='store' type="button" class="btn btn-primary"
+                                    id="saveButton">Save
                                     changes</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -86,7 +88,9 @@
                                 <tr wire:key="child-{{ $child->id }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $child->question }}</td>
-                                    <td></td>
+                                    <td><button wire:click='edit({{ $child->id }})'
+                                            class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i>
+                                            Edit</button></td>
                                 </tr>
                             @endforeach
                         @endforeach
@@ -103,39 +107,42 @@
         </div>
     </div>
 
-    {{-- <div wire:ignore.self class="modal fade" id="editRoleModal" tabindex="-1" aria-hidden="true">
+
+
+    <!-- Modal -->
+    <div wire:ignore.self class="modal fade" id="edit_modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-warning">
-                    <h5 class="modal-title">Ubah Data Role</h5>
+                <div class="modal-header bg-warning" id="modalHeader">
+                    <h5 class="modal-title text-dark">Edit Pertanyaan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-12">
                             <div class="mb-3">
-                                <label for="roleName" class="form-label">Nama Role</label>
-                                <input wire:model='name' type="text" class="form-control" id="permissionName"
-                                    placeholder="Masukkan nama permission">
+                                <label for="question" class="form-label">Pertanyaan</label>
+                                <input wire:model='question' type="text" class="form-control" id="question"
+                                    placeholder="Nama Pertanyaan">
                             </div>
                             <div wire:ignore class="mb-3">
-                                <label for="selectedPermissions" class="form-label">Permission</label>
-                                <select class="multiple-select" id="editSelectedPermissions"
-                                    data-placeholder="Choose anything" multiple="multiple">
-                                    @foreach ($permissions as $item)
-                                        <option value="{{ $item->name }}"
-                                            @if (in_array($item->name, $selectedPermissions)) selected @endif>{{ $item->name }}
-                                        </option>
+                                <label for="selectParent" class="form-label">Parent</label>
+                                <select wire:model='id_parent' class="form-select" id="selectParent">
+                                    <option value="">Tidak Ada Parent</option>
+                                    @foreach ($parents as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->question }}</option>
                                     @endforeach
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <label for="guard_name" class="form-label">Guard Name</label>
-                                <select wire:model='guard_name' class="form-control" id="guard_name">
-                                    <option value="web">Pilih Guard Name</option>
-                                    <option selected value="web">Web</option>
-                                    <option value="api">API</option>
-                                    <option value="admin">Admin</option>
+                                <label for="selectOrder" class="form-label">Urutan</label>
+                                <select wire:model='order' class="form-select" id="selectOrder"
+                                    wire:key="order-{{ implode('-', $orders) }}">
+                                    @foreach ($orders as $item)
+                                        <option value="{{ $item }}">
+                                            {{ $item }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -143,11 +150,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button wire:click.prevent='updateRole' type="button" class="btn btn-warning">Update</button>
+                    <button wire:click.prevent='store' type="button" class="btn btn-warning" id="saveButton">Save
+                        changes</button>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 
 </div>
 
@@ -160,8 +168,17 @@
                 Livewire.dispatch("updateOrder");
             })
 
+            Livewire.on("addModal", () => {
+                $("#create_modal").modal('show');
+            })
+
+            Livewire.on("editModal", () => {
+                $("#edit_modal").modal('show');
+            })
+
             Livewire.on("closeModal", () => {
                 $("#create_modal").modal('hide');
+                $("#edit_modal").modal('hide');
             })
         });
     </script>

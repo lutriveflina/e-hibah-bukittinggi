@@ -21,16 +21,16 @@
         <div class="card-body">
             <ul class="nav nav-pills" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link active" data-bs-toggle="pill" href="#data_lembaga" role="tab"
-                        aria-selected="false">
+                    <a class="nav-link @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif" data-bs-toggle="pill"
+                        href="#data_lembaga" role="tab" aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Lembaga</div>
                         </div>
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="pill" href="#data_proposal" role="tab"
-                        aria-selected="false">
+                    <a class="nav-link @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif" data-bs-toggle="pill"
+                        href="#data_proposal" role="tab" aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Proposal</div>
                         </div>
@@ -38,7 +38,8 @@
                 </li>
                 @if ($permohonan->id_status >= 3)
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="pill" href="#data_rab" role="tab" aria-selected="false">
+                        <a class="nav-link @if ($is_lembaga_verif && $is_proposal_verif && !$is_pendukung_verif) show active @endif" data-bs-toggle="pill"
+                            href="#data_rab" role="tab" aria-selected="false">
                             <div class="d-flex align-items-center">
                                 <div class="tab-title">Data Rab</div>
                             </div>
@@ -55,8 +56,8 @@
                 @endif
                 @if ($permohonan->id_status >= 4)
                     <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="pill" href="#berita_acara" role="tab"
-                            aria-selected="true">
+                        <a class="nav-link @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif" data-bs-toggle="pill"
+                            href="#berita_acara" role="tab" aria-selected="true">
                             <div class="d-flex align-items-center">
                                 <div class="tab-title">Berita Acara</div>
                             </div>
@@ -67,7 +68,8 @@
         </div>
     </div>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="data_lembaga" role="tabpanel">
+        <div class="tab-pane fade @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif" id="data_lembaga"
+            role="tabpanel">
 
             <div class="card">
                 <div class="card-body">
@@ -102,7 +104,8 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <input type="checkbox" wire:model='is_lembaga_verif' id="is_lembaga_verif_checkbox">
+                                <input type="checkbox" wire:model='is_lembaga_verif' @checked($is_lembaga_verif)
+                                    id="is_lembaga_verif_checkbox">
                                 <span class="text-start ms-3">Data Lembaga Telah Dilakukan Pengecekan</span>
                             </div>
                         </div>
@@ -110,7 +113,8 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="data_proposal" role="tabpanel">
+        <div class="tab-pane fade @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif" id="data_proposal"
+            role="tabpanel">
             <div class="mb-4">
                 <div class="card">
                     <div class="card-body">
@@ -266,7 +270,7 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <input type="checkbox" wire:model='is_proposal_verif'
+                                <input type="checkbox" wire:model='is_proposal_verif' @checked($is_proposal_verif)
                                     id="is_proposal_verif_checkbox">
                                 <span class="text-start ms-3">Data Proposal Telah Dilakukan Pengecekan</span>
                             </div>
@@ -275,7 +279,8 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="data_rab" role="tabpanel">
+        <div class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && !$is_pendukung_verif) show active @endif" id="data_rab"
+            role="tabpanel">
             <div class="card">
                 <div class="card-body">
 
@@ -386,8 +391,8 @@
                         </div>
                         <div class="row">
                             <div class="col-12">
-                                <input type="checkbox" wire:model='is_proposal_verif'
-                                    id="is_proposal_verif_checkbox">
+                                <input type="checkbox" wire:model='is_pendukung_verif' @checked($is_pendukung_verif)
+                                    id="is_pendukung_verif_checkbox">
                                 <span class="text-start ms-3">Data Pendukung Telah Dilakukan Pengecekan</span>
                             </div>
                         </div>
@@ -395,7 +400,8 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="berita_acara" role="tabpanel">
+        <div class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif" id="berita_acara"
+            role="tabpanel">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title text-center fw-bold">
@@ -444,7 +450,7 @@
                     <div class="mb-4">
                         <div class="row">
                             <div class="col-1 text-center">
-                                <input wire:model='agreement' type="checkbox">
+                                <input wire:model='is_lengkap' type="checkbox">
                             </div>
                             <div class="col-11">
                                 <p>Dengan ini saya menyatakan proposal ini telah dilakukan verifikasi kesesuaian,
@@ -495,19 +501,19 @@
                             <div class="mb-3">
                                 <label class="form-label">Kelengkapan Administrasi <span
                                         class="text-danger">*</span></label>
-                                <input type="file" class="form-control">
+                                <input type="file" wire:model='file_kelengkapan_adm' class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">No <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control">
+                                <input type="text" wire:model='no_kelengkapan_adm' class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control">
+                                <input type="date" wire:model='tanggal_kelengkapan_adm' class="form-control">
                             </div>
                         </div>
                     </div>
@@ -523,19 +529,19 @@
                             <div class="mb-3">
                                 <label class="form-label">Berita Acara Peninjauan Lapangan <span
                                         class="text-danger">*</span></label>
-                                <input type="file" class="form-control">
+                                <input type="file" wire:model='file_tinjau_lap' class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">No <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control">
+                                <input type="text" wire:model='no_tinjau_lap' class="form-control">
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                <input type="date" class="form-control">
+                                <input type="date" wire:model='tanggal_tinjau_lap' class="form-control">
                             </div>
                         </div>
                     </div>

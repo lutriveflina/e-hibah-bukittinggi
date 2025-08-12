@@ -48,8 +48,10 @@
                         <a href="{{ route('user.index') }}" class="list-group-item"><i class="bi bi-people"></i>
                             Pengguna</a>
                     @endcan
-                    <a href="{{ route('pertanyaan') }}" class="list-group-item"><i class="bi bi-question-square"></i>
-                        Pertanyaan</a>
+                    @can('View Any Pertanyaan', App\Models\PertanyaanKelengkapan::class)
+                        <a href="{{ route('pertanyaan') }}" class="list-group-item"><i class="bi bi-question-square"></i>
+                            Pertanyaan</a>
+                    @endcan
 
                 </div>
             </div>

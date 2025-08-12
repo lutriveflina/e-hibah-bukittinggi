@@ -97,15 +97,19 @@ class User extends Component
     public function update(){
         $this->validate();
         $role = Role::findOrFail($this->role);
-
-        ModelsUser::whereId($this->userId)->update([
+        
+        $user = ModelsUser::findOrFail($this->userId);
+        
+        $user->update([
             'name' => $this->name,
             'email' => $this->email,
             'id_role' => $this->role,
             'id_skpd' => $this->skpd ? $this->skpd : null,
-        ])->assignRole([$role->name]);
+        ]);
 
-        $this->reset(['roleId','name', 'email', 'role']);
+        $user->assignRole([$role->name]);
+
+        $this->reset(['role','name', 'email', 'role']);
         session()->flash('message', 'User created successfully.');
         $this->dispatch('closeModal');
     }

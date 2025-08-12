@@ -11,10 +11,12 @@ use App\Livewire\Lembaga\Pengurus;
 use App\Livewire\Lembaga\Profile;
 use App\Livewire\Permohonan\CreateOrUpdate;
 use App\Livewire\Lembagas\IndexLembaga;
+use App\Livewire\Permission as LivewirePermission;
 use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\Permohonan\IsiRab;
 use App\Livewire\Permohonan\Review;
 use App\Livewire\PertanyaanKelengkapan;
+use App\Livewire\Role as LivewireRole;
 use App\Livewire\SKPD;
 use App\Livewire\User;
 use App\Livewire\User\ChangePassword;
@@ -25,12 +27,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role as ModelsRole;
 
-Route::get('/', [AuthController::class, 'Authenticate'])->name('login');
+Route::get('/', [AuthController::class, 'login'])->name('login')->middleware('guest');
+Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate')->middleware('guest');
+
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [MainController::class, 'dasboard'])->name('dashboard');
-    Route::get('/permission', [MainController::class, 'permission'])->name('permission');
-    Route::get('/role', [MainController::class, 'role'])->name('role');
+    Route::get('/permission', LivewirePermission::class)->name('permission');
+    Route::get('/role', LivewireRole::class)->name('role');
     Route::get('/skpd', SKPD::class)->name('skpd');
     Route::get('/user', User::class)->name('user.index');
     Route::get('/user/change_password', ChangePassword::class)->name('user.change_password');
@@ -50,6 +54,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan/isi_rab/{id_permohonan}', IsiRab::class)->name('permohonan.isi_rab');
     Route::get('/permohonan/send/{id_permohonan}', [PermohonanController::class, 'send'])->name('permohonan.send');
     Route::get('/permohonan/review/{id_permohonan}', Review::class)->name('permohonan.review');
+    Route::get('/permohonan/edit_review/{id_permohonan}', Review::class)->name('permohonan.edit_review');
+    Route::get('/permohonan/send_review/{id_permohonan}', [PermohonanController::class, 'send_review'])->name('permohonan.send_review');
+    Route::get('/permohonan/confirm_review/{id_permohonan}', [PermohonanController::class, 'confirm_review'])->name('permohonan.confirm_review');
 });
 
 
@@ -65,6 +72,6 @@ Route::middleware(['auth'])->group(function () {
 //         'roles'         => $user->getRoleNames(),       // daftar role
 //         'permissions'   => $user->getAllPermissions()->pluck('name'), // daftar permission
 //         'has_role_admin' => $user->hasRole('Admin Lembaga'),    // cek role admin
-//         'can_check_permohonan'  => $user->can('view_dukung', App\Models\Status_permohonan::class),   // cek permission view users
+//         'can_view_pertanyaan'  => $user->can('View Any Pertanyaan', App\Models\PertanyaanKelengkapan::class),   // cek permission view users
 //     ];
 // })->middleware('auth');
