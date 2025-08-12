@@ -41,7 +41,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
     Route::get('/pertanyaan', PertanyaanKelengkapan::class)->name('pertanyaan');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
-    Route::get('/lembaga/uncreate', [LembagaController::class, 'uncreate'])->name('lembaga.uncreate');
+    Route::get('/lembaga/create', [LembagaController::class, 'create'])->name('lembaga.create');
     Route::get('/lembaga/admin/{id_lembaga}', [LembagaController::class, 'admin'])->name('lembaga.admin');
     Route::get('/lembaga/update/profile/{id_lembaga}', Profile::class)->name('lembaga.update.profile');
     Route::get('/lembaga/update/pendukung/{id_lembaga}', Pendukung::class)->name('lembaga.update.pendukung');
@@ -75,3 +75,10 @@ Route::middleware(['auth'])->group(function () {
 //         'can_view_pertanyaan'  => $user->can('View Any Pertanyaan', App\Models\PertanyaanKelengkapan::class),   // cek permission view users
 //     ];
 // })->middleware('auth');
+
+Route::get('/test-email', function () {
+    \Illuminate\Support\Facades\Mail::raw('Test email SMTP Gmail', function ($message) {
+        $message->to('s.uum1612@gmail.com')->subject('SMTP Gmail Test');
+    });
+    return 'Email terkirim!';
+});

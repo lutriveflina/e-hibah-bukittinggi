@@ -6,6 +6,7 @@ use App\Models\Lembaga;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LembagaController extends Controller
 {
@@ -59,40 +60,49 @@ class LembagaController extends Controller
             'date_pernyataan' => 'required',
             'file_pernyataan' => 'required|mimetypes:application/pdf',
         ]);
-        
-        $validatedLembaga['name'] = $validatedLembaga['name_lembaga'];
-        $validatedLembaga['id_skpd'] = 1;
 
-        $ext_akta_kumham = $request->file('file_akta_kumham')->getclientOriginalExtension();
-        $ext_domisili = $request->file('file_domisili')->getclientOriginalExtension();
-        $ext_operasional = $request->file('file_operasional')->getclientOriginalExtension();
-        $ext_pernyataan = $request->file('file_pernyataan')->getclientOriginalExtension();
+        DB::beginTransaction();
+        try {
+            $validatedLembaga['name'] = $validatedLembaga['name_lembaga'];
+            $validatedLembaga['id_skpd'] = 1;
 
-        $validatedLembaga['file_akta_kumham'] = $request->file('file_akta_kumham')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_akta_kumham.' . $ext_akta_kumham, 'public');
-        $validatedLembaga['file_domisili'] = $request->file('file_domisili')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_domisili.' . $ext_domisili, 'public');
-        $validatedLembaga['file_operasional'] = $request->file('file_operasional')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_operasional.' . $ext_operasional, 'public');
-        $validatedLembaga['file_pernyataan'] = $request->file('file_pernyataan')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_pernyataan.' . $ext_pernyataan, 'public');
+            $ext_akta_kumham = $request->file('file_akta_kumham')->getclientOriginalExtension();
+            $ext_domisili = $request->file('file_domisili')->getclientOriginalExtension();
+            $ext_operasional = $request->file('file_operasional')->getclientOriginalExtension();
+            $ext_pernyataan = $request->file('file_pernyataan')->getclientOriginalExtension();
 
-        $lembaga = Lembaga::create($validatedLembaga);
+            $validatedLembaga['file_akta_kumham'] = $request->file('file_akta_kumham')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_akta_kumham.' . $ext_akta_kumham, 'public');
+            $validatedLembaga['file_domisili'] = $request->file('file_domisili')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_domisili.' . $ext_domisili, 'public');
+            $validatedLembaga['file_operasional'] = $request->file('file_operasional')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_operasional.' . $ext_operasional, 'public');
+            $validatedLembaga['file_pernyataan'] = $request->file('file_pernyataan')->storeAs('data_lembaga', 'lembaga_' . Auth::user()->id . '_pernyataan.' . $ext_pernyataan, 'public');
 
-        $ext_ktp = $request->file('scan_ktp')->getclientOriginalExtension();
+            $lembaga = Lembaga::create($validatedLembaga);
 
-        $data_pimpinan = [
-            'name' => $request->input('name_pimpinan'),
-            'email' => $request->input('email_pimpinan'),
-            'nik' => $request->input('nik'),
-            'no_hp' => $request->input('no_hp'),
-            'alamat' => $request->input('alamat_pimpinan'),
-            'scan_ktp' => $request->file('scan_ktp')->storeAs('pengurus', 'pengurus_' . Auth::user()->id . '_ketua.' . $ext_ktp, 'public'),
-        ];
+            $ext_ktp = $request->file('scan_ktp')->getclientOriginalExtension();
 
-        $lembaga->pengurus()->create($data_pimpinan);
+            $data_pimpinan = [
+                'name' => $request->input('name_pimpinan'),
+                'email' => $request->input('email_pimpinan'),
+                'nik' => $request->input('nik'),
+                'no_hp' => $request->input('no_hp'),
+                'alamat' => $request->input('alamat_pimpinan'),
+                'scan_ktp' => $request->file('scan_ktp')->storeAs('pengurus', 'pengurus_' . Auth::user()->id . '_ketua.' . $ext_ktp, 'public'),
+            ];
 
-        User::where('id', Auth::user()->id)->update([
-            'id_lembaga' => $lembaga->id,
-        ]);
-        
-        return redirect()->route('lembaga.index')->with('success', 'Lembaga created successfully.');
+            $lembaga->pengurus()->create($data_pimpinan);
+
+            DB::commit();
+
+            User::where('id', Auth::user()->id)->update([
+                'id_lembaga' => $lembaga->id,
+            ]);
+            
+            return redirect()->route('lembaga.index')->with('success', 'Lembaga created successfully.');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
+            session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
+        }
     }
 
     public function show()

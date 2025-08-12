@@ -40,16 +40,17 @@
                                             <label for="role" class="form-label">Role</label>
                                             <select wire:model='role' id="role" class="form-select">
                                                 @foreach ($roles as $key => $role)
-                                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div x-show="$wire.role != 1 || $wire.role != 5" class="mb-3">
+                                        <div x-show="$wire.role == 2 || $wire.role == 3 || $wire.role == 4"
+                                            class="mb-3">
                                             <label for="skpd" class="form-label">Instansi</label>
                                             <select wire:model='skpd' id="skpd" class="form-select">
                                                 <option value="">--- Pilih SKPD ---</option>
                                                 @foreach ($skpds as $key => $skpd)
-                                                    <option value="{{ $skpd->id }}">{{ $skpd->name }}</option>
+                                                <option value="{{ $skpd->id }}">{{ $skpd->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -82,18 +83,18 @@
                     </thead>
                     <tbody>
                         @foreach ($users as $key => $user)
-                            <tr>
-                                <td>{{ $user->name }}</td>
-                                <td>{{ $user->has_role->name }}</td>
-                                <td>{{ $user->skpd->name ?? ($user->lembaga->name ?? '') }}</td>
-                                <td>
-                                    <button wire:click='edit({{ $user->id }})' class="btn btn-sm btn-warning"><i
-                                            class="bi bi-pencil-square"></i>
-                                        Edit</button>
-                                    <button wire:click='verifyDelete({{ $user->id }})'
-                                        class="btn btn-sm btn-danger"><i class="bi bi-trash"></i> Hapus</button>
-                                </td>
-                            </tr>
+                        <tr>
+                            <td>{{ $user->name }}</td>
+                            <td>{{ $user->has_role->name }}</td>
+                            <td>{{ $user->skpd->name ?? ($user->lembaga->name ?? '') }}</td>
+                            <td>
+                                <button wire:click='edit({{ $user->id }})' class="btn btn-sm btn-warning"><i
+                                        class="bi bi-pencil-square"></i>
+                                    Edit</button>
+                                <button wire:click='verifyDelete({{ $user->id }})' class="btn btn-sm btn-danger"><i
+                                        class="bi bi-trash"></i> Hapus</button>
+                            </td>
+                        </tr>
                         @endforeach
                     </tbody>
                     <tfoot>
@@ -134,7 +135,7 @@
                                 <label for="role" class="form-label">Role</label>
                                 <select wire:model='role' id="role" class="form-select">
                                     @foreach ($roles as $key => $role)
-                                        <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -143,7 +144,7 @@
                                 <select wire:model='skpd' id="skpd" class="form-select">
                                     <option value="">--- Pilih SKPD ---</option>
                                     @foreach ($skpds as $key => $skpd)
-                                        <option value="{{ $skpd->id }}">{{ $skpd->name }}</option>
+                                    <option value="{{ $skpd->id }}">{{ $skpd->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -206,8 +207,8 @@
 </div>
 
 @push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
             Livewire.on("createModal", () => {
                 $('#create-modal').modal('show');
             });
@@ -226,5 +227,5 @@
                 $('#delete-modal').modal('hide');
             });
         })
-    </script>
+</script>
 @endpush

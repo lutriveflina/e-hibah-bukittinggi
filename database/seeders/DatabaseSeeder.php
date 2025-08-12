@@ -17,18 +17,6 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // Permission::create();
-
-        // Permission::create();
-
-        // Permission::create();
-
-        // Permission::create();
-
-        // Permission::create();
-
-        // Permission::create();
-
         $permissions = [
             // User
             ['name' => 'View Any User', 'guard_name' => 'web'],
@@ -63,8 +51,20 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Restore Lembaga', 'guard_name' => 'web'],
 
             // Permohonan
+            ['name' => 'View Any Permohonan', 'guard_name' => 'web'],
+            ['name' => 'View Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Create Permohonan', 'guard_name' => 'web'],
             ['name' => 'Update Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Delete Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Restore Permohonan', 'guard_name' => 'web'],
             ['name' => 'View Dukung Permohonan', 'guard_name' => 'web'],
+            ['name' => 'View Rab Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Check Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Send Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Review Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Reviewed Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Confirm Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Upload Rab Permohonan', 'guard_name' => 'web'],
 
             // Skpd
             ['name' => 'View Any Skpd', 'guard_name' => 'web'],
@@ -73,6 +73,14 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Update Skpd', 'guard_name' => 'web'],
             ['name' => 'Delete Skpd', 'guard_name' => 'web'],
             ['name' => 'Restore Skpd', 'guard_name' => 'web'],
+
+            // Pertanyaan
+            ['name' => 'View Any Pertanyaan', 'guard_name' => 'web'],
+            ['name' => 'View Pertanyaan', 'guard_name' => 'web'],
+            ['name' => 'Create Pertanyaan', 'guard_name' => 'web'],
+            ['name' => 'Update Pertanyaan', 'guard_name' => 'web'],
+            ['name' => 'Delete Pertanyaan', 'guard_name' => 'web'],
+            ['name' => 'Restore Pertanyaan', 'guard_name' => 'web'],
         ];
 
         // Insert permissions
@@ -80,7 +88,43 @@ class DatabaseSeeder extends Seeder
             Permission::firstOrCreate($permission);
         }
 
-        Role::create(['name' => 'Super Admin', 'guard_name' => 'web'])->syncPermissions(Permission::all());
+        $permission_for_super_admin = Permission::all()->except(
+            Permission::where('name', 'View Admin Lembaga')->first()->id
+        );
+
+        Role::create(['name' => 'Super Admin', 'guard_name' => 'web'])->syncPermissions($permission_for_super_admin);
+        Role::create(['name' => 'Admin SKPD', 'guard_name' => 'web'])->syncPermissions([
+            'View Any Lembaga',
+            'View Lembaga',
+            'View Any Permohonan',
+            'Check Permohonan',
+            'Review Permohonan',
+            'Reviewed Permohonan',
+            'Reviewed Permohonan',
+        ]);
+        Role::create(['name' => 'Reviewer', 'guard_name' => 'web'])->syncPermissions([
+            'View Any Permohonan',
+            'Check Permohonan',
+            'Review Permohonan',
+            'Send Permohonan',
+        ]);
+        Role::create(['name' => 'Verifikator', 'guard_name' => 'web'])->syncPermissions([
+            'View Any Permohonan',
+            'Check Permohonan',
+            'Review Permohonan',
+            'Send Permohonan',
+        ]);
+        Role::create(['name' => 'Admin Lembaga', 'guard_name' => 'web'])->syncPermissions([
+            'View Admin Lembaga',
+            'Create Lembaga',
+            'Update Lembaga',
+            'View Any Permohonan',
+            'Create Permohonan',
+            'View Dukung Permohonan',
+            'View Rab Permohonan',
+            'Check Permohonan',
+            'Send Permohonan',
+        ]);
         
         // contoh user superadmin
         User::create([
