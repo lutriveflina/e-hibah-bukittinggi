@@ -16,7 +16,7 @@
                                         <select wire:model='id_skpd' class="form-control">
                                             <option value="">--- Pilih SKPD ---</option>
                                             @foreach ($skpd as $key => $item)
-                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -27,7 +27,7 @@
                                         <select wire:model='id_urusan' class="form-control">
                                             <option value="">--- Pilih Urusan ---</option>
                                             @foreach ($urusan as $key => $item)
-                                                <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
+                                            <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
                                             @endforeach
                                         </select>
                                     </div>

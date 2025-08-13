@@ -23,9 +23,12 @@ trait Blameable
         });
 
         static::deleting(function ($model) {
-            if(Auth::check() && in_array('illuminate\Database\Eloquent\SoftDeletes', class_uses_recursive($model))) {
-                $model->deleted_by = Auth::id();
-                $model->saveQuietly();
+            if (Auth::check()) {
+                if (in_array('Illuminate\Database\Eloquent\SoftDeletes', class_uses_recursive($model))) {
+                    // Soft delete
+                    $model->deleted_by = Auth::id();
+                    $model->saveQuietly();
+                }
             }
         });
     }

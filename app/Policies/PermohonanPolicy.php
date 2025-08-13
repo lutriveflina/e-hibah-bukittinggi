@@ -72,31 +72,31 @@ class PermohonanPolicy
      * Determine whether the user can update the model.
      */
     public function view_rab(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('View Rab Permohonan');
     }
 
     public function check(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('Check Permohonan');
     }
 
     public function send(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('Send Permohonan');
     }
 
     public function review(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('Review Permohonan');
     }
 
     public function reviewed(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('Reviewed Permohonan');
     }
 
     public function confirm_review(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('Confirm Review Permohonan');
     }
 
     public function upload_rab(User $user) : bool {
-        return false;
+        return $user->hasPermissionTo('Updload Rab Permohonan');
     }
     
 }

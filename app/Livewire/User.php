@@ -62,13 +62,11 @@ class User extends Component
         $role = Role::findOrFail($this->role);
 
         // Optionally, send an email with the password
-        // if($role->name == 'Admin Lembaga'){
-        //     Mail::to($this->email)->queue(new SendUserPassword($new_password));
-        // }else{
-        //     $new_password = 'bukittinggi2025';
-        // }
-
-        $new_password = 'bukittinggi2025';
+        if($role->name == 'Admin Lembaga'){
+            Mail::to($this->email)->queue(new SendUserPassword($new_password));
+        }else{
+            $new_password = 'bukittinggi2025';
+        }
 
         ModelsUser::create([
             'name' => $this->name,

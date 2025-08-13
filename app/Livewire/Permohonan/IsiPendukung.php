@@ -79,7 +79,7 @@ class IsiPendukung extends Component
             }
         } catch (\Throwable $th) {
             DB::rollBack();
-
+            dd($th);
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }
 

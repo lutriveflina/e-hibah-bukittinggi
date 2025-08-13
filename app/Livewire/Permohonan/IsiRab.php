@@ -25,7 +25,7 @@ class IsiRab extends Component
     public $listeners = ['close-modal'];
 
     public function mount($id_permohonan = null){
-        $this->permohonan = Permohonan::find($id_permohonan);
+        $this->permohonan = Permohonan::findOrFail($id_permohonan);
         $this->satuans = Satuan::orderBy('name')->get();
     }
 

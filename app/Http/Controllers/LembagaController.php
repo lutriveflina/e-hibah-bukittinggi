@@ -65,6 +65,7 @@ class LembagaController extends Controller
         try {
             $validatedLembaga['name'] = $validatedLembaga['name_lembaga'];
             $validatedLembaga['id_skpd'] = 1;
+            $validatedLembaga['id_urusan'] = 2;
 
             $ext_akta_kumham = $request->file('file_akta_kumham')->getclientOriginalExtension();
             $ext_domisili = $request->file('file_domisili')->getclientOriginalExtension();
@@ -97,7 +98,7 @@ class LembagaController extends Controller
                 'id_lembaga' => $lembaga->id,
             ]);
             
-            return redirect()->route('lembaga.index')->with('success', 'Lembaga created successfully.');
+            return redirect()->route('lembaga.admin', ['id_lembaga' => $lembaga->id])->with('success', 'Lembaga created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th);

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Permission;
 use App\Models\Role as ModelsRole;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Component;
 
@@ -17,7 +18,11 @@ class Role extends Component
     public $name;
     public $guard_name;
     
-    protected $listeners = ['editRole', 'closeModal'];
+    protected $listeners = [
+        'editRole',
+        'deleteModal',
+        'closeModal'
+    ];
     // protected $listeners = ['select2Updated' => 'updateSelectedPermissions'];
 
     public function mount()
@@ -85,5 +90,39 @@ class Role extends Component
         $this->reset(['roleId', 'name', 'guard_name', 'selectedPermissions']);
         session()->flash('message', 'Role berhasil diperbarui.');
         $this->dispatch('closeModal');
+    }
+
+    public function delete_warning($id_role){
+        $role = ModelsRole::findOrFail($id_role);
+        if($role){
+            $this->roleId = $role->id;
+            $this->name = $role->name;
+            $this->guard_name = $role->guard_name;
+            $this->selectedPermissions = $role->permissions->pluck('name')->toArray();
+
+            $this->dispatch('deleteModal');
+        }
+    }
+
+    public function delete($id_role){
+        $role = ModelsRole::findOrFail($id_role);
+        if($role){
+            DB::beginTransaction();
+
+            try {
+                
+                $role->permissions()->detach();
+
+                $role->delete();
+
+                DB::commit();
+
+                $this->dispatch('closeModal');
+            } catch (\Throwable $th) {
+                DB::rollBack();
+                dd($th);
+                session()->flash("Error", "Gagal menghapus data: ", $th->getMessage());
+            }
+        }
     }
 }

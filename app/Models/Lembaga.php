@@ -11,6 +11,7 @@ class Lembaga extends BaseModel
     protected $fillable = [
         'name',
         'id_skpd',
+        'id_urusan',
         'email',
         'phone',
         'alamat',

@@ -22,7 +22,6 @@ use App\Livewire\User;
 use App\Livewire\User\ChangePassword;
 use App\Models\Lembaga;
 use App\Models\Permission;
-use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role as ModelsRole;
@@ -60,25 +59,25 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-// Route::get('/testing', function () {
-//     $user = auth()->user();
+Route::get('/testing', function () {
+    $user = auth()->user();
 
-//     if (!$user) {
-//         return 'Tidak ada user yang login.';
-//     }
+    if (!$user) {
+        return 'Tidak ada user yang login.';
+    }
 
-//     return [
-//         'user_id'       => $user->id,
-//         'roles'         => $user->getRoleNames(),       // daftar role
-//         'permissions'   => $user->getAllPermissions()->pluck('name'), // daftar permission
-//         'has_role_admin' => $user->hasRole('Admin Lembaga'),    // cek role admin
-//         'can_view_pertanyaan'  => $user->can('View Any Pertanyaan', App\Models\PertanyaanKelengkapan::class),   // cek permission view users
-//     ];
-// })->middleware('auth');
+    return [
+        'user_id'       => $user->id,
+        'roles'         => $user->getRoleNames(),       // daftar role
+        'permissions'   => $user->getAllPermissions()->pluck('name'), // daftar permission
+        'has_role_admin' => $user->hasRole('Admin Lembaga'),    // cek role admin
+        'can_view_dukung'  => $user->can('view_dukung', App\Models\Permohonan::class),   // cek permission view users
+    ];
+})->middleware('auth');
 
-Route::get('/test-email', function () {
-    \Illuminate\Support\Facades\Mail::raw('Test email SMTP Gmail', function ($message) {
-        $message->to('s.uum1612@gmail.com')->subject('SMTP Gmail Test');
-    });
-    return 'Email terkirim!';
-});
+// Route::get('/test-email', function () {
+//     \Illuminate\Support\Facades\Mail::raw('Test email SMTP Gmail', function ($message) {
+//         $message->to('s.uum1612@gmail.com')->subject('SMTP Gmail Test');
+//     });
+//     return 'Email terkirim!';
+// });
