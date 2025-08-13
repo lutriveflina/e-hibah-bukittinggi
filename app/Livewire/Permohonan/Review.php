@@ -7,8 +7,11 @@ use App\Models\KelengkapanBeritaAcara;
 use App\Models\Permohonan;
 use App\Models\PertanyaanKelengkapan;
 use App\Models\RabPermohonan;
+use App\Models\Status_permohonan;
 use App\Models\VerifikasiPermohonan;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -43,6 +46,12 @@ class Review extends Component
 
     public $berita_acara;
 
+    protected $status_rekomendasi;
+    public $nominal_rekomendasi;
+    public $tanggal_rekomendasi;
+    public $catatan_rekomendasi;
+    public $file_pemberitahuan;
+
     public $listeners = ['updateStatement' => 'veriffiedStatement'];
 
     public function mount($id_permohonan = null){
@@ -57,12 +66,11 @@ class Review extends Component
         }
 
         $this->questions = PertanyaanKelengkapan::with(['children' => function($query) {$query->orderBy('order');}])->where('id_parent', null)->orderBy('order')->get();
-
         $this->berita_acara = BeritaAcara::firstWhere('id_permohonan', $this->permohonan->id);
         if($this->berita_acara){
             $kelengkapan = KelengkapanBeritaAcara::where('id_berita_acara', $this->berita_acara->id)->get();
             foreach($this->questions as $question){
-                foreach($question->child as $child){
+                foreach($question->children as $child){
                     $existing = $kelengkapan->firstWhere('id_pertanyaan', $child->id);
 
                     $this->answer[$child->id] = [
@@ -72,6 +80,17 @@ class Review extends Component
                     ];
                 }
             }
+
+            $this->is_lengkap = $this->berita_acara->is_lengkap;
+            if($this->is_lengkap == 1){
+                $this->veriffied = true;
+            }
+            $this->file_kelengkapan_adm = $this->berita_acara->file_kelengkapan_adm;
+            $this->no_kelengkapan_adm = $this->berita_acara->no_kelengkapan_adm;
+            $this->tanggal_kelengkapan_adm = $this->berita_acara->tanggal_kelengkapan_adm;
+            $this->file_tinjau_lap = $this->berita_acara->file_tinjau_lap;
+            $this->no_tinjau_lap = $this->berita_acara->no_tinjau_lap;
+            $this->tanggal_tinjau_lap = $this->berita_acara->tanggal_tinjau_lap;
         }
     }
 
@@ -110,25 +129,31 @@ class Review extends Component
         $this->veriffied = true;
     }
 
-    public function store($VerificationBool){
+    public function store_berita_acara($VerificationBool){
         if($VerificationBool == 0) return;
         $this->validate();
         DB::beginTransaction();
         try {
+            $ext_kelengkapan_adm = $this->file_kelengkapan_adm->getclientOriginalExtension();
+            $kelengkapan_adm_path = $this->file_kelengkapan_adm->storeAs('berita_acara', 'kelengkapan_adm_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_kelengkapan_adm, 'public');
+            
+            $ext_tinjau_lap = $this->file_tinjau_lap->getclientOriginalExtension();
+            $tinjau_lap_path = $this->file_tinjau_lap->storeAs('berita_acara', 'tinjau_lap_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_tinjau_lap, 'public');
+            
             $berita_acara = BeritaAcara::create([
                 'id_permohonan' => $this->permohonan->id,
                 'is_lengkap' => $this->is_lengkap,
-                'file_kelengkapan_adm' => $this->file_kelengkapan_adm,
+                'file_kelengkapan_adm' => $kelengkapan_adm_path,
                 'no_kelengkapan_adm' => $this->no_kelengkapan_adm,
                 'tanggal_kelengkapan_adm' => $this->tanggal_kelengkapan_adm,
-                'file_tinjau_lap' => $this->file_tinjau_lap,
+                'file_tinjau_lap' => $tinjau_lap_path,
                 'no_tinjau_lap' => $this->no_tinjau_lap,
                 'tanggal_tinjau_lap' => $this->tanggal_tinjau_lap,
             ]);
-
+            
             foreach($this->questions as $question){
-                foreach($question->children as $child){
-
+                    foreach($question->children as $child){
+                    
                     KelengkapanBeritaAcara::create([
                         'id_berita_acara' => $berita_acara->id,
                         'id_pertanyaan' => $child->id,
@@ -139,7 +164,7 @@ class Review extends Component
 
                 }
             }
-
+            
             DB::commit();
             
             Permohonan::where('id', $this->permohonan->id)->increment('id_status');
@@ -151,5 +176,39 @@ class Review extends Component
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }
         
+    }
+
+    public function store_pemberitahuan($state){
+        dd($this);
+        DB::beginTransaction();
+
+        try {
+            $ext_file_pemberitahuan = $this->file_file_pemberitahuan->getclientOriginalExtension();
+            $file_pemberitahuan_path = $this->file_file_pemberitahuan->storeAs('berita_acara', 'file_pemberitahuan_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_file_pemberitahuan, 'public');
+
+            if($state == 1){
+                $status = Status_permohonan::where('name', 'direkomendasi')->first()->id;
+            }else if($state == 2){
+                $status = Status_permohonan::where('name', 'koreksi')->first()->id;
+            }else if($state == 1){
+                $status = Status_permohonan::where('name', 'ditolak')->first()->id;
+            }
+
+            $permohonan = $this->permohonan->update([
+                'id_status' => $status,
+                'nominal_rekomendasi' => $this->nominal_rekomendasi,
+                'tanggal_rekomendasi' => $this->tanggal_rekomendasi,
+                'catatan_rekomendasi' => $this->catatan_rekomendasi,
+                'file_pemberitahuan' => $file_pemberitahuan_path
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('permohonan');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
+            session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
+        }
     }
 }

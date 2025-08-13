@@ -56,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan/review/{id_permohonan}', Review::class)->name('permohonan.review');
     Route::get('/permohonan/edit_review/{id_permohonan}', Review::class)->name('permohonan.edit_review');
     Route::get('/permohonan/send_review/{id_permohonan}', [PermohonanController::class, 'send_review'])->name('permohonan.send_review');
-    Route::get('/permohonan/confirm_review/{id_permohonan}', [PermohonanController::class, 'confirm_review'])->name('permohonan.confirm_review');
+    Route::get('/permohonan/confirm_review/{id_permohonan}', Review::class)->name('permohonan.confirm_review');
 });
 
 

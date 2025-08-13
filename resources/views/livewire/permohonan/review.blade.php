@@ -64,6 +64,15 @@
                         </a>
                     </li>
                 @endif
+                @if ($permohonan->id_status > 5)
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" data-bs-toggle="pill" href="#status" role="tab" aria-selected="false">
+                            <div class="d-flex align-items-center">
+                                <div class="tab-title">Status</div>
+                            </div>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>
@@ -433,13 +442,15 @@
                                             <td>{{ $loop->iteration }}</td>
                                             <td>{{ $child->question }}</td>
                                             <td class="text-center"><input type="checkbox"
-                                                    wire:model='answer.{{ $child->id }}.is_ada'>
+                                                    wire:model='answer.{{ $child->id }}.is_ada'
+                                                    @checked($answer[$child->id]['is_ada'] == 1) @disabled($permohonan->id_status > 5)>
                                             </td>
                                             <td class="text-center"><input type="checkbox"
-                                                    wire:model='answer.{{ $child->id }}.is_sesuai'></td>
+                                                    wire:model='answer.{{ $child->id }}.is_sesuai'
+                                                    @checked($answer[$child->id]['is_ada'] == 1) @disabled($permohonan->id_status > 5)></td>
                                             <td><input type="text"
                                                     wire:model='answer.{{ $child->id }}.keterangan'
-                                                    class="form-control"></td>
+                                                    class="form-control" @disabled($permohonan->id_status > 5)></td>
                                         </tr>
                                     @endforeach
                                 @endforeach
@@ -450,7 +461,8 @@
                     <div class="mb-4">
                         <div class="row">
                             <div class="col-1 text-center">
-                                <input wire:model='is_lengkap' type="checkbox">
+                                <input wire:model='is_lengkap' @checked($is_lengkap == 1) type="checkbox"
+                                    @disabled($permohonan->id_status > 5)>
                             </div>
                             <div class="col-11">
                                 <p>Dengan ini saya menyatakan proposal ini telah dilakukan verifikasi kesesuaian,
@@ -470,8 +482,10 @@
                             usulan
                             hibahnya?</div>
                         <div>
-                            <button wire:click='hasVeriffied' class="btn btn-primary me-4">Ya</button>
-                            <button wire:click='store(0)' class="btn btn-danger">Tidak</button>
+                            <button wire:click='hasVeriffied' class="btn btn-primary me-4"
+                                @disabled($permohonan->id_status > 5)>Ya</button>
+                            <button wire:click='store(0)' class="btn btn-danger"
+                                @disabled($permohonan->id_status > 5)>Tidak</button>
                         </div>
                     </div>
                 </div>
@@ -501,26 +515,40 @@
                             <div class="mb-3">
                                 <label class="form-label">Kelengkapan Administrasi <span
                                         class="text-danger">*</span></label>
-                                <input type="file" wire:model='file_kelengkapan_adm' class="form-control">
+                                <input type="file" wire:model='file_kelengkapan_adm' class="form-control"
+                                    @disabled($permohonan->id_status > 5)>
+                                <div class="progress mt-2" wire:loading wire:target="file_kelengkapan_adm">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                        role="progressbar" style="width: 100%;">
+                                        Uploading...
+                                    </div>
+                                </div>
+                                @error('file_kelengkapan_adm')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">No <span class="text-danger">*</span></label>
-                                <input type="text" wire:model='no_kelengkapan_adm' class="form-control">
+                                <input type="text" wire:model='no_kelengkapan_adm' class="form-control"
+                                    @disabled($permohonan->id_status > 5)>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                <input type="date" wire:model='tanggal_kelengkapan_adm' class="form-control">
+                                <input type="date" wire:model='tanggal_kelengkapan_adm' class="form-control"
+                                    @disabled($permohonan->id_status > 5)>
                             </div>
                         </div>
                     </div>
 
                     <div class="row mb-4">
                         <div class="col-3">
-                            <button class="btn btn-warning">Lihat Dokumen</button>
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                data-file-url="{{ Storage::url($berita_acara->file_kelengkapan_adm) }}">Lihat
+                                Dokumen</button>
                         </div>
                     </div>
 
@@ -529,25 +557,40 @@
                             <div class="mb-3">
                                 <label class="form-label">Berita Acara Peninjauan Lapangan <span
                                         class="text-danger">*</span></label>
-                                <input type="file" wire:model='file_tinjau_lap' class="form-control">
+                                <input type="file" wire:model='file_tinjau_lap' class="form-control"
+                                    @disabled($permohonan->id_status > 5)>
+                                <div class="progress mt-2" wire:loading wire:target="file_tinjau_lap">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                        role="progressbar" style="width: 100%;">
+                                        Uploading...
+                                    </div>
+                                </div>
+                                @error('file_tinjau_lap')
+                                    <div class="alert alert-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">No <span class="text-danger">*</span></label>
-                                <input type="text" wire:model='no_tinjau_lap' class="form-control">
+                                <input type="text" wire:model='no_tinjau_lap' class="form-control"
+                                    @disabled($permohonan->id_status > 5)>
                             </div>
                         </div>
                         <div class="col-4">
                             <div class="mb-3">
                                 <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                                <input type="date" wire:model='tanggal_tinjau_lap' class="form-control">
+                                <input type="date" wire:model='tanggal_tinjau_lap' class="form-control"
+                                    @disabled($permohonan->id_status > 5)>
                             </div>
                         </div>
                     </div>
+
                     <div class="row mb-4">
-                        <div class="c0l-3">
-                            <button class="btn btn-warning">Lihat Dokumen</button>
+                        <div class="col-3">
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                data-file-url="{{ Storage::url($berita_acara->file_tinjau_lap) }}">Lihat
+                                Dokumen</button>
                         </div>
                     </div>
 
@@ -556,7 +599,62 @@
             <div class="card">
                 <div class="card-body">
                     <div class="text-center">
-                        <button wire:click='store(1)' class="btn btn-primary w-100">Simpan</button>
+                        <button wire:click='store_berita_acara(1)' class="btn btn-primary w-100"
+                            @disabled($permohonan->id_status > 5)>Simpan</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div wire:ignore class="tab-pane fade" id="status">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Status Proposal</label>
+                        <div class="row justify-content-center">
+                            <div class="col-3">
+                                <button type="button" class="btn btn-outline-dark w-100"
+                                    id="recomended_button">Direkomendasi</button>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-primary w-100"
+                                    id="correction_button">Dikoreksi</button>
+                            </div>
+                            <div class="col-3">
+                                <button type="button" class="btn btn-outline-danger w-100"
+                                    id="denied_button">Ditolak</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-2 d-none" id="recomendation_row">
+                        <div class="col-md-6">
+                            <label class="form-label">Nominal Rekomendasi <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">Rp</span>
+                                <input type="hidden" id="state_permohonan">
+                                <input type="number" wire:model='nominal_rekomendasi' class="form-control"
+                                    placeholder="Nominal">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Tanggal Rekomendasi <span class="text-danger">*</span></label>
+                            <input type="date" wire:model='tanggal_rekomendasi' class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="mt-3 d-none" id="note_row">
+                        <label class="form-label">Catatan <span class="text-danger">*</span></label>
+                        <textarea wire:model='catatan_rekomendasi' class="form-control" rows="2"></textarea>
+                    </div>
+
+                    <div class="mt-3 d-none" id="notif_row">
+                        <label class="form-label">Surat Pemberitahuan</label>
+                        <input type="file" wire:model.prevent='file_pemberitahuan' class="form-control">
+                    </div>
+
+                    <div class="mt-4 d-none" id="save_status_button">
+                        <button id="store_pemberitahuan" class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </div>
             </div>
@@ -608,7 +706,48 @@
             $("#is_lembaga_verif_checkbox, #is_proposal_verif_checkbox, #is_pendukung_verif_checkbox").on("change",
                 function() {
                     Livewire.dispatch("updateStatement");
-                })
+                });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            let state;
+
+            $("#recomended_button").on("click", function() {
+                $("#recomendation_row").addClass("d-none");
+                $("#note_row").addClass("d-none");
+                $("#notif_row").removeClass("d-none");
+                $("#save_status_button").removeClass("d-none");
+                // $("#state_permohonan").val(1);
+                state = 1;
+            });
+
+            $("#correction_button").on("click", function() {
+                $("#recomendation_row").removeClass("d-none");
+                $("#note_row").removeClass("d-none");
+                $("#notif_row").removeClass("d-none");
+                $("#save_status_button").removeClass("d-none");
+                // $("#state_permohonan").val(2);
+                state = 2;
+                console.log(state);
+
+            });
+
+            $("#denied_button").on("click", function() {
+                $("#recomendation_row").addClass("d-none");
+                $("#note_row").removeClass("d-none");
+                $("#notif_row").addClass("d-none");
+                $("#save_status_button").removeClass("d-none");
+                // $("#state_permohonan").val(3);
+                state = 3
+            });
+
+            $("#store_pemberitahuan").on("click", function() {
+                console.log("clicked");
+
+                $wire.store_pemberitahuan(state);
+            })
         });
     </script>
 @endpush
