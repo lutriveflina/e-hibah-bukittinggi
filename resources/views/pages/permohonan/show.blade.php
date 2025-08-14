@@ -53,15 +53,6 @@
                         </a>
                     </li>
                 @endif
-                @if ($permohonan->id_status >= 5)
-                    <li class="nav-item" role="presentation">
-                        <a class="nav-link" data-bs-toggle="pill" href="#berita_acara" role="tab" aria-selected="false">
-                            <div class="d-flex align-items-center">
-                                <div class="tab-title">Berita Acara</div>
-                            </div>
-                        </a>
-                    </li>
-                @endif
             </ul>
         </div>
     </div>
@@ -107,8 +98,8 @@
                 <div class="card">
                     <div class="card-body">
                         <label class="form-label">Usulan APBD</label>
-                        <input type="text" class="form-control" value="{{ $permohonan->tahun_apbd }}"
-                            placeholder="2025" disabled>
+                        <input type="text" class="form-control" value="{{ $permohonan->tahun_apbd }}" placeholder="2025"
+                            disabled>
                         @error('usulan_apbd')
                             <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
@@ -190,20 +181,22 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">SKPD <span class="text-danger">*</span></label>
-                            <select wire:model="id_skpd" id="id_skpd" class="form-control">
+                            <select wire:model="id_skpd" id="id_skpd" class="form-control" disabled>
                                 <option value="">-- Pilih SKPD --</option>
-                                {{-- @foreach ($skpds as $key => $item)
-                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                @endforeach --}}
+                                @foreach ($skpds as $key => $item)
+                                    <option @selected($item->id == $permohonan->id_skpd) value="{{ $item->id }}">{{ $item->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Urusan <span class="text-danger">*</span></label>
-                            <select wire:model="urusan" id="urusan" class="form-control">
+                            <select wire:model="urusan" id="urusan" class="form-control" disabled>
                                 <option value="">-- Pilih Urusan --</option>
-                                {{-- @foreach ($urusans as $key => $item)
-                                    <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
-                                @endforeach --}}
+                                @foreach ($urusans as $key => $item)
+                                    <option @selected($item->id == $permohonan->urusan) value="{{ $item->id }}">
+                                        {{ $item->nama_urusan }}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="row">
@@ -373,15 +366,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="tab-pane fade" id="berita_acara" role="tabpanel">
-            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic
-                lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork
-                tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica.
-                DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh
-                mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog.
-                Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown.
-                Pitchfork sustainable tofu synth chambray yr.</p>
         </div>
     </div>
     </div>
