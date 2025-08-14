@@ -97,12 +97,6 @@ class CreateOrUpdate extends Component
                 $this->tanggal_rekomendasi = $permohonan->tanggal_rekomendasi;
                 $this->catatan_rekomendasi = $permohonan->catatan_rekomendasi;
                 $this->file_pemberitahuan = $permohonan->file_pemberitahuan;
-                $this->nominal_rab = $permohonan->nominal_rab;
-                $this->id_status = $permohonan->id_status;
-                $this->nominal_rekomendasi = $permohonan->nominal_rekomendasi;
-                $this->tanggal_rekomendasi = $permohonan->tanggal_rekomendasi;
-                $this->catatan_rekomendasi = $permohonan->catatan_rekomendasi;
-                $this->file_pemberitahuan = $permohonan->file_pemberitahuan;
             }
         }
     }

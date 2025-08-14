@@ -10,7 +10,8 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label for="nominalRAB" class="form-label">Nominal RAB <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="nominalRAB" placeholder="Masukkan nominal RAB">
+                <input type="text" wire:model='total_kegiatan' class="form-control" id="nominalRAB"
+                    placeholder="Masukkan nominal RAB">
             </div>
             <div class="col-md-4 mb-3">
                 <label for="nominalRAB" class="form-label">&nbsp;</label><br>

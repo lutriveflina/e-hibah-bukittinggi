@@ -3,7 +3,7 @@
 @section('content')
     <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
         <div class="breadcrumb-title pe-3">
-            <h4>Permohonan</h4>
+            <h4>Cek Permohonan</h4>
         </div>
         <div class="ps-3">
             <nav aria-label="breadcrumb">

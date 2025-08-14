@@ -12,6 +12,7 @@ use App\Livewire\Lembaga\Profile;
 use App\Livewire\Permohonan\CreateOrUpdate;
 use App\Livewire\Lembagas\IndexLembaga;
 use App\Livewire\Permission as LivewirePermission;
+use App\Livewire\Permohonan\EditPermohonan;
 use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\Permohonan\IsiRab;
 use App\Livewire\Permohonan\Review;
@@ -48,6 +49,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lembaga/store', [LembagaController::class, 'store'])->name('lembaga.store');
     Route::get('/permohonan', [PermohonanController::class, 'index'])->name('permohonan');
     Route::get('/permohonan/create', CreateOrUpdate::class)->name('permohonan.create');
+    Route::get('/permohonan/edit/{id_permohonan}', EditPermohonan::class)->name('permohonan.edit');
     Route::get('/permohonan/show/{id_permohonan}', [PermohonanController::class, 'show'])->name('permohonan.show');
     Route::get('/permhonan/isi_pendukung/{id_permohonan}', IsiPendukung::class)->name('permohonan.isi_pendukung');
     Route::get('/permohonan/isi_rab/{id_permohonan}', IsiRab::class)->name('permohonan.isi_rab');
@@ -59,21 +61,21 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::get('/testing', function () {
-    $user = auth()->user();
+// Route::get('/testing', function () {
+//     $user = auth()->user();
 
-    if (!$user) {
-        return 'Tidak ada user yang login.';
-    }
+//     if (!$user) {
+//         return 'Tidak ada user yang login.';
+//     }
 
-    return [
-        'user_id'       => $user->id,
-        'roles'         => $user->getRoleNames(),       // daftar role
-        'permissions'   => $user->getAllPermissions()->pluck('name'), // daftar permission
-        'has_role_admin' => $user->hasRole('Admin Lembaga'),    // cek role admin
-        'can_view_dukung'  => $user->can('view_dukung', App\Models\Permohonan::class),   // cek permission view users
-    ];
-})->middleware('auth');
+//     return [
+//         'user_id'       => $user->id,
+//         'roles'         => $user->getRoleNames(),       // daftar role
+//         'permissions'   => $user->getAllPermissions()->pluck('name'), // daftar permission
+//         'has_role_admin' => $user->hasRole('Admin Lembaga'),    // cek role admin
+//         'can_view_dukung'  => $user->can('view_dukung', App\Models\Permohonan::class),   // cek permission view users
+//     ];
+// })->middleware('auth');
 
 // Route::get('/test-email', function () {
 //     \Illuminate\Support\Facades\Mail::raw('Test email SMTP Gmail', function ($message) {

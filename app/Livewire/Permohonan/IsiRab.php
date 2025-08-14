@@ -14,6 +14,7 @@ class IsiRab extends Component
     public $permohonan;
     public $satuans;
     public $kegiatans;
+    public $nominal_rab;
 
     #[Validate('required')]
     public $nama_kegiatan;

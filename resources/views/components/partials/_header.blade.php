@@ -1,6 +1,9 @@
 <!--start top header-->
 <header class="top-header">
     <nav class="navbar navbar-expand">
+        <div class="mobile-toggle-icon d-xl-none">
+            <i class="bi bi-list"></i>
+        </div>
         <div class="top-navbar-right ms-auto">
             <form action="{{ route('logout') }}" method="post">
                 @csrf
