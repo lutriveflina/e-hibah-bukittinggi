@@ -4,7 +4,8 @@
 
         <div class="row mb-4">
             <div class="col-md-4 mb-3">
-                <label for="totalPengajuan" class="form-label">Total Pengajuan <span class="text-danger">*</span></label>
+                <label for="totalPengajuan" class="form-label">Total Pengajuan <span
+                        class="text-danger">*</span></label>
                 <input type="number" class="form-control" id="totalPengajuan" placeholder="Masukkan total pengajuan"
                     value="{{ collect($kegiatans)->flatMap(fn($kegiatan) => $kegiatan)->map(fn($item) => $item['rincian']['subtotal'] ?? 0)->sum() }}">
             </div>
@@ -15,10 +16,22 @@
             </div>
             <div class="col-md-4 mb-3">
                 <label for="nominalRAB" class="form-label">&nbsp;</label><br>
-                <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#create_modal">Tambah
+                <button wire:click='tambahKegiatan' class="btn btn-primary w-100" data-bs-toggle="modal"
+                    data-bs-target="#create_modal">Tambah
                     Kegiatan dan Rincian</button>
             </div>
         </div>
+
+        @if (session()->has('message'))
+        <div class="alert alert-success" role="alert">
+            {{ session('message') }}
+        </div>
+        @endif
+        @if (session()->has('error'))
+        <div class="alert alert-success" role="alert">
+            {{ session('error') }}
+        </div>
+        @endif
 
         <div class="table-responsive mb-4">
             <table class="table table-bordered text-center">
@@ -34,29 +47,29 @@
                 </thead>
                 <tbody>
                     @foreach ($kegiatans as $kegiatan)
-                        <tr class="bg-warning">
-                            <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
-                            <td class="text-end">
-                                {{ number_format(
-                                    collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) => is_numeric($val))->sum(),
-                                    0,
-                                    ',',
-                                    '.',
-                                ) }}
-                            </td>
-                            <td><button class="btn btn-sm btn-warning"><i
-                                        class="bi bi-pencil-square"></i></button><button
-                                    class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button></td>
-                        </tr>
-                        @foreach ($kegiatan->rincian as $rincian)
-                            <tr class="">
-                                <td class="text-start">{{ $rincian->keterangan }}</td>
-                                <td>{{ $rincian->volume }}</td>
-                                <td class="text-start">{{ $rincian->satuan->name }}</td>
-                                <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}</td>
-                                <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}</td>
-                            </tr>
-                        @endforeach
+                    <tr class="bg-warning">
+                        <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
+                        <td class="text-end">
+                            {{ number_format(
+                            collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) => is_numeric($val))->sum(),
+                            0,
+                            ',',
+                            '.',
+                            ) }}
+                        </td>
+                        <td><button class="btn btn-sm btn-warning"><i class="bi bi-pencil-square"></i></button><button
+                                wire:click='deleteKegiatan({{ $kegiatan->id }})' class="btn btn-sm btn-danger"><i
+                                    class="bi bi-trash"></i></button></td>
+                    </tr>
+                    @foreach ($kegiatan->rincian as $rincian)
+                    <tr class="">
+                        <td class="text-start">{{ $rincian->keterangan }}</td>
+                        <td>{{ $rincian->volume }}</td>
+                        <td class="text-start">{{ $rincian->satuan->name }}</td>
+                        <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}</td>
+                        <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}</td>
+                    </tr>
+                    @endforeach
                     @endforeach
                 </tbody>
             </table>
@@ -64,7 +77,7 @@
 
         <div class="d-grid">
             @if ($permohonan->id_status == 2)
-                <button wire:click='saveRab' class="btn btn-primary">Submit</button>
+            <button wire:click='saveRab' class="btn btn-primary">Submit</button>
             @endif
         </div>
     </div>
@@ -80,7 +93,7 @@
                 <div class="modal-body">
                     <!-- Tombol Tambah Rincian -->
                     <div class="d-flex justify-content-end mb-3">
-                        <button wire:click='tambahRincian' class="btn btn-primary">Tambah Rincian</button>
+                        <button wire:click='tambahKegiatan' class="btn btn-primary">Tambah Kegiatan</button>
                     </div>
 
                     <!-- Table Input -->
@@ -98,60 +111,73 @@
                             </thead>
                             <tbody>
                                 <!-- Baris Highlight (opsional, bisa dihapus kalau tidak diperlukan) -->
+                                @foreach ($kegiatan_rab as $k1 => $item)
+                                <!-- Baris Highlight (opsional, bisa dihapus kalau tidak diperlukan) -->
                                 <tr class="bg-warning">
-                                    <td colspan="4"><input wire:model='nama_kegiatan' type="text"
-                                            class="form-control" placeholder="Nama Kegiatan"></td>
+                                    <td colspan="4"><input wire:model='kegiatan_rab.{{ $k1 }}.nama_kegiatan' type="text"
+                                            class="form-control" placeholder="kegiatan_rab.{{ $k1 }}.total_kegiatan">
+                                    </td>
                                     <td><input wire:model='total_kegiatan' type="text" class="form-control" readonly>
                                     </td>
-                                    <td></td>
+                                    <td class="text-start">
+                                        <button wire:click='tambahRincian({{ $k1 }})' class="btn btn-sm btn-primary"><i
+                                                class="bi bi-plus-lg"></i></button>
+                                        <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                    </td>
                                 </tr>
-
-                                @foreach ($rincian as $index => $item)
-                                    <tr>
-                                        <td><input type="text" class="form-control"
-                                                wire:model="rincian.{{ $index }}.kegiatan"></td>
-                                        <td><input type="number" class="form-control"
-                                                wire:model="rincian.{{ $index }}.volume"></td>
-                                        <td>
-                                            <div wire:ignore x-data x-init="() => {
-                                                let select_satuan = $($el).find('#select_satuan_{{ $index }}');
-                                                select_satuan.select2({
-                                                    dropdownAutoWidth: true,
-                                                    width: '100%',
-                                                    dropdownParent: $('#create_modal') // pastikan ID-nya sesuai
-                                                });
-                                            
-                                                select_satuan.on('change', function() {
-                                                    $wire.set('rincian.{{ $index }}.satuan', this.value);
-                                                });
-                                            
-                                                // optional sync back from Livewire
-                                                $watch('value', value => select_satuan.val(value).trigger('change'));
-                                            }">
-                                                <select class="form-select" id="select_satuan_{{ $index }}">
-                                                    <option value="">Pilih Satuan</option>
-                                                    @foreach ($satuans as $satuan)
-                                                        <option value="{{ $satuan->id }}">{{ $satuan->name }}
-                                                        </option>
-                                                    @endforeach
-                                                    <!-- Tambah satuan lain sesuai kebutuhan -->
-                                                </select>
-                                            </div>
-                                        </td>
-                                        <td><input type="number" class="form-control"
-                                                wire:model="rincian.{{ $index }}.harga_satuan"></td>
-                                        <td class="text-end">
-                                            <input type="hidden" wire:model='rincian.{{ $index }}.subtotal'>
-                                            Rp
-                                            {{ number_format((float) ($item['volume'] ?? 0) * (float) ($item['harga_satuan'] ?? 0), 0, ',', '.') }}
-                                        </td>
-                                        <td>
-                                            <button type="button" wire:click="hapusRincian({{ $index }})"
-                                                class="btn btn-danger btn-sm">
-                                                <i class="bi bi-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                @foreach ($item['rincian'] as $k2 => $child)
+                                <tr>
+                                    <td><input type="text" class="form-control"
+                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.name">
+                                    </td>
+                                    <td><input type="number" class="form-control"
+                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.volume">
+                                    </td>
+                                    <td>
+                                        <div wire:ignore x-data x-init="() => {
+                                                    let select_satuan = $($el).find('#select_satuan_{{ $k1 }}{{ $k2 }}');
+                                                    select_satuan.select2({
+                                                        dropdownAutoWidth: true,
+                                                        width: '100%',
+                                                        dropdownParent: $('#create_modal') // pastikan ID-nya sesuai
+                                                    });
+                                                
+                                                    select_satuan.on('change', function() {
+                                                        $wire.set('kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.satuan', this.value);
+                                                    });
+                                                
+                                                    // optional sync back from Livewire
+                                                    $watch('value', value => select_satuan.val(value).trigger('change'));
+                                                }">
+                                            <select class="form-select" id="select_satuan_{{ $k1 }}{{ $k2 }}">
+                                                <option value="">Pilih Satuan</option>
+                                                @foreach ($satuans as $satuan)
+                                                <option value="{{ $satuan->id }}">
+                                                    {{ $satuan->name }}
+                                                </option>
+                                                @endforeach
+                                                <!-- Tambah satuan lain sesuai kebutuhan -->
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td><input type="number" class="form-control"
+                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.harga_satuan">
+                                    </td>
+                                    <td class="text-end">
+                                        <input type="hidden"
+                                            wire:model='kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.subtotal'>
+                                        Rp
+                                        {{ number_format((float) ($child['volume'] ?? 0) * (float)
+                                        ($child['harga_satuan'] ?? 0), 0, ',', '.') }}
+                                    </td>
+                                    <td class="text-start">
+                                        <button type="button" wire:click="hapusRincian({{ $k1 }},{{ $k2 }})"
+                                            class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -169,11 +195,11 @@
 </div>
 
 @push('scripts')
-    <script>
-        $(document).ready(function() {
+<script>
+    $(document).ready(function() {
             Livewire.on('close-modal', function() {
                 $("#create_modal").modal('hide');
             })
         });
-    </script>
+</script>
 @endpush

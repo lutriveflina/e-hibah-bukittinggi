@@ -6,6 +6,7 @@ use App\Models\Permohonan;
 use App\Models\RabPermohonan;
 use App\Models\RincianRab;
 use App\Models\Satuan;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -16,11 +17,14 @@ class IsiRab extends Component
     public $kegiatans;
     public $nominal_rab;
 
-    #[Validate('required')]
+    // #[Validate('required')]
     public $nama_kegiatan;
     public $total_kegiatan;
 
     #[Validate('required')]
+    public $kegiatan_rab = [];
+
+    // #[Validate('required')]
     public $rincian = [];
 
     public $listeners = ['close-modal'];
@@ -36,9 +40,19 @@ class IsiRab extends Component
         return view('livewire.permohonan.isi-rab');
     }
 
-    public function tambahRincian()
+    public function tambahKegiatan(){
+        $countKegiatan = count($this->kegiatan_rab);
+        $this->kegiatan_rab[$countKegiatan + 1] = [
+            'name_kegiatan' => '',
+            'total_kegiatan' => 0,
+            'rincian' => [],
+        ];
+    }
+
+    public function tambahRincian($k1)
     {
-        $this->rincian[] = [
+        $countChild = count($this->kegiatan_rab[$k1]['rincian']);
+        $this->kegiatan_rab[$k1]['rincian'][$countChild + 1] = [
             'kegiatan' => '',
             'volume' => '',
             'satuan' => '',
@@ -89,26 +103,55 @@ class IsiRab extends Component
     }
 
     public function store(){
+        dd($this->kegiatan_rab);
         $this->validate();
 
-        $kegiatan = RabPermohonan::create([
-            'id_permohonan' => $this->permohonan->id,
-            'nama_kegiatan' => $this->nama_kegiatan,
-        ]);
+        DB::beginTransaction();
+        try {
+            foreach($this->kegiatan_rab as $k1 => $item){
+                $kegiatan = RabPermohonan::create([
+                    'id_permohonan' => $this->permohonan->id,
+                    'nama_kegiatan' => $this->kegiatan_rab[$k1]['nama_kegiatan'],
+                ]);
 
-        foreach($this->rincian as $rincian){
-            RincianRab::create([
-                'id_rab' => $kegiatan->id,
-                'keterangan' => $rincian['kegiatan'],
-                'volume' => $rincian['volume'],
-                'id_satuan' => $rincian['satuan'],
-                'harga' => $rincian['harga_satuan'],
-                'subtotal' => $rincian['subtotal'],
-            ]);
+                foreach($this->kegiatan_rab[$k1]['rincian'] as $k2 => $rincian){
+                    RincianRab::create([
+                        'id_rab' => $kegiatan->id,
+                        'keterangan' => $rincian['kegiatan'],
+                        'volume' => $rincian['volume'],
+                        'id_satuan' => $rincian['satuan'],
+                        'harga' => $rincian['harga_satuan'],
+                        'subtotal' => $rincian['subtotal'],
+                    ]);
+                }
+            }
+            DB::commit();
+            $this->reset(['kegiatan_rab']);
+            $this->dispatch('close-modal');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            session()->flash('error', 'Kegiatan dan Rincian gagal dihapus :'.$th);
         }
 
-        $this->reset(['nama_kegiatan', 'total_kegiatan', 'rincian']);
-        $this->dispatch('close-modal');
+    }
+
+    public function deleteKegiatan($id_kegiatan){
+        $kegiatan = RabPermohonan::findOrFail($id_kegiatan);
+
+        DB::beginTransaction();
+
+        try {
+            $kegiatan->rincian()->delete();
+    
+            $kegiatan->delete();
+
+            DB::commit();
+
+            session()->flash('message', 'Kegiatan dan Semua Rincian telah berhasil di hapus');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            session()->flash('error', 'Kegiatan dan Rincian gagal dihapus :'.$th);
+        }
     }
 
     public function saveRab(){

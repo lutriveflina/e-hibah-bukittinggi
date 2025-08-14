@@ -16,14 +16,18 @@ class AuthController extends Controller
             'email' => 'required',
             'password' => 'required'
         ]);
-
+        
         $credentials = [
             'email' => $validatedData['email'],
             'password' => $validatedData['password'],
         ];
         
         if(Auth::attempt($credentials, $request['remember'])) {
-            session()->regenerate();
+            try {
+                session()->regenerate();
+            } catch (\Throwable $th) {
+                return redirect()->route('login')->with($th);
+            }
             return redirect()->route('dashboard');
         }
 
