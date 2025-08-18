@@ -28,6 +28,7 @@ class User extends Authenticatable
         'password',
         'id_role',
         'id_skpd',
+        'id_urusan',
         'id_lembaga',
         'deleted_at',
         'created_by',

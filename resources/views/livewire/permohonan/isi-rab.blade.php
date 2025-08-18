@@ -6,13 +6,14 @@
             <div class="col-md-4 mb-3">
                 <label for="totalPengajuan" class="form-label">Total Pengajuan <span
                         class="text-danger">*</span></label>
-                <input type="number" class="form-control" id="totalPengajuan" placeholder="Masukkan total pengajuan"
+                <input type="number" class="form-control" wire:model.change='total_pengajuan' id="totalPengajuan"
+                    placeholder="Masukkan total pengajuan"
                     value="{{ collect($kegiatans)->flatMap(fn($kegiatan) => $kegiatan)->map(fn($item) => $item['rincian']['subtotal'] ?? 0)->sum() }}">
             </div>
             <div class="col-md-4 mb-3">
                 <label for="nominalRAB" class="form-label">Nominal RAB <span class="text-danger">*</span></label>
                 <input type="text" wire:model='total_kegiatan' class="form-control" id="nominalRAB"
-                    placeholder="Masukkan nominal RAB">
+                    placeholder="Masukkan nominal RAB" readonly>
             </div>
             <div class="col-md-4 mb-3">
                 <label for="nominalRAB" class="form-label">&nbsp;</label><br>
@@ -77,7 +78,8 @@
 
         <div class="d-grid">
             @if ($permohonan->id_status == 2)
-            <button wire:click='saveRab' class="btn btn-primary">Submit</button>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#submit_modal"
+                @disabled($this->checkPengajuan())>Submit</button>
             @endif
         </div>
     </div>
@@ -114,10 +116,11 @@
                                 @foreach ($kegiatan_rab as $k1 => $item)
                                 <!-- Baris Highlight (opsional, bisa dihapus kalau tidak diperlukan) -->
                                 <tr class="bg-warning">
-                                    <td colspan="4"><input wire:model='kegiatan_rab.{{ $k1 }}.nama_kegiatan' type="text"
-                                            class="form-control" placeholder="kegiatan_rab.{{ $k1 }}.total_kegiatan">
+                                    <td colspan="4"><input wire:model='kegiatan_rab.{{ $k1 }}.name_kegiatan' type="text"
+                                            class="form-control" placeholder="Nama Kegiatan">
                                     </td>
-                                    <td><input wire:model='total_kegiatan' type="text" class="form-control" readonly>
+                                    <td><input wire:model='kegiatan_rab.{{ $k1 }}.total_kegiatan' type="text"
+                                            class="form-control" readonly>
                                     </td>
                                     <td class="text-start">
                                         <button wire:click='tambahRincian({{ $k1 }})' class="btn btn-sm btn-primary"><i
@@ -128,10 +131,10 @@
                                 @foreach ($item['rincian'] as $k2 => $child)
                                 <tr>
                                     <td><input type="text" class="form-control"
-                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.name">
+                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.kegiatan">
                                     </td>
                                     <td><input type="number" class="form-control"
-                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.volume">
+                                            wire:model.change="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.volume">
                                     </td>
                                     <td>
                                         <div wire:ignore x-data x-init="() => {
@@ -161,14 +164,12 @@
                                         </div>
                                     </td>
                                     <td><input type="number" class="form-control"
-                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.harga_satuan">
+                                            wire:model.change="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.harga_satuan">
                                     </td>
                                     <td class="text-end">
                                         <input type="hidden"
                                             wire:model='kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.subtotal'>
-                                        Rp
-                                        {{ number_format((float) ($child['volume'] ?? 0) * (float)
-                                        ($child['harga_satuan'] ?? 0), 0, ',', '.') }}
+                                        Rp {{ number_format($this->getSubtotal($k1, $k2), 0, ',', '.') }}
                                     </td>
                                     <td class="text-start">
                                         <button type="button" wire:click="hapusRincian({{ $k1 }},{{ $k2 }})"
@@ -187,6 +188,30 @@
                     <div class="d-flex justify-content-end">
                         <button wire:click='store' type="button" class="btn btn-primary">Simpan</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi -->
+    <div wire:ignore.self class="modal fade" id="submit_modal" tabindex="-1" aria-labelledby="confirmSubmitModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-warning">
+                    <h5 class="modal-title fw-bold" id="confirmSubmitModalLabel">Konfirmasi Simpan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p class="fw-bold fs-5">Yakin akan simpan data RAB?</p>
+                    <p class="text-muted">Periksa kembali dengan teliti, karena setelah disimpan data hanya bisa diubah
+                        pada masa koreksi.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" wire:click="saveRab" class="btn btn-success">
+                        <i class="bi bi-check-circle"></i> Ya, Simpan
+                    </button>
                 </div>
             </div>
         </div>

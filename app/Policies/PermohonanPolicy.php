@@ -35,7 +35,7 @@ class PermohonanPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Permohonan $permohonan): bool
+    public function update(User $user): bool
     {
         return $user->hasPermissionTo('Update Permohonan');
     }

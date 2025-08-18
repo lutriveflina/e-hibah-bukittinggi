@@ -7,6 +7,7 @@ use App\Models\RabPermohonan;
 use App\Models\RincianRab;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -19,6 +20,7 @@ class IsiRab extends Component
 
     // #[Validate('required')]
     public $nama_kegiatan;
+    public $total_pengajuan;
     public $total_kegiatan;
 
     #[Validate('required')]
@@ -27,7 +29,7 @@ class IsiRab extends Component
     // #[Validate('required')]
     public $rincian = [];
 
-    public $listeners = ['close-modal'];
+    public $listeners = ['updateSubTotal', 'close-modal'];
 
     public function mount($id_permohonan = null){
         $this->permohonan = Permohonan::findOrFail($id_permohonan);
@@ -37,6 +39,15 @@ class IsiRab extends Component
     public function render()
     {
         $this->kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', $this->permohonan->id)->get();
+        if($this->kegiatans){
+            $grand = 0;
+            foreach ($this->kegiatans as $k1 => $item) {
+                foreach ($item->rincian as $k2 => $child) {
+                    $grand += $child->subtotal;
+                }
+            }
+            $this->total_kegiatan = $grand;
+        }
         return view('livewire.permohonan.isi-rab');
     }
 
@@ -65,6 +76,36 @@ class IsiRab extends Component
     {
         unset($this->rincian[$index]);
         $this->rincian = array_values($this->rincian); // reset index array
+    }
+
+    public function getSubtotal($k1, $k2)
+    {
+        $child = $this->kegiatan_rab[$k1]['rincian'][$k2];
+        $subtotal = (float) ($child['volume'] ?? 0) * (float) ($child['harga_satuan'] ?? 0);
+        $this->kegiatan_rab[$k1]['rincian'][$k2]['subtotal'] = $subtotal;
+        $this->kegiatan_rab[$k1]['total_kegiatan'] = $this->getTotalKegiatan($k1);
+        return $subtotal;
+    }
+
+    // Hitung total kegiatan
+    public function getTotalKegiatan($k1)
+    {
+        $total = 0;
+        foreach ($this->kegiatan_rab[$k1]['rincian'] as $k2 => $child) {
+
+            $total += $child['subtotal'];
+        }
+        return $total;
+    }
+
+    // Hitung total semua kegiatan
+    public function getGrandTotal()
+    {
+        $grand = 0;
+        foreach ($this->kegiatan_rab as $k1 => $item) {
+            $grand += $this->getTotalKegiatan($k1);
+        }
+        $this->total_kegiatan = $grand;
     }
 
     public function updated($property)
@@ -103,7 +144,6 @@ class IsiRab extends Component
     }
 
     public function store(){
-        dd($this->kegiatan_rab);
         $this->validate();
 
         DB::beginTransaction();
@@ -111,7 +151,7 @@ class IsiRab extends Component
             foreach($this->kegiatan_rab as $k1 => $item){
                 $kegiatan = RabPermohonan::create([
                     'id_permohonan' => $this->permohonan->id,
-                    'nama_kegiatan' => $this->kegiatan_rab[$k1]['nama_kegiatan'],
+                    'nama_kegiatan' => $this->kegiatan_rab[$k1]['name_kegiatan'],
                 ]);
 
                 foreach($this->kegiatan_rab[$k1]['rincian'] as $k2 => $rincian){
@@ -128,8 +168,10 @@ class IsiRab extends Component
             DB::commit();
             $this->reset(['kegiatan_rab']);
             $this->dispatch('close-modal');
+            $this->getGrandTotal();
         } catch (\Throwable $th) {
             DB::rollBack();
+            dd($th);
             session()->flash('error', 'Kegiatan dan Rincian gagal dihapus :'.$th);
         }
 
@@ -154,8 +196,17 @@ class IsiRab extends Component
         }
     }
 
+    public function checkPengajuan(){
+        if($this->total_kegiatan == $this->total_pengajuan){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public function saveRab(){
-        Permohonan::where('id', $this->permohonan->id)->increment('id_status');
+        $this->permohonan->update(['nominal_rab' => $this->total_pengajuan]); 
+        $this->permohonan->increment('id_status');
 
         return redirect()->route('permohonan');
     }

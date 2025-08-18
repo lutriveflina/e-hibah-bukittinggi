@@ -46,7 +46,7 @@
                                         </div>
                                         <div x-show="$wire.role == 2 || $wire.role == 3 || $wire.role == 4"
                                             class="mb-3">
-                                            <label for="skpd" class="form-label">Instansi</label>
+                                            <label for="skpd" class="form-label">SKPD {{ $skpd }}</label>
                                             <select wire:model='skpd' id="skpd" class="form-select">
                                                 <option value="">--- Pilih SKPD ---</option>
                                                 @foreach ($skpds as $key => $skpd)
@@ -54,6 +54,17 @@
                                                 @endforeach
                                             </select>
                                         </div>
+                                        @if($urusans && $urusans->count())
+                                        <div>
+                                            <label for="urusan" class="form-label">Urusan</label>
+                                            <select wire:model='urusan' id="urusan" class="form-select">
+                                                <option value="">--- Pilih Urusan ---</option>
+                                                @foreach ($urusans as $urusan)
+                                                <option value="{{ $urusan->id }}">{{ $urusan->nama_urusan }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -212,6 +223,10 @@
             Livewire.on("createModal", () => {
                 $('#create-modal').modal('show');
             });
+
+            $("#create-modal #skpd").on('change', function(){
+                Livewire.dispatch('updatedSkpd');
+            })
 
             Livewire.on("editModal", () => {
                 $('#edit-modal').modal('show');

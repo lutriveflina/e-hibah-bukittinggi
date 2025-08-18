@@ -5,6 +5,7 @@ namespace App\Livewire\Permohonan;
 use App\Models\PendukungPermohonan;
 use App\Models\Permohonan;
 use App\Models\RabPermohonan;
+use App\Models\RincianRab;
 use App\Models\Satuan;
 use App\Models\Skpd;
 use App\Models\UrusanSkpd;
@@ -103,15 +104,27 @@ class EditPermohonan extends Component
                 $this->file_pemberitahuan = $this->permohonan->file_pemberitahuan;
         }
 
-        $this->kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', $id_permohonan)->get();
+        
+        $this->kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', $this->permohonan->id)->get();
+        if($this->kegiatans){
+            $grand = 0;
+            foreach ($this->kegiatans as $k1 => $item) {
+                foreach ($item->rincian as $k2 => $child) {
+                    $grand += $child->subtotal;
+                }
+            }
+            $this->total_kegiatan = $grand;
+        }
         foreach ($this->kegiatans as $k1 => $item) {
             $this->kegiatan_rab[$k1] = [
+                'id_kegiatan' => $item->id,
                 'nama_kegiatan' => $item->nama_kegiatan,
                 'total_kegiatan' => 0
             ];
             foreach($item->rincian as $k2 => $child){
                 $this->kegiatan_rab[$k1]['rincian'][$k2] = [
-                    'name' => $child->keterangan,
+                    'id_rincian' => $child->id,
+                    'kegiatan' => $child->keterangan,
                     'volume' => $child->volume,
                     'satuan' => $child->id_satuan,
                     'harga_satuan' => $child->harga,
@@ -219,6 +232,35 @@ class EditPermohonan extends Component
         }
     }
 
+    public function getSubtotal($k1, $k2)
+    {
+        $child = $this->kegiatan_rab[$k1]['rincian'][$k2];
+        $subtotal = (float) ($child['volume'] ?? 0) * (float) ($child['harga_satuan'] ?? 0);
+        $this->kegiatan_rab[$k1]['rincian'][$k2]['subtotal'] = $subtotal;
+        $this->kegiatan_rab[$k1]['total_kegiatan'] = $this->getTotalKegiatan($k1);
+        return $subtotal;
+    }
+
+    // Hitung total kegiatan
+    public function getTotalKegiatan($k1)
+    {
+        $total = 0;
+        foreach ($this->kegiatan_rab[$k1]['rincian'] as $k2 => $child) {
+
+            $total += $child['subtotal'];
+        }
+        return $total;
+    }
+
+    public function getGrandTotal()
+    {
+        $grand = 0;
+        foreach ($this->kegiatan_rab as $k1 => $item) {
+            $grand += $this->getTotalKegiatan($k1);
+        }
+        $this->total_kegiatan = $grand;
+    }
+
     public function tambahRincian($k1)
     {
         $countChild = count($this->kegiatan_rab[$k1]['rincian']);
@@ -240,8 +282,69 @@ class EditPermohonan extends Component
         ];
     }
 
+    public function deleteKegiatan($id_kegiatan){
+        $kegiatan = RabPermohonan::findOrFail($id_kegiatan);
+
+        DB::beginTransaction();
+
+        try {
+            $kegiatan->rincian()->delete();
+    
+            $kegiatan->delete();
+
+            DB::commit();
+
+            session()->flash('message', 'Kegiatan dan Semua Rincian telah berhasil di hapus');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            session()->flash('error', 'Kegiatan dan Rincian gagal dihapus :'.$th);
+        }
+    }
+
+    public function update_rab(){
+
+        DB::beginTransaction();
+        try {
+            foreach($this->kegiatan_rab as $k1 => $item){
+                $kegiatan = RabPermohonan::findOrFail($item['id_kegiatan'])->update([
+                    'nama_kegiatan' => $this->kegiatan_rab[$k1]['nama_kegiatan'],
+                ]);
+
+                foreach($this->kegiatan_rab[$k1]['rincian'] as $k2 => $rincian){
+                    RincianRab::findOrFail($rincian['id_rincian'])->update([
+                        'keterangan' => $rincian['kegiatan'],
+                        'volume' => $rincian['volume'],
+                        'id_satuan' => $rincian['satuan'],
+                        'harga' => $rincian['harga_satuan'],
+                        'subtotal' => $rincian['subtotal'],
+                    ]);
+                }
+            }
+            DB::commit();
+            $this->dispatch('close-modal');
+            $this->getGrandTotal();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            dd($th);
+            session()->flash('error', 'Kegiatan dan Rincian gagal dihapus :'.$th);
+        }
+
+    }
+
+    public function checkRab(){
+        if($this->total_kegiatan == $this->nominal_rab){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public function saveRab(){
+        $this->permohonan->update(['nominal_rab' => $this->nominal_rab]);
+        session()->flash('warning_rab', 'Berhasil update data RAB');
+    }
+
     public function update_pendukung(){
-        
         $tanggung_jawab_path = $this->file_pernyataan_tanggung_jawab;
         $pengurus_path = $this->struktur_pengurus;
         $rab_path = $this->file_rab;
@@ -257,7 +360,7 @@ class EditPermohonan extends Component
                 }
 
                 $ext_tanggung_jawab = $this->file_pernyataan_tanggung_jawab->getclientOriginalExtension();
-                $tanggung_jawab_path = $this->file_pernyataan_tanggung_jawab->storeAs('dukung_permohonan', 'tanggung_jawab_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_tanggung_jawab, 'public');
+                $tanggung_jawab_path = $this->file_pernyataan_tanggung_jawab->storeAs('dukung_permohonan', 'tanggung_jawab_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_tanggung_jawab, 'public');
             }
 
             if($this->pendukung->file_mohon != $this->file_mohon){
@@ -266,7 +369,7 @@ class EditPermohonan extends Component
                 }
 
                 $ext_pengurus = $this->struktur_pengurus->getclientOriginalExtension();
-                $pengurus_path = $this->struktur_pengurus->storeAs('dukung_permohonan', 'pengurus_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_pengurus, 'public');
+                $pengurus_path = $this->struktur_pengurus->storeAs('dukung_permohonan', 'pengurus_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_pengurus, 'public');
             }
 
             if($this->pendukung->struktur_pengurus != $this->struktur_pengurus){
@@ -275,7 +378,7 @@ class EditPermohonan extends Component
                 }
 
                 $ext_rab = $this->file_rab->getclientOriginalExtension();
-                $rab_path = $this->file_rab->storeAs('dukung_permohonan', 'rab_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_rab, 'public');
+                $rab_path = $this->file_rab->storeAs('dukung_permohonan', 'rab_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_rab, 'public');
             }
 
             if($this->pendukung->saldo_akhir_rek != $this->saldo_akhir_rek){
@@ -284,7 +387,7 @@ class EditPermohonan extends Component
                 }
 
                 $ext_saldo_akhir_rek = $this->saldo_akhir_rek->getclientOriginalExtension();
-                $saldo_akhir_rek_path = $this->saldo_akhir_rek->storeAs('dukung_permohonan', 'saldo_akhir_rek_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_saldo_akhir_rek, 'public');
+                $saldo_akhir_rek_path = $this->saldo_akhir_rek->storeAs('dukung_permohonan', 'saldo_akhir_rek_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_saldo_akhir_rek, 'public');
             }
 
             if($this->pendukung->file_tidak_tumpang_tindih != $this->file_tidak_tumpang_tindih){
@@ -293,7 +396,7 @@ class EditPermohonan extends Component
                 }
 
                 $ext_tidak_tumpang_tindih = $this->file_tidak_tumpang_tindih->getclientOriginalExtension();
-                $tidak_tumpang_tindih_path = $this->file_tidak_tumpang_tindih->storeAs('dukung_permohonan', 'tidak_tumpang_tindih_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_tidak_tumpang_tindih, 'public');
+                $tidak_tumpang_tindih_path = $this->file_tidak_tumpang_tindih->storeAs('dukung_permohonan', 'tidak_tumpang_tindih_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_tidak_tumpang_tindih, 'public');
             }
 
             $update_pendukung_permohonan = $this->pendukung->update([

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('file_rab');
             $table->string('saldo_akhir_rek');
             $table->string('no_tidak_tumpang_tindih');
-            $table->dateTime('tanggal_tidak_tumpang_tindih');
+            $table->date('tanggal_tidak_tumpang_tindih');
             $table->string('file_tidak_tumpang_tindih');
             $table->timestamps();
             $table->softDeletes();

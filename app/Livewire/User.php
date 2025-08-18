@@ -6,10 +6,12 @@ use App\Helpers\General;
 use App\Mail\SendUserPassword;
 use App\Models\Role;
 use App\Models\Skpd;
+use App\Models\UrusanSkpd;
 use App\Models\User as ModelsUser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
@@ -21,6 +23,7 @@ class User extends Component
     public $user;
     public $roles;
     public $skpds;
+    public $urusans;
     public $userId;
 
     #[Validate('required|string|max:255')]
@@ -30,8 +33,9 @@ class User extends Component
     #[Validate('required')]
     public $role;
     public $skpd;
+    public $urusan;
 
-    protected $listeners = ['createModal', 'editModal', 'closeModal', 'verifyingDelete'];
+    protected $listeners = ['createModal', 'updatedSkpd', 'editModal', 'closeModal', 'verifyingDelete'];
 
     public function mount()
     {
@@ -39,6 +43,7 @@ class User extends Component
         $this->authorize('viewAny', User::class);
         $this->roles = Role::all();
         $this->skpds = Skpd::orderBy('id', 'ASC')->get();
+        $this->urusans = [];
 
     }
 
@@ -52,6 +57,13 @@ class User extends Component
     {
         $this->reset(['name', 'email', 'role', 'skpd']);
         $this->dispatch('createModal');
+    }
+
+    #[On('updatedSkpd')]
+    public function updatedSkpd(){
+        if(!empty($this->skpd)){
+            $this->urusans = UrusanSkpd::where('id_skpd', $this->skpd)->get();
+        }
     }
 
     public function store(){
@@ -74,9 +86,10 @@ class User extends Component
             'id_role' => $this->role,
             'password' => bcrypt($new_password),
             'id_skpd' => $this->skpd ? $this->skpd : null,
+            'id_urusan' => $this->urusan ? $this->urusan : null,
         ])->assignRole([$role->name]);
 
-        $this->reset(['name', 'email', 'role']);
+        $this->reset(['name', 'email', 'role', 'skpd', 'urusans', 'urusan']);
         session()->flash('message', 'User created successfully.');
         $this->dispatch('closeModal');
     }
