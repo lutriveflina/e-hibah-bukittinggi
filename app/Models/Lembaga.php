@@ -14,6 +14,7 @@ class Lembaga extends BaseModel
         'id_urusan',
         'email',
         'phone',
+        'id_kelurahan',
         'alamat',
         'npwp',
         'no_akta_kumham',
@@ -41,6 +42,11 @@ class Lembaga extends BaseModel
     public function skpd()
     {
         return $this->belongsTo(Skpd::class, 'id_skpd');
+    }
+
+    public function urusan()
+    {
+        return $this->belongsTo(UrusanSkpd::class, 'id_urusan');
     }
 
     public function user()

@@ -99,6 +99,9 @@ class CreateOrUpdate extends Component
                 $this->file_pemberitahuan = $permohonan->file_pemberitahuan;
             }
         }
+
+            $this->id_skpd = Auth::user()->lembaga?->skpd?->id;
+            $this->id_urusan = Auth::user()->lembaga?->urusan?->id;
     }
     
     public function render()

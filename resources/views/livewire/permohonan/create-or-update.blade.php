@@ -104,7 +104,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">SKPD <span class="text-danger">*</span></label>
-                                <select wire:model="id_skpd" id="id_skpd" class="form-control">
+                                <select wire:model="id_skpd" id="id_skpd" class="form-control" disabled>
                                     <option value="">-- Pilih SKPD --</option>
                                     @foreach ($skpds as $key => $item)
                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -113,7 +113,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Urusan <span class="text-danger">*</span></label>
-                                <select wire:model="urusan" id="urusan" class="form-control">
+                                <select wire:model="urusan" id="urusan" class="form-control" disabled>
                                     <option value="">-- Pilih Urusan --</option>
                                     @foreach ($urusans as $key => $item)
                                         <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>

@@ -16,7 +16,7 @@
                                         <select wire:model='id_skpd' class="form-control">
                                             <option value="">--- Pilih SKPD ---</option>
                                             @foreach ($skpd as $key => $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                <option value="{{ $item->id }}">{{ $item->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -27,7 +27,7 @@
                                         <select wire:model='id_urusan' class="form-control">
                                             <option value="">--- Pilih Urusan ---</option>
                                             @foreach ($urusan as $key => $item)
-                                            <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
+                                                <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -51,11 +51,67 @@
                                 </div>
                             </div>
                             <div class="mb-3">
+                                <label for="propinsi" class="form-label">Propinsi <span
+                                        class="text-danger">*</span></label>
+                                <select wire:model='propinsi' class="form-select" id="propinsi">
+                                    <option selected>Pilih Propinsi</option>
+                                    @foreach ($propinsis as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('propinsi')
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="kota" class="form-label">Kota/Kabupaten <span
+                                        class="text-danger">*</span></label>
+                                <select wire:model='kabkota' class="form-select" id="kabkota">
+                                    <option selected>Pilih Kota/Kabupaten</option>
+                                    @foreach ($kabkotas as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('kota')
+                                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="kecamatan" class="form-label">Kecamatan</label>
+                                    <select wire:model='kecamatan' class="form-select" id="kecamatan">
+                                        <option selected>Pilih Kecamatan</option>
+                                        @foreach ($kecamatans as $item)
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('kecamatan')
+                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="kelurahan" class="form-label">Kelurahan <span
+                                            class="text-danger">*</span></label>
+                                    <select wire:model='kelurahan' class="form-select" id="kelurahan">
+                                        <option selected>Pilih Kelurahan</option>
+                                        @foreach ($kelurahans as $item)
+                                            <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('kelurahan')
+                                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="mb-3">
                                 <label for="alamat" class="form-label">Alamat</label>
                                 <textarea wire:model='alamat' class="form-control" rows="3"></textarea>
                             </div>
                             <div class="mb-3">
-                                <button type="submit" class="btn btn-primary w-100">Ubah Data</button>
+                                <button wire:model='update' type="submit" class="btn btn-primary w-100">Ubah
+                                    Data</button>
                             </div>
                         </div>
                     </div>
@@ -64,3 +120,21 @@
         </div>
     </form>
 </div>
+
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            $("#propinsi").on('change', function() {
+                Livewire.dispatch('updatedPropinsi');
+            });
+
+            $("#kabkota").on('change', function() {
+                Livewire.dispatch('updatedKabkota');
+            });
+
+            $("#kecamatan").on('change', function() {
+                Livewire.dispatch('updatedKecamatan');
+            });
+        });
+    </script>
+@endpush
