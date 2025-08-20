@@ -30,10 +30,16 @@
                                                 class="text-danger">*</span></label>
                                         <input type="file" wire:model="file_pernyataan_tanggung_jawab"
                                             class="form-control">
+                                        @error('file_pernyataan_tanggung_jawab')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Berkas RAB <span class="text-danger">*</span></label>
                                         <input type="file" wire:model="file_rab" class="form-control">
+                                        @error('file_rab')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -41,11 +47,17 @@
                                         <label class="form-label">Struktur Pengurus <span
                                                 class="text-danger">*</span></label>
                                         <input type="file" wire:model="struktur_pengurus" class="form-control">
+                                        @error('struktur_pengurus')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Saldo Akhir Rekening Bank <span
                                                 class="text-danger">*</span></label>
                                         <input type="file" wire:model="saldo_akhir_rek" class="form-control">
+                                        @error('saldo_akhir_rek')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +67,7 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <h3 class="font-semibold mb-2">Surat Permohonan</h3>
+                        <h3 class="font-semibold mb-2">Surat Pernyataan</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="row">
                                 <div class="col-4">
@@ -63,6 +75,9 @@
                                         <label class="form-label">Surat Pernyataan Tidak Tumpang Tindih <span
                                                 class="text-danger">*</span></label>
                                         <input type="text" wire:model="no_tidak_tumpang_tindih" class="form-control">
+                                        @error('no_tidak_tumpang_tindih')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                                 <div class="col-4">
@@ -72,6 +87,9 @@
                                             <span class="input-group-text"><i class="bi bi-calendar"></i></span>
                                             <input type="date" wire:model="tanggal_tidak_tumpang_tindih"
                                                 class="form-control">
+                                            @error('tanggal_tidak_tumpang_tindih')
+                                                <span class="text-danger text-sm">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                     </div>
                                 </div>
@@ -81,6 +99,9 @@
                                                 class="text-danger">*</span></label>
                                         <input type="file" wire:model="file_tidak_tumpang_tindih"
                                             class="form-control">
+                                        @error('file_tidak_tumpang_tindih')
+                                            <span class="text-danger text-sm">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                 </div>
                             </div>

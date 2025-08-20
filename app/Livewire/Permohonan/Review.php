@@ -46,13 +46,13 @@ class Review extends Component
 
     public $berita_acara;
 
-    protected $status_rekomendasi;
+    public $status_rekomendasi;
     public $nominal_rekomendasi;
     public $tanggal_rekomendasi;
     public $catatan_rekomendasi;
     public $file_pemberitahuan;
 
-    public $listeners = ['updateStatement' => 'veriffiedStatement'];
+    public $listeners = ['updatethis->status_rekomendasiment' => 'veriffiedStatement'];
 
     public function mount($id_permohonan = null){
         $this->permohonan = Permohonan::with(['lembaga', 'skpd', 'status', 'pendukung'])->where('id', $id_permohonan)->first();
@@ -66,6 +66,15 @@ class Review extends Component
         }
 
         $this->questions = PertanyaanKelengkapan::with(['children' => function($query) {$query->orderBy('order');}])->where('id_parent', null)->orderBy('order')->get();
+        foreach($this->questions as $item){
+            foreach($item->children as $child){
+                $this->answer[$child->id] = [
+                    'is_ada' => false,
+                    'is_sesuia' => false,
+                    'keterangan' => ''
+                ];
+            }
+        }
         $this->berita_acara = BeritaAcara::firstWhere('id_permohonan', $this->permohonan->id);
         if($this->berita_acara){
             $kelengkapan = KelengkapanBeritaAcara::where('id_berita_acara', $this->berita_acara->id)->get();
@@ -178,19 +187,18 @@ class Review extends Component
         
     }
 
-    public function store_pemberitahuan($state){
-        dd($this);
+    public function store_pemberitahuan(){
         DB::beginTransaction();
 
         try {
-            $ext_file_pemberitahuan = $this->file_file_pemberitahuan->getclientOriginalExtension();
-            $file_pemberitahuan_path = $this->file_file_pemberitahuan->storeAs('berita_acara', 'file_pemberitahuan_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_file_pemberitahuan, 'public');
+            $ext_file_pemberitahuan = $this->file_pemberitahuan->getclientOriginalExtension();
+            $file_pemberitahuan_path = $this->file_pemberitahuan->storeAs('berita_acara', 'file_pemberitahuan_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_file_pemberitahuan, 'public');
 
-            if($state == 1){
+            if($this->status_rekomendasi == 1){
                 $status = Status_permohonan::where('name', 'direkomendasi')->first()->id;
-            }else if($state == 2){
+            }else if($this->status_rekomendasi == 2){
                 $status = Status_permohonan::where('name', 'koreksi')->first()->id;
-            }else if($state == 1){
+            }else if($this->status_rekomendasi == 1){
                 $status = Status_permohonan::where('name', 'ditolak')->first()->id;
             }
 
@@ -210,5 +218,17 @@ class Review extends Component
             dd($th);
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }
+    }
+
+    public function recomending() {
+        $this->status_rekomendasi = 1;
+    }
+
+    public function correcting() {
+        $this->status_rekomendasi = 2;
+    }
+
+    public function deniying() {
+        $this->status_rekomendasi = 3;
     }
 }

@@ -49,7 +49,9 @@ class PermohonanController extends Controller
     }
 
     public function send($id_permohonan){
-        Permohonan::where('id', $id_permohonan)->increment('id_status');
+        Permohonan::where('id', $id_permohonan)->update([
+            'id_status' => 4,
+        ]);
 
         return redirect()->route('permohonan');
     }

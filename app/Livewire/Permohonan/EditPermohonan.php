@@ -301,6 +301,18 @@ class EditPermohonan extends Component
         }
     }
 
+    public function deleteRincian($id_rincian){
+        DB::beginTransaction();
+
+        try {
+            RincianRab::findOrFail($id_rincian)->delete();
+
+            DB::commit();
+        } catch (\Throwable $th) {
+            session()->flash('error', 'Rincian gagal dihapus :'.$th);
+        }
+    }
+
     public function update_rab(){
 
         DB::beginTransaction();

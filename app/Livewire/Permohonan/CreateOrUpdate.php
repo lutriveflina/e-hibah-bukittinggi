@@ -19,6 +19,7 @@ class CreateOrUpdate extends Component
     public $id_permohonan;
     public $id_lembaga;
     public $skpds = [];
+    public $all_urusans = [];
     public $urusans = [];
 
     #[Validate('required')]
@@ -71,6 +72,7 @@ class CreateOrUpdate extends Component
         $user = User::with(['lembaga'])->find(Auth::user()->id);
         $this->id_lembaga = $user->lembaga->id;
         $this->skpds = Skpd::all();
+        $this->all_urusans = UrusanSkpd::all();
 
         if($id){
             $permohonan = Permohonan::find($id);
@@ -101,12 +103,16 @@ class CreateOrUpdate extends Component
         }
 
             $this->id_skpd = Auth::user()->lembaga?->skpd?->id;
-            $this->id_urusan = Auth::user()->lembaga?->urusan?->id;
+            $this->urusan = Auth::user()->lembaga?->urusan?->id;
     }
     
     public function render()
     {
         return view('livewire.permohonan.create-or-update');
+    }
+
+    public function updatedSkpd(){
+        $this->urusans = collect($this->all_urusans)->where('id_skpd', $this->id_skpd)->values()->toArray();
     }
 
     #[On('updated_id_skpd')]
@@ -124,7 +130,6 @@ class CreateOrUpdate extends Component
 
     public function store(){
         $this->validate();
-
         $ext_mohon = $this->file_mohon->getclientOriginalExtension();
         $mohon_path = $this->file_mohon->storeAs('permohonan', 'surat_permohonan_'.Auth::user()->id.$this->id_lembaga.date('now').'.'.$ext_mohon, 'public');
 

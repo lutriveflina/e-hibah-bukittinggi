@@ -15,9 +15,8 @@
             </nav>
         </div>
         <div class="ms-auto">
-            <a href="{{ $this->checkRab() ? 'javascript:' : route('permohonan') }}" @if($this->checkRab())
-                title="RAB Belum Diperbarui"
-                @endif>
+            <a href="{{ $this->checkRab() ? 'javascript:' : route('permohonan') }}"
+                @if ($this->checkRab()) title="RAB Belum Diperbarui" @endif>
                 <button class="btn btn-primary" @disabled($this->checkRab())>
                     Back
                 </button>
@@ -45,8 +44,8 @@
                     </a>
                 </li>
                 <li class="nav-item" wire:click='updateEditState({{ ' rab' }})' role="presentation">
-                    <a wire:ignore.self class="nav-link @if ($edit_state == 'rab') active @endif" data-bs-toggle="pill"
-                        href="#data_rab" role="tab" aria-selected="false">
+                    <a wire:ignore.self class="nav-link @if ($edit_state == 'rab') active @endif"
+                        data-bs-toggle="pill" href="#data_rab" role="tab" aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Rab</div>
                         </div>
@@ -65,15 +64,16 @@
     </div>
 
     <div class="tab-content" id="pills-tabContent">
-        <div wire:ignore.self class="tab-pane fade  @if ($edit_state == 'lembaga') show active @endif" id="data_lembaga"
-            role="tabpanel">
+        <div wire:ignore.self class="tab-pane fade  @if ($edit_state == 'lembaga') show active @endif"
+            id="data_lembaga" role="tabpanel">
 
             <div class="card">
                 <div class="card-body">
                     <div class="col col-12">
                         <div class="mb-3">
                             <label for="search" class="form-label">Nama Lembaga</label>
-                            <input type="text" class="form-control" value="{{ $permohonan->lembaga->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ $permohonan->lembaga->name }}"
+                                disabled>
                         </div>
                         <div class="row">
                             <div class="col col-6">
@@ -96,8 +96,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" rows="3"
-                                disabled>{{ $permohonan->lembaga->alamat }}"</textarea>
+                            <textarea class="form-control" rows="3" disabled>{{ $permohonan->lembaga->alamat }}"</textarea>
                         </div>
                     </div>
                 </div>
@@ -107,9 +106,9 @@
         <div wire:ignore.self class="tab-pane fade @if ($edit_state == 'proposal') show active @endif"
             id="data_proposal" role="tabpanel">
             @if (session()->has('proposal_error'))
-            <div class="mb-4">
-                <div class="alert alert-success">{{ session('message') }}</div>
-            </div>
+                <div class="mb-4">
+                    <div class="alert alert-success">{{ session('message') }}</div>
+                </div>
             @endif
             {{-- Usulah APBD --}}
             <div class="mb-4">
@@ -118,7 +117,7 @@
                         <label class="form-label">Usulan APBD</label>
                         <input type="text" wire:model="usulan_apbd" class="form-control" placeholder="2025">
                         @error('usulan_apbd')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -204,7 +203,7 @@
                             <select wire:model="id_skpd" id="id_skpd" class="form-control">
                                 <option value="">-- Pilih SKPD --</option>
                                 @foreach ($skpds as $key => $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -213,7 +212,7 @@
                             <select wire:model="urusan" id="urusan" class="form-control">
                                 <option value="">-- Pilih Urusan --</option>
                                 @foreach ($urusans as $key => $item)
-                                <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -280,15 +279,15 @@
             </div>
         </div>
 
-        <div wire:ignore.self class="tab-pane fade  @if ($edit_state == 'rab') show active @endif" id="data_rab"
-            role="tabpanel">
+        <div wire:ignore.self class="tab-pane fade  @if ($edit_state == 'rab') show active @endif"
+            id="data_rab" role="tabpanel">
             <div class="card">
                 <div class="card-body">
 
                     @if (session()->has('warning_rab'))
-                    <div class="alert alert-secondary" role="alert">
-                        {{session('message')}}
-                    </div>
+                        <div class="alert alert-secondary" role="alert">
+                            {{ session('message') }}
+                        </div>
                     @endif
                     <div class="row mb-4">
                         <div class="col-md-4 mb-3">
@@ -324,29 +323,28 @@
                             </thead>
                             <tbody>
                                 @foreach ($kegiatans as $kegiatan)
-                                <tr class="bg-warning">
-                                    <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
-                                    <td class="text-end">
-                                        {{ number_format(
-                                        collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) =>
-                                        is_numeric($val))->sum(),
-                                        0,
-                                        ',',
-                                        '.',
-                                        ) }}
-                                    </td>
-                                </tr>
-                                @foreach ($kegiatan->rincian as $rincian)
-                                <tr class="">
-                                    <td class="text-start">{{ $rincian->keterangan }}</td>
-                                    <td>{{ $rincian->volume }}</td>
-                                    <td class="text-start">{{ $rincian->satuan->name }}</td>
-                                    <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                                @endforeach
+                                    <tr class="bg-warning">
+                                        <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
+                                        <td class="text-end">
+                                            {{ number_format(
+                                                collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) => is_numeric($val))->sum(),
+                                                0,
+                                                ',',
+                                                '.',
+                                            ) }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($kegiatan->rincian as $rincian)
+                                        <tr class="">
+                                            <td class="text-start">{{ $rincian->keterangan }}</td>
+                                            <td>{{ $rincian->volume }}</td>
+                                            <td class="text-start">{{ $rincian->satuan->name }}</td>
+                                            <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -443,7 +441,8 @@
                                 <div class="mb-3">
                                     <label class="form-label">Surat Pernyataan <span
                                             class="text-danger">*</span></label>
-                                    <input type="file" wire:model="file_tidak_tumpang_tindih" class="form-control mb-3">
+                                    <input type="file" wire:model="file_tidak_tumpang_tindih"
+                                        class="form-control mb-3">
 
                                     <button type="button" class="btn btn-warning" data-bs-toggle="modal"
                                         data-bs-target="#fileModal"
@@ -508,31 +507,32 @@
                             <tbody>
                                 <!-- Baris Highlight (opsional, bisa dihapus kalau tidak diperlukan) -->
                                 @foreach ($kegiatan_rab as $k1 => $item)
-                                <!-- Baris Highlight (opsional, bisa dihapus kalau tidak diperlukan) -->
-                                <tr class="bg-warning">
-                                    <td colspan="4"><input wire:model='kegiatan_rab.{{ $k1 }}.nama_kegiatan' type="text"
-                                            class="form-control" placeholder="Nama Kegiatan">
-                                    </td>
-                                    <td><input wire:model='kegiatan_rab.{{ $k1 }}.total_kegiatan' type="text"
-                                            class="form-control" readonly>
-                                    </td>
-                                    <td class="text-start">
-                                        <button wire:click='tambahRincian({{ $k1 }})' class="btn btn-sm btn-primary"><i
-                                                class="bi bi-plus-lg"></i></button>
-                                        <button wire:click='deleteKegiatan({{ $item["id_kegiatan"] }})'
-                                            class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
-                                    </td>
-                                </tr>
-                                @foreach ($item['rincian'] as $k2 => $child)
-                                <tr>
-                                    <td><input type="text" class="form-control"
-                                            wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.kegiatan">
-                                    </td>
-                                    <td><input type="number" class="form-control"
-                                            wire:model.change="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.volume">
-                                    </td>
-                                    <td>
-                                        <div wire:ignore x-data x-init="() => {
+                                    <!-- Baris Highlight (opsional, bisa dihapus kalau tidak diperlukan) -->
+                                    <tr class="bg-warning">
+                                        <td colspan="4"><input
+                                                wire:model='kegiatan_rab.{{ $k1 }}.nama_kegiatan'
+                                                type="text" class="form-control" placeholder="Nama Kegiatan">
+                                        </td>
+                                        <td><input wire:model='kegiatan_rab.{{ $k1 }}.total_kegiatan'
+                                                type="text" class="form-control" readonly>
+                                        </td>
+                                        <td class="text-start">
+                                            <button wire:click='tambahRincian({{ $k1 }})'
+                                                class="btn btn-sm btn-primary"><i class="bi bi-plus-lg"></i></button>
+                                            <button wire:click='deleteKegiatan({{ $item['id_kegiatan'] }})'
+                                                class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    @foreach ($item['rincian'] as $k2 => $child)
+                                        <tr>
+                                            <td><input type="text" class="form-control"
+                                                    wire:model="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.kegiatan">
+                                            </td>
+                                            <td><input type="number" class="form-control"
+                                                    wire:model.change="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.volume">
+                                            </td>
+                                            <td>
+                                                <div wire:ignore x-data x-init="() => {
                                                     let select_satuan = $($el).find('#select_satuan_{{ $k1 }}{{ $k2 }}');
                                                     select_satuan.select2({
                                                         dropdownAutoWidth: true,
@@ -547,33 +547,35 @@
                                                     // optional sync back from Livewire
                                                     $watch('value', value => select_satuan.val(value).trigger('change'));
                                                 }">
-                                            <select class="form-select" id="select_satuan_{{ $k1 }}{{ $k2 }}">
-                                                <option value="">Pilih Satuan</option>
-                                                @foreach ($satuans as $satuan)
-                                                <option value="{{ $satuan->id }}">
-                                                    {{ $satuan->name }}
-                                                </option>
-                                                @endforeach
-                                                <!-- Tambah satuan lain sesuai kebutuhan -->
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td><input type="number" class="form-control"
-                                            wire:model.change="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.harga_satuan">
-                                    </td>
-                                    <td class="text-end">
-                                        <input type="hidden"
-                                            wire:model='kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.subtotal'>
-                                        Rp {{ number_format($this->getSubtotal($k1, $k2), 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-start">
-                                        <button type="button" wire:click="hapusRincian({{ $k1 }},{{ $k2 }})"
-                                            class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                @endforeach
+                                                    <select class="form-select"
+                                                        id="select_satuan_{{ $k1 }}{{ $k2 }}">
+                                                        <option value="">Pilih Satuan</option>
+                                                        @foreach ($satuans as $satuan)
+                                                            <option value="{{ $satuan->id }}">
+                                                                {{ $satuan->name }}
+                                                            </option>
+                                                        @endforeach
+                                                        <!-- Tambah satuan lain sesuai kebutuhan -->
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td><input type="number" class="form-control"
+                                                    wire:model.change="kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.harga_satuan">
+                                            </td>
+                                            <td class="text-end">
+                                                <input type="hidden"
+                                                    wire:model='kegiatan_rab.{{ $k1 }}.rincian.{{ $k2 }}.subtotal'>
+                                                Rp {{ number_format($this->getSubtotal($k1, $k2), 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-start">
+                                                <button type="button"
+                                                    wire:click="deleteRincian({{ $kegiatan_rab[$k1]['rincian'][$k2]['id_rincian'] }})"
+                                                    class="btn btn-danger btn-sm">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -590,8 +592,8 @@
 </div>
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const fileModal = document.getElementById('fileModal');
             const modalContent = document.getElementById('modalFileContent');
 
@@ -613,10 +615,10 @@
                     modalContent.innerHTML = `<p class="text-danger">Jenis file tidak didukung.</p>`;
                 }
             });
-            
+
             Livewire.on('close-modal', function() {
                 $("#update_rab_modal").modal('hide');
             })
         });
-</script>
+    </script>
 @endpush

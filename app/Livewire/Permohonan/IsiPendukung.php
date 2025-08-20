@@ -4,6 +4,7 @@ namespace App\Livewire\Permohonan;
 
 use App\Models\PendukungPermohonan;
 use App\Models\Permohonan;
+use App\Models\Status_permohonan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Validate;
@@ -29,8 +30,11 @@ class IsiPendukung extends Component
     #[Validate('required')]
     public $file_tidak_tumpang_tindih;
 
+    public $id_status_didukung;
+
     public function mount($id_permohonan = null){
         $this->id_permohonan = $id_permohonan;
+        $this->id_status_didukung = Status_permohonan::where('name', 'Didukung')->first()->id;
     }
 
     public function render()
@@ -61,6 +65,7 @@ class IsiPendukung extends Component
 
             $create_pendukung_permohonan = PendukungPermohonan::create([
                 'id_permohonan' => $this->id_permohonan,
+                'id_status' => $this->id_status->didukung,
                 'file_pernyataan_tanggung_jawab' => $tanggung_jawab_path,
                 'struktur_pengurus' => $pengurus_path,
                 'file_rab' => $rab_path,
@@ -69,14 +74,10 @@ class IsiPendukung extends Component
                 'tanggal_tidak_tumpang_tindih' => $this->tanggal_tidak_tumpang_tindih,
                 'file_tidak_tumpang_tindih' => $tidak_tumpang_tindih_path,
             ]);
+            
+            DB::commit();
 
-            if($create_pendukung_permohonan){
-                Permohonan::where('id', $this->id_permohonan)->increment('id_status');
-
-                DB::commit();
-
-                return redirect()->route('permohonan');
-            }
+            return redirect()->route('permohonan');
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th);

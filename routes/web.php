@@ -15,6 +15,7 @@ use App\Livewire\Permission as LivewirePermission;
 use App\Livewire\Permohonan\EditPermohonan;
 use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\Permohonan\IsiRab;
+use App\Livewire\Permohonan\Perbaikan;
 use App\Livewire\Permohonan\Review;
 use App\Livewire\PertanyaanKelengkapan;
 use App\Livewire\Role as LivewireRole;
@@ -58,6 +59,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan/edit_review/{id_permohonan}', Review::class)->name('permohonan.edit_review');
     Route::get('/permohonan/send_review/{id_permohonan}', [PermohonanController::class, 'send_review'])->name('permohonan.send_review');
     Route::get('/permohonan/confirm_review/{id_permohonan}', Review::class)->name('permohonan.confirm_review');
+    Route::get('/permohonan/revisi/{id_permohonan}', Perbaikan::class)->name('permohonan.revisi');
 });
 
 

@@ -56,7 +56,7 @@
                     </thead>
                     <tbody>
                         @foreach ($permohonan as $key => $item)
-                            <tr>
+                            <tr @if ($item->id_status == 8) class="bg-warning" @endif>
                                 <td>{{ $loop->iteration }}</td>
                                 @if (!auth()->user()->hasRole('Admin Lembaga'))
                                     <td>{{ $item->lembaga->name }}</td>
@@ -81,9 +81,13 @@
                                         <span>{{ number_format($item->nominal_rekomendasi ?? 0, 0, ',', '.') }}</span>
                                     </div>
                                 </td>
-                                <td>Rp. {{ $item->nominal_rekomendasi ?? 0 }}</td>
                                 <td>
-                                    @status_buttons([$item->status->status_button, App\Models\Permohonan::class, $item->id])
+                                    <div class="d-flex justify-content-between"><span>Rp.</span>
+                                        <span>{{ number_format($item->nominal_rekomendasi ?? 0, 0, ',', '.') }}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    @status_buttons([$item->status->status_button, App\Models\Permohonan::class, $item->id, $item->id_status])
                                 </td>
                                 <td class="text-center">
                                     @action_buttons([$item->status->action_buttons, App\Models\Permohonan::class, $item->id])

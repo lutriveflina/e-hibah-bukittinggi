@@ -68,10 +68,11 @@ class Profile extends Component
             $this->propinsi = $this->getKabkota($this->kabkota)->id_propinsi ?? null;
             $this->alamat = $lembaga->alamat;
         }
-        
+        $this->updatedPropinsi();
+        $this->updatedKabkota();
+        $this->updatedKecamatan();
         $this->skpd = Skpd::all();
         $this->urusan = UrusanSkpd::all();
-        dd($this);
     }
 
     public function render()

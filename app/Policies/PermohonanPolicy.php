@@ -98,5 +98,9 @@ class PermohonanPolicy
     public function upload_rab(User $user) : bool {
         return $user->hasPermissionTo('Updload Rab Permohonan');
     }
+
+    public function revisi(User $user) : bool {
+        return $user->hasPermissionTo('Revision Permohonan');
+    }
     
 }

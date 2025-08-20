@@ -21,7 +21,7 @@
         <div class="card-body">
             <ul class="nav nav-pills" role="tablist">
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
+                    <a wire:ignore.self class="nav-link @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
                         data-bs-toggle="pill" href="#data_lembaga" role="tab" aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Lembaga</div>
@@ -29,7 +29,7 @@
                     </a>
                 </li>
                 <li class="nav-item" role="presentation">
-                    <a class="nav-link @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
+                    <a wire:ignore.self class="nav-link @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
                         data-bs-toggle="pill" href="#data_proposal" role="tab" aria-selected="false">
                         <div class="d-flex align-items-center">
                             <div class="tab-title">Data Proposal</div>
@@ -37,46 +37,48 @@
                     </a>
                 </li>
                 @if ($permohonan->id_status >= 3)
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link @if ($is_lembaga_verif && $is_proposal_verif && !$is_pendukung_verif) show active @endif"
-                        data-bs-toggle="pill" href="#data_rab" role="tab" aria-selected="false">
-                        <div class="d-flex align-items-center">
-                            <div class="tab-title">Data Rab</div>
-                        </div>
-                    </a>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="pill" href="#data_pendukung" role="tab" aria-selected="false">
-                        <div class="d-flex align-items-center">
-                            <div class="tab-title">Data Pendukung</div>
-                        </div>
-                    </a>
-                </li>
+                    <li class="nav-item" role="presentation">
+                        <a wire:ignore.self class="nav-link @if ($is_lembaga_verif && $is_proposal_verif && !$is_pendukung_verif) show active @endif"
+                            data-bs-toggle="pill" href="#data_rab" role="tab" aria-selected="false">
+                            <div class="d-flex align-items-center">
+                                <div class="tab-title">Data Rab</div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a wire:ignore.self class="nav-link" data-bs-toggle="pill" href="#data_pendukung" role="tab"
+                            aria-selected="false">
+                            <div class="d-flex align-items-center">
+                                <div class="tab-title">Data Pendukung</div>
+                            </div>
+                        </a>
+                    </li>
                 @endif
                 @if ($permohonan->id_status >= 4)
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif"
-                        data-bs-toggle="pill" href="#berita_acara" role="tab" aria-selected="true">
-                        <div class="d-flex align-items-center">
-                            <div class="tab-title">Berita Acara</div>
-                        </div>
-                    </a>
-                </li>
+                    <li class="nav-item" role="presentation">
+                        <a wire:ignore.self class="nav-link @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif"
+                            data-bs-toggle="pill" href="#berita_acara" role="tab" aria-selected="true">
+                            <div class="d-flex align-items-center">
+                                <div class="tab-title">Berita Acara</div>
+                            </div>
+                        </a>
+                    </li>
                 @endif
                 @if ($permohonan->id_status > 5)
-                <li class="nav-item" role="presentation">
-                    <a class="nav-link" data-bs-toggle="pill" href="#status" role="tab" aria-selected="false">
-                        <div class="d-flex align-items-center">
-                            <div class="tab-title">Status</div>
-                        </div>
-                    </a>
-                </li>
+                    <li class="nav-item" role="presentation">
+                        <a wire:ignore.self class="nav-link" data-bs-toggle="pill" href="#status" role="tab"
+                            aria-selected="false">
+                            <div class="d-flex align-items-center">
+                                <div class="tab-title">Status</div>
+                            </div>
+                        </a>
+                    </li>
                 @endif
             </ul>
         </div>
     </div>
     <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
+        <div wire:ignore.self class="tab-pane fade @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
             id="data_lembaga" role="tabpanel">
 
             <div class="card">
@@ -84,7 +86,8 @@
                     <div class="col col-12">
                         <div class="mb-3">
                             <label for="search" class="form-label">Nama Lembaga</label>
-                            <input type="text" class="form-control" value="{{ $permohonan->lembaga->name }}" disabled>
+                            <input type="text" class="form-control" value="{{ $permohonan->lembaga->name }}"
+                                disabled>
                         </div>
                         <div class="row">
                             <div class="col col-6">
@@ -107,8 +110,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="alamat" class="form-label">Alamat</label>
-                            <textarea class="form-control" rows="3"
-                                disabled>{{ $permohonan->lembaga->alamat }}"</textarea>
+                            <textarea class="form-control" rows="3" disabled>{{ $permohonan->lembaga->alamat }}"</textarea>
                         </div>
                         <div class="row">
                             <div class="col-12">
@@ -121,16 +123,16 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
+        <div wire:ignore.self class="tab-pane fade @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
             id="data_proposal" role="tabpanel">
             <div class="mb-4">
                 <div class="card">
                     <div class="card-body">
                         <label class="form-label">Usulan APBD</label>
-                        <input type="text" class="form-control" value="{{ $permohonan->tahun_apbd }}" placeholder="2025"
-                            disabled>
+                        <input type="text" class="form-control" value="{{ $permohonan->tahun_apbd }}"
+                            placeholder="2025" disabled>
                         @error('usulan_apbd')
-                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                            <span class="text-red-500 text-sm">{{ $message }}</span>
                         @enderror
                     </div>
                 </div>
@@ -146,14 +148,14 @@
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label class="form-label">No Surat <span class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" value="{{ $permohonan->no_mohon }}"
-                                            disabled>
+                                        <input type="text" class="form-control"
+                                            value="{{ $permohonan->no_mohon }}" disabled>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label">Perihal Surat <span
                                                 class="text-danger">*</span></label>
-                                        <input type="text" class="form-control" value="{{ $permohonan->perihal_mohon }}"
-                                            disabled>
+                                        <input type="text" class="form-control"
+                                            value="{{ $permohonan->perihal_mohon }}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -170,7 +172,10 @@
                                     <div class="mb-3">
                                         <label class="form-label">Scan Permohonan <span
                                                 class="text-danger">*</span></label><br>
-                                        <button class="btn btn-warning">Lihat Dokumen</button>
+                                        <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#fileModal"
+                                            data-file-url="{{ Storage::url($permohonan->file_mohon) }}">Lihat
+                                            Dokumen</button>
                                     </div>
                                 </div>
                             </div>
@@ -190,8 +195,8 @@
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label">No Proposal <span class="text-danger">*</span></label>
-                                    <input type="text" class="form-control" value="{{ $permohonan->no_proposal }}"
-                                        disabled>
+                                    <input type="text" class="form-control"
+                                        value="{{ $permohonan->no_proposal }}" disabled>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -234,8 +239,8 @@
                                     <label class="form-label">Awal <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                                        <input type="date" class="form-control" value="{{ $permohonan->awal_laksana }}"
-                                            disabled>
+                                        <input type="date" class="form-control"
+                                            value="{{ $permohonan->awal_laksana }}" disabled>
                                     </div>
                                 </div>
                             </div>
@@ -244,15 +249,20 @@
                                     <label class="form-label">Akhir <span class="text-danger">*</span></label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-calendar"></i></span>
-                                        <input type="date" class="form-control" value="{{ $permohonan->akhir_laksana }}"
-                                            disabled>
+                                        <input type="date" class="form-control"
+                                            value="{{ $permohonan->akhir_laksana }}" disabled>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Scan Proposal <span class="text-danger">*</span></label><br>
-                            <button class="btn btn-warning">Lihat Dokumen</button>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
+                                    data-bs-target="#fileModal"
+                                    data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Lihat
+                                    Dokumen</button>
+                            </div>
                         </div>
 
                     </div>
@@ -266,8 +276,7 @@
                         <h3 class="font-semibold mt-6 mb-2">Ringkasan Proposal</h3>
                         <div class="mb-3">
                             <label class="form-label">Latar Belakang</label>
-                            <textarea class="form-control" rows="3"
-                                disabled>{{ $permohonan->latar_belakang }}</textarea>
+                            <textarea class="form-control" rows="3" disabled>{{ $permohonan->latar_belakang }}</textarea>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Maksud Tujuan</label>
@@ -288,7 +297,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && !$is_pendukung_verif) show active @endif"
+        <div wire:ignore.self class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && !$is_pendukung_verif) show active @endif"
             id="data_rab" role="tabpanel">
             <div class="card">
                 <div class="card-body">
@@ -307,29 +316,28 @@
                             </thead>
                             <tbody>
                                 @foreach ($kegiatans as $kegiatan)
-                                <tr class="bg-warning">
-                                    <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
-                                    <td class="text-end">
-                                        {{ number_format(
-                                        collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) =>
-                                        is_numeric($val))->sum(),
-                                        0,
-                                        ',',
-                                        '.',
-                                        ) }}
-                                    </td>
-                                </tr>
-                                @foreach ($kegiatan->rincian as $rincian)
-                                <tr class="">
-                                    <td class="text-start">{{ $rincian->keterangan }}</td>
-                                    <td>{{ $rincian->volume }}</td>
-                                    <td class="text-start">{{ $rincian->satuan->name }}</td>
-                                    <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                                @endforeach
+                                    <tr class="bg-warning">
+                                        <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
+                                        <td class="text-end">
+                                            {{ number_format(
+                                                collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) => is_numeric($val))->sum(),
+                                                0,
+                                                ',',
+                                                '.',
+                                            ) }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($kegiatan->rincian as $rincian)
+                                        <tr class="">
+                                            <td class="text-start">{{ $rincian->keterangan }}</td>
+                                            <td>{{ $rincian->volume }}</td>
+                                            <td class="text-start">{{ $rincian->satuan->name }}</td>
+                                            <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -337,7 +345,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="data_pendukung" role="tabpanel">
+        <div wire:ignore.self class="tab-pane fade" id="data_pendukung" role="tabpanel">
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -373,44 +381,66 @@
                             </div>
                             <div class="mb-3">
                                 <label for="surat_domisili" class="label-form">Proposal</label><br>
-                                <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
-                                    data-file-url="{{ Storage::url($permohonan->file_proposal) }}"">Lihat
-                                    Dokumen</button>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                        data-bs-target="#fileModal"
+                                        data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Lihat
+                                        Dokumen</button>
+                                </div>
                             </div>
                         </div>
                         <div class=" col-4">
-                                    <div class="mb-3">
-                                        <label for="surat_domisili" class="label-form">Struktur Organisasi</label><br>
-                                        <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="surat_domisili" class="label-form">Berkas RAB</label><br>
-                                        <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                                    </div>
-                            </div>
-                            <div class="col-4">
+                            <div class="mb-3">
+                                <label for="surat_domisili" class="label-form">Struktur Organisasi</label><br>
                                 <div class="mb-3">
-                                    <label for="surat_domisili" class="label-form">Foto Kondisi Saat Ini</label><br>
-                                    <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="surat_domisili" class="label-form">Saldo Akhir Rekening Bank</label><br>
-                                    <button class="btn btn-warning w-100">Lihat Dokumen</button>
+                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                        data-bs-target="#fileModal"
+                                        data-file-url="{{ Storage::url($permohonan->pendukung->struktur_pengurus) }}">Lihat
+                                        Dokumen</button>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-12">
-                                    <input type="checkbox" wire:model='is_pendukung_verif' @checked($is_pendukung_verif)
-                                        id="is_pendukung_verif_checkbox">
-                                    <span class="text-start ms-3">Data Pendukung Telah Dilakukan Pengecekan</span>
+                            <div class="mb-3">
+                                <label for="surat_domisili" class="label-form">Berkas RAB</label><br>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                        data-bs-target="#fileModal"
+                                        data-file-url="{{ Storage::url($permohonan->pendukung->file_rab) }}">Lihat
+                                        Dokumen</button>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="mb-3">
+                                <label for="surat_domisili" class="label-form">Foto Kondisi Saat Ini</label><br>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                        data-bs-target="#fileModal"
+                                        data-file-url="{{ Storage::url($permohonan->pendukung->struktur_pengurus) }}">Lihat
+                                        Dokumen</button>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="surat_domisili" class="label-form">Saldo Akhir Rekening Bank</label><br>
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                        data-bs-target="#fileModal"
+                                        data-file-url="{{ Storage::url($permohonan->pendukung->saldo_akhir_rek) }}">Lihat
+                                        Dokumen</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <input type="checkbox" wire:model='is_pendukung_verif' @checked($is_pendukung_verif)
+                                    id="is_pendukung_verif_checkbox">
+                                <span class="text-start ms-3">Data Pendukung Telah Dilakukan Pengecekan</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif"
+        <div wire:ignore.self class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif"
             id="berita_acara" role="tabpanel">
             <div class="card">
                 <div class="card-body">
@@ -432,29 +462,28 @@
                             </thead>
                             <tbody>
                                 @foreach ($questions as $item)
-                                <tr wire:key="parent-{{ $item->id }}" class="bg-warning">
-                                    <td colspan="2">{{ $item->question }}</td>
-                                    <td class="text-center"><input type="checkbox" name="ada_1"></td>
-                                    <td class="text-center"><input type="checkbox" name="sesuai_1"></td>
-                                    <td></td>
-                                </tr>
-                                @foreach ($item->children as $child)
-                                <tr wire:key="child-{{ $child->id }}">
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $child->question }}</td>
-                                    <td class="text-center"><input type="checkbox"
-                                            wire:model='answer.{{ $child->id }}.is_ada'
-                                            @checked($answer[$child->id]['is_ada'] == 1)
-                                        @disabled($permohonan->id_status > 5)>
-                                    </td>
-                                    <td class="text-center"><input type="checkbox"
-                                            wire:model='answer.{{ $child->id }}.is_sesuai'
-                                            @checked($answer[$child->id]['is_ada'] == 1)
-                                        @disabled($permohonan->id_status > 5)></td>
-                                    <td><input type="text" wire:model='answer.{{ $child->id }}.keterangan'
-                                            class="form-control" @disabled($permohonan->id_status > 5)></td>
-                                </tr>
-                                @endforeach
+                                    <tr wire:key="parent-{{ $item->id }}" class="bg-warning">
+                                        <td colspan="2">{{ $item->question }}</td>
+                                        <td class="text-center"><input type="checkbox" name="ada_1"></td>
+                                        <td class="text-center"><input type="checkbox" name="sesuai_1"></td>
+                                        <td></td>
+                                    </tr>
+                                    @foreach ($item->children as $child)
+                                        <tr wire:key="child-{{ $child->id }}">
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $child->question }}</td>
+                                            <td class="text-center"><input type="checkbox"
+                                                    wire:model='answer.{{ $child->id }}.is_ada'
+                                                    @checked($answer[$child->id]['is_ada'] == 1) @disabled($permohonan->id_status > 5)>
+                                            </td>
+                                            <td class="text-center"><input type="checkbox"
+                                                    wire:model='answer.{{ $child->id }}.is_sesuai'
+                                                    @checked($answer[$child->id]['is_ada'] == 1) @disabled($permohonan->id_status > 5)></td>
+                                            <td><input type="text"
+                                                    wire:model='answer.{{ $child->id }}.keterangan'
+                                                    class="form-control" @disabled($permohonan->id_status > 5)></td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -463,7 +492,7 @@
                     <div class="mb-4">
                         <div class="row">
                             <div class="col-1 text-center">
-                                <input wire:model='is_lengkap' @checked($is_lengkap==1) type="checkbox"
+                                <input wire:model='is_lengkap' @checked($is_lengkap == 1) type="checkbox"
                                     @disabled($permohonan->id_status > 5)>
                             </div>
                             <div class="col-11">
@@ -487,8 +516,8 @@
                         <div>
                             <button wire:click='hasVeriffied' class="btn btn-primary me-4"
                                 @disabled($permohonan->id_status > 5)>Ya</button>
-                            <button wire:click='store(0)' class="btn btn-danger" @disabled($permohonan->id_status >
-                                5)>Tidak</button>
+                            <button wire:click='store(0)' class="btn btn-danger"
+                                @disabled($permohonan->id_status > 5)>Tidak</button>
                         </div>
                     </div>
                 </div>
@@ -527,7 +556,7 @@
                                     </div>
                                 </div>
                                 @error('file_kelengkapan_adm')
-                                <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -549,9 +578,12 @@
 
                     <div class="row mb-4">
                         <div class="col-3">
-                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
-                                data-file-url="{{ Storage::url($berita_acara->file_kelengkapan_adm) }}">Lihat
-                                Dokumen</button>
+                            @if ($berita_acara)
+                                <button class="btn btn-warning w-100" data-bs-toggle="modal"
+                                    data-bs-target="#fileModal"
+                                    data-file-url="{{ Storage::url($berita_acara->file_kelengkapan_adm) }}">Lihat
+                                    Dokumen</button>
+                            @endif
                         </div>
                     </div>
 
@@ -569,7 +601,7 @@
                                     </div>
                                 </div>
                                 @error('file_tinjau_lap')
-                                <div class="alert alert-danger">{{ $message }}</div>
+                                    <div class="alert alert-danger">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
@@ -591,9 +623,12 @@
 
                     <div class="row mb-4">
                         <div class="col-3">
-                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
-                                data-file-url="{{ Storage::url($berita_acara->file_tinjau_lap) }}">Lihat
-                                Dokumen</button>
+                            @if ($berita_acara)
+                                <button class="btn btn-warning w-100" data-bs-toggle="modal"
+                                    data-bs-target="#fileModal"
+                                    data-file-url="{{ Storage::url($berita_acara->file_tinjau_lap) }}">Lihat
+                                    Dokumen</button>
+                            @endif
                         </div>
                     </div>
 
@@ -609,28 +644,28 @@
             </div>
 
         </div>
-        <div wire:ignore class="tab-pane fade" id="status">
+        <div wire:ignore.self class="tab-pane fade" id="status">
             <div class="card shadow-sm border-0">
                 <div class="card-body">
                     <div class="mb-3">
                         <label class="form-label fw-bold">Status Proposal</label>
                         <div class="row justify-content-center">
                             <div class="col-3">
-                                <button type="button" class="btn btn-outline-dark w-100"
+                                <button wire:click='recomending' type="button" class="btn btn-outline-dark w-100"
                                     id="recomended_button">Direkomendasi</button>
                             </div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-primary w-100"
+                                <button wire:click='correcting' type="button" class="btn btn-primary w-100"
                                     id="correction_button">Dikoreksi</button>
                             </div>
                             <div class="col-3">
-                                <button type="button" class="btn btn-outline-danger w-100"
+                                <button wire:click='deniying' type="button" class="btn btn-outline-danger w-100"
                                     id="denied_button">Ditolak</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="row g-2 d-none" id="recomendation_row">
+                    <div wire:ignore.self class="row g-2 d-none" id="recomendation_row">
                         <div class="col-md-6">
                             <label class="form-label">Nominal Rekomendasi <span class="text-danger">*</span></label>
                             <div class="input-group">
@@ -646,24 +681,27 @@
                         </div>
                     </div>
 
-                    <div class="mt-3 d-none" id="note_row">
+                    <div wire:ignore.self class="mt-3 d-none" id="note_row">
                         <label class="form-label">Catatan <span class="text-danger">*</span></label>
                         <textarea wire:model='catatan_rekomendasi' class="form-control" rows="2"></textarea>
                     </div>
 
-                    <div class="mt-3 d-none" id="notif_row">
+                    <div wire:ignore.self class="mt-3 d-none" id="notif_row">
                         <label class="form-label">Surat Pemberitahuan</label>
-                        <input type="file" wire:model.prevent='file_pemberitahuan' class="form-control">
+                        <input type="file" wire:model='file_pemberitahuan' class="form-control">
                     </div>
 
-                    <div class="mt-4 d-none" id="save_status_button">
-                        <button id="store_pemberitahuan" class="btn btn-primary w-100">Simpan</button>
+                    <div wire:ignore.self class="mt-4 d-none" id="save_status_button">
+                        <button wire:click='store_pemberitahuan' id="store_pemberitahuan"
+                            class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </div>
             </div>
 
         </div>
     </div>
+
+
 
     <div class="modal fade" id="fileModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-xl modal-dialog-centered">
@@ -682,8 +720,8 @@
 
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const fileModal = document.getElementById('fileModal');
             const modalContent = document.getElementById('modalFileContent');
 
@@ -711,9 +749,9 @@
                     Livewire.dispatch("updateStatement");
                 });
         });
-</script>
-<script>
-    $(document).ready(function() {
+    </script>
+    <script>
+        $(document).ready(function() {
 
             let state;
 
@@ -752,5 +790,5 @@
                 $wire.store_pemberitahuan(state);
             })
         });
-</script>
+    </script>
 @endpush

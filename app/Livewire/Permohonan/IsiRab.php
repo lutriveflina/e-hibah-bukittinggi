@@ -6,6 +6,7 @@ use App\Models\Permohonan;
 use App\Models\RabPermohonan;
 use App\Models\RincianRab;
 use App\Models\Satuan;
+use App\Models\Status_permohonan;
 use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
@@ -26,6 +27,8 @@ class IsiRab extends Component
     #[Validate('required')]
     public $kegiatan_rab = [];
 
+    public $id_status_didraft;
+
     // #[Validate('required')]
     public $rincian = [];
 
@@ -34,6 +37,7 @@ class IsiRab extends Component
     public function mount($id_permohonan = null){
         $this->permohonan = Permohonan::findOrFail($id_permohonan);
         $this->satuans = Satuan::orderBy('name')->get();
+        $this->id_status_didraft = Status_permohonan::where('name', 'draft')->first()->id;
     }
 
     public function render()
@@ -65,10 +69,10 @@ class IsiRab extends Component
         $countChild = count($this->kegiatan_rab[$k1]['rincian']);
         $this->kegiatan_rab[$k1]['rincian'][$countChild + 1] = [
             'kegiatan' => '',
-            'volume' => '',
+            'volume' => 0,
             'satuan' => '',
-            'harga_satuan' => '',
-            'subtotal' => '',
+            'harga_satuan' => 0,
+            'subtotal' => 0,
         ];
     }
 
@@ -205,8 +209,10 @@ class IsiRab extends Component
     }
 
     public function saveRab(){
-        $this->permohonan->update(['nominal_rab' => $this->total_pengajuan]); 
-        $this->permohonan->increment('id_status');
+        $this->permohonan->update([
+            'nominal_rab' => $this->total_pengajuan,
+            'id_status' => $this->id_status_didraft,
+        ]); 
 
         return redirect()->route('permohonan');
     }

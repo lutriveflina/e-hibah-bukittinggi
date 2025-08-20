@@ -70,10 +70,10 @@
                                 <select wire:model='kabkota' class="form-select" id="kabkota">
                                     <option selected>Pilih Kota/Kabupaten</option>
                                     @foreach ($kabkotas as $item)
-                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                        <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
                                     @endforeach
                                 </select>
-                                @error('kota')
+                                @error('kabkota')
                                     <div class="alert alert-danger mt-2">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -84,7 +84,7 @@
                                     <select wire:model='kecamatan' class="form-select" id="kecamatan">
                                         <option selected>Pilih Kecamatan</option>
                                         @foreach ($kecamatans as $item)
-                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                            <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
                                         @endforeach
                                     </select>
                                     @error('kecamatan')
