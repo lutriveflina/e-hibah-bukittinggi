@@ -65,4 +65,12 @@ class PermohonanController extends Controller
     public function confirm_review() {
         //
     }
+
+    public function send_revisi($id_permohonan){
+        Permohonan::where('id', $id_permohonan)->update([
+            'id_status' => 11,
+        ]);
+
+        return redirect()->route('permohonan');
+    }
 }
