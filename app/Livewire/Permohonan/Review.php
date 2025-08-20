@@ -204,6 +204,7 @@ class Review extends Component
 
             $permohonan = $this->permohonan->update([
                 'id_status' => $status,
+                'status_rekomendasi' => $this->status_rekomendasi,
                 'nominal_rekomendasi' => $this->nominal_rekomendasi,
                 'tanggal_rekomendasi' => $this->tanggal_rekomendasi,
                 'catatan_rekomendasi' => $this->catatan_rekomendasi,

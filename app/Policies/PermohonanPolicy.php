@@ -102,5 +102,17 @@ class PermohonanPolicy
     public function revisi(User $user) : bool {
         return $user->hasPermissionTo('Revision Permohonan');
     }
+
+    public function revised(User $user) : bool {
+        return $user->hasPermissionTo('Revised Permohonan');
+    }
+
+    public function review_revisi(User $user) : bool {
+        return $user->hasPermissionTo('Review Perbaikan Permohonan');
+    }
+
+    public function confirm_revisi(User $user) : bool {
+        return $user->hasPermissionTo('Confirm Perbaikan Permohonan');
+    }
     
 }

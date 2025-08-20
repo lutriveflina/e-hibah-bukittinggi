@@ -38,7 +38,7 @@ class PerbaikanRab extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function perbaikan_rincian(): HasMany
+    public function rincian(): HasMany
     {
         return $this->hasMany(PerbaikanRincianRab::class, 'id_perbaikan_rab');
     }

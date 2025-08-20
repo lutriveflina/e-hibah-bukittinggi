@@ -17,8 +17,6 @@ class PerbaikanRincianRab extends Model
         'id_satuan',
         'harga',
         'subtotal',
-        'id_perbaikan',
-        'nama_kegiatan',
         'deleted_at',
         'created_by',
         'updated_by',
@@ -33,5 +31,15 @@ class PerbaikanRincianRab extends Model
     public function perbaikan_rab(): BelongsTo
     {
         return $this->belongsTo(PerbaikanRab::class, 'id_perbaikan_rab');
+    }
+    
+    /**
+     * Get the satuan that owns the RabPermohonan
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function satuan(): BelongsTo
+    {
+        return $this->belongsTo(Satuan::class, 'id_satuan');
     }
 }

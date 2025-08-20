@@ -2,14 +2,22 @@
 
 namespace App\Livewire;
 
+use App\Imports\QuestionsImport;
 use App\Models\PertanyaanKelengkapan as ModelsPertanyaanKelengkapan;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
+use Livewire\WithFileUploads;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PertanyaanKelengkapan extends Component
 {
+    use WithFileUploads;
+
+    public $file_import;
+    
     public $questions;
     public $parents;
     public $orders = [1];
@@ -22,7 +30,7 @@ class PertanyaanKelengkapan extends Component
     #[Validate('required')]
     public $order = 1;
 
-    public $listeners = ['updateModal', 'updateOrder', 'closeModal'];
+    public $listeners = ['import-start', 'import-finish', 'showImportResult', 'updateModal', 'updateOrder', 'closeModal'];
 
     public function render()
     {
@@ -30,6 +38,41 @@ class PertanyaanKelengkapan extends Component
         $this->parents = ModelsPertanyaanKelengkapan::where('id_parent', null)->orderBy('order')->get();
         return view('livewire.pertanyaan-kelengkapan');
     }
+
+    public function import()
+    {
+        $this->validate([
+            'file_import' => 'required|file|mimes:xlsx,csv,xls',
+        ]);
+
+        // tampilkan loading di frontend
+        $this->dispatch('import-start');
+
+        try {
+            $import = new QuestionsImport();
+            Excel::import($import, $this->file_import);
+
+            // hasil import
+            $summary = [
+                'total'     => $import->getRowCount(),
+                'success'   => $import->getSuccessCount(),
+                'failed'    => $import->getFailedCount(),
+                'errors'    => $import->getErrors(),
+            ];
+
+            // kirim hasil ke JS
+            $this->dispatch('import-finished', $summary);
+
+        } catch (\Exception $e) {
+            $this->dispatch('import-finished', [
+                'total' => 0,
+                'success' => 0,
+                'failed' => 0,
+                'errors' => [$e->getMessage()],
+            ]);
+        }
+    }
+    
     #[Computed()]
     public function pertanyaan()
     {

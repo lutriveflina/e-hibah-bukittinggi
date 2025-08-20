@@ -29,6 +29,7 @@ class Permohonan extends Model
         'file_proposal',
         'nominal_rab',
         'id_status',
+        'status_rekomendasi',
         'nominal_rekomendasi',
         'tanggal_rekomendasi',
         'catatan_rekomendasi',
