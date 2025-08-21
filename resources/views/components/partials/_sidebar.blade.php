@@ -74,7 +74,7 @@
                     @endcan
                     <a href="{{ route('permohonan') }}" class="list-group-item"><i
                             class="bi bi-chat-left-text"></i>Permohonan</a>
-                    <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
+                    <a href="{{ route('nphd') }}" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
                         Manager</a>
                     <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-ruled"></i>Laporan</a>
                 </div>
