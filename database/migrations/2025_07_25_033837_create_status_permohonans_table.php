@@ -99,7 +99,7 @@ return new class extends Migration
                         ],
                         [
                             'color' => 'warning', 
-                            'icon' => 'bi bi-pencil-square', 
+                            'icon' => 'bi bi-search', 
                             'url' => 'permohonan.edit', 
                             'permission' => 'review'
                         ],
@@ -147,7 +147,7 @@ return new class extends Migration
                         ],
                         [
                             'color' => 'warning', 
-                            'icon' => 'bi bi-pencil-square', 
+                            'icon' => 'bi bi-file-check-fill', 
                             'url' => 'permohonan.confirm_review', 
                             'permission' => 'confirm_review'
                         ],

@@ -11,7 +11,7 @@
                     </li>
                     <li class="breadcrumb-item"><a href="{{ route('permohonan') }}">Permohonan</a>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Review</li>
+                    <li class="breadcrumb-item active" aria-current="page">Review Perbaikan</li>
                 </ol>
             </nav>
         </div>
@@ -81,7 +81,7 @@
         <div wire:ignore.self class="tab-pane fade @if (!$is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
             id="data_lembaga" role="tabpanel">
 
-            <div class="card">
+            <div class="card bg-secondary">
                 <div class="card-body">
                     <div class="col col-12">
                         <div class="mb-3">
@@ -126,7 +126,7 @@
         <div wire:ignore.self class="tab-pane fade @if ($is_lembaga_verif && !$is_proposal_verif && !$is_pendukung_verif) show active @endif"
             id="data_proposal" role="tabpanel">
             <div class="mb-4">
-                <div class="card">
+                <div class="card bg-secondary">
                     <div class="card-body">
                         <label class="form-label">Usulan APBD</label>
                         <input type="text" class="form-control" value="{{ $permohonan->tahun_apbd }}"
@@ -140,7 +140,7 @@
 
             {{-- Surat Permohonan --}}
             <div class="mb-4">
-                <div class="card">
+                <div class="card bg-secondary">
                     <div class="card-body">
                         <h3 class="font-semibold mb-2">Surat Permohonan</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -190,13 +190,13 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <h3 class="font-semibold mt-6 mb-2">Proposal</h3>
+                        <h3 class="font-semibold mt-6 mb-2">Proposal yang diperbaiki</h3>
                         <div class="row">
                             <div class="col-6">
                                 <div class="mb-3">
                                     <label class="form-label">No Proposal <span class="text-danger">*</span></label>
                                     <input type="text" class="form-control"
-                                        value="{{ $permohonan->no_proposal }}" disabled>
+                                        value="{{ $permohonan->perbaikanProposal->last()->no_proposal }}" disabled>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -206,14 +206,16 @@
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-calendar"></i></span>
                                         <input type="date" class="form-control"
-                                            value="{{ $permohonan->tanggal_proposal }}" disabled>
+                                            value="{{ $permohonan->perbaikanProposal->last()->tanggal_perbaikan }}"
+                                            disabled>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Judul Proposal <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" value="{{ $permohonan->title }}" disabled>
+                            <input type="text" class="form-control"
+                                value="{{ $permohonan->perbaikanProposal->last()->judul_proposal }}" disabled>
                         </div>
                         <div class="mb-3">
                             <label class="form-label">SKPD <span class="text-danger">*</span></label>
@@ -255,13 +257,30 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mb-3">
-                            <label class="form-label">Scan Proposal <span class="text-danger">*</span></label><br>
-                            <div class="mb-3">
-                                <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                    data-bs-target="#fileModal"
-                                    data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Lihat
-                                    Dokumen</button>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Scan Proposal yang diperbaiki <span
+                                            class="text-danger">*</span></label><br>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                            data-bs-target="#fileModal"
+                                            data-file-url="{{ Storage::url($permohonan->perbaikanProposal->last()->file_proposal) }}">Lihat
+                                            Dokumen</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Scan Proposal sebelum diperbaiki <span
+                                            class="text-danger">*</span></label><br>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                            data-bs-target="#fileModal"
+                                            data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Lihat
+                                            Dokumen</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -271,7 +290,7 @@
 
             {{-- Isi Proposal --}}
             <div class="mb-4">
-                <div class="card">
+                <div class="card bg-secondary">
                     <div class="card-body">
                         <h3 class="font-semibold mt-6 mb-2">Ringkasan Proposal</h3>
                         <div class="mb-3">
@@ -346,7 +365,7 @@
             </div>
         </div>
         <div wire:ignore.self class="tab-pane fade" id="data_pendukung" role="tabpanel">
-            <div class="card mb-3">
+            <div class="card mb-3 bg-secondary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
@@ -371,7 +390,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card mb-3">
+            <div class="card mb-3 bg-secondary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">
@@ -442,7 +461,7 @@
         </div>
         <div wire:ignore.self class="tab-pane fade @if ($is_lembaga_verif && $is_proposal_verif && $is_pendukung_verif) show active @endif"
             id="berita_acara" role="tabpanel">
-            <div class="card">
+            <div class="card bg-secondary">
                 <div class="card-body">
                     <h5 class="card-title text-center fw-bold">
                         Checklist Kesesuaian Data Antara Dokumen Tertulis Dan SoftCopy <br>
@@ -509,6 +528,73 @@
             </div>
             <div class="card">
                 <div class="card-body">
+                    <h5 class="card-title text-center fw-bold">
+                        Perubahan Dokumen Tertulis Dan SoftCopy
+                    </h5>
+
+                    <div class="mb-4">
+                        <table class="table table-bordered mt-4">
+                            <thead class="table-secondary text-center align-middle">
+                                <tr>
+                                    <th style="width: 5%;">No</th>
+                                    <th>Kelengkapan</th>
+                                    <th style="width: 10%;">Ada</th>
+                                    <th style="width: 10%;">Sesuai</th>
+                                    <th style="width: 30%;">Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-warning">
+                                    <td colspan="2">Kelengkapan Data Proposal dan RAB Setelah diperbaiki</td>
+                                    <td class="text-center"><input type="checkbox" name="ada_1"></td>
+                                    <td class="text-center"><input type="checkbox" name="sesuai_1"></td>
+                                    <td></td>
+                                </tr>
+                                @foreach ($list_kelengkapan_perbaikan as $key => $item)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $item['question'] }}</td>
+
+                                        <td wire class="text-center"><input
+                                                wire:model='list_kelengkapan_perbaikan.{{ $key }}.is_ada'
+                                                type="checkbox">
+                                        </td>
+                                        <td class="text-center"><input
+                                                wire:model='list_kelengkapan_perbaikan.{{ $key }}.is_sesuai'
+                                                type="checkbox"></td>
+                                        <td><input
+                                                wire:model='list_kelengkapan_perbaikan.{{ $key }}.keterangan'
+                                                type="text" class="form-control"></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="row">
+                            <div class="col-1 text-center">
+                                <input wire:model='is_lengkap_perbaikan' type="checkbox">
+                            </div>
+                            <div class="col-11">
+                                <p>Dengan ini saya menyatakan proposal ini telah dilakukan review ulang dengan
+                                    kesesuaian,
+                                    kelengkapan,
+                                    keabsahan antar dokumen tertulis & software (Berdasarkan pergub 27 tahun 2023)
+                                    serta
+                                    kelayakan
+                                    usulan hibahnya</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <button wire:click='storeReviewPerbaikan' class="btn btn-warning w-100">Submit Berita
+                                Acara Perbaikan</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card bg-secondary">
+                <div class="card-body">
                     <div class="mb-4 text-center">
                         <div class="fw-bold mb-3">Apakah Data telah diverifikasi kelengkapan keabsahan dan kelayakan
                             usulan
@@ -523,7 +609,7 @@
                 </div>
             </div>
 
-            <div x-show="$wire.veriffied == true" class="card">
+            <div x-show="$wire.veriffied == true" class="card bg-secondary">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-4">

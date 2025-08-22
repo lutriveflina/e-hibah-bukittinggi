@@ -18,6 +18,7 @@ use App\Livewire\Permohonan\IsiPendukung;
 use App\Livewire\Permohonan\IsiRab;
 use App\Livewire\Permohonan\Perbaikan;
 use App\Livewire\Permohonan\Review;
+use App\Livewire\Permohonan\ReviewPerbaikan;
 use App\Livewire\PertanyaanKelengkapan;
 use App\Livewire\Role as LivewireRole;
 use App\Livewire\SKPD;
@@ -62,12 +63,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/permohonan/confirm_review/{id_permohonan}', Review::class)->name('permohonan.confirm_review');
     Route::get('/permohonan/revisi/{id_permohonan}', Perbaikan::class)->name('permohonan.revisi');
     Route::get('/permohonan/send_revisi/{id_permohonan}', [PermohonanController::class, 'send_revisi'])->name('permohonan.send_revisi');
-
-
+    Route::get('/permohonan/review_revisi/{id_permohonan}', ReviewPerbaikan::class)->name('permohonan.review_revisi');
+    Route::get('/permohonan/confirm_revisi/{id_permohonan}', ReviewPerbaikan::class)->name('permohonan.confirm_revisi');
 
     Route::get('/nphd', [NphdContoller::class, 'index'])->name('nphd');
     Route::get('/nphd/show/{id_permohonan}', \App\Livewire\Nphd\Show::class)->name('nphd.show');
+
 });
+
 
 
 // Route::get('/testing', function () {

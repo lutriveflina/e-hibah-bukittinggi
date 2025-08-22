@@ -52,7 +52,7 @@ return new class extends Migration
                         ],
                         [
                             'color' => 'warning', 
-                            'icon' => 'bi bi-pencil-square', 
+                            'icon' => 'bi bi-search', 
                             'url' => 'permohonan.review_revisi', 
                             'permission' => 'review_revisi'
                         ],
@@ -73,7 +73,7 @@ return new class extends Migration
                         ],
                         [
                             'color' => 'warning', 
-                            'icon' => 'bi bi-pencil-square', 
+                            'icon' => 'bi bi-file-check-fill', 
                             'url' => 'permohonan.confirm_revisi', 
                             'permission' => 'confirm_revisi'
                         ],

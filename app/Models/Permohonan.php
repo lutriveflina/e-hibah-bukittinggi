@@ -55,4 +55,12 @@ class Permohonan extends Model
     public function pendukung(){
         return $this->hasOne(PendukungPermohonan::class, 'id_permohonan');
     }
+
+    public function perbaikanProposal(){
+        return $this->hasMany(perbaikanProposal::class, 'id_permohonan');
+    }
+
+    public function perbaikanRab(){
+        return $this->hasMany(PerbaikanRab::class, 'id_permohonan');
+    }
 }
