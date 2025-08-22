@@ -10,19 +10,19 @@ class NphdContoller extends Controller
 {
     public function index(){
         if(Auth::user()->hasRole('Super Admin')){
-            $permohonan = Permohonan::all();
+            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_status', 7)->get();
         }
 
         if(Auth::user()->hasRole('Admin SKPD')){
-            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_skpd', Auth::user()->id_skpd)->get();
+            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_skpd', Auth::user()->id_skpd)->where('id_status', 7)->get();
         }
 
         if(Auth::user()->hasRole('Reviewer') || Auth::user()->hasRole('Verifikator')){
-            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_skpd', Auth::user()->id_skpd)->where('urusan', Auth::user()->id_urusan)->get();
+            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_skpd', Auth::user()->id_skpd)->where('urusan', Auth::user()->id_urusan)->where('id_status', 7)->get();
         }
         
         if(Auth::user()->hasRole('Admin Lembaga')){
-            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_lembaga', Auth::user()->id_lembaga)->get();
+            $permohonan = Permohonan::with(['skpd', 'lembaga'])->where('id_lembaga', Auth::user()->id_lembaga)->where('id_status', 7)->get();
         }
         
         return view('pages.nphd.index', [

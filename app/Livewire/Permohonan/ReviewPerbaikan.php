@@ -59,6 +59,7 @@ class ReviewPerbaikan extends Component
     public $tanggal_rekomendasi;
     public $catatan_rekomendasi;
     public $file_pemberitahuan;
+    public $file_pemberitahuan_perbaikan;
 
     public $listeners = ['updatethis->status_rekomendasiment' => 'veriffiedStatement'];
 
@@ -215,29 +216,39 @@ class ReviewPerbaikan extends Component
         
     }
 
-    public function store_pemberitahuan(){
+    public function store_pemberitahuan_perbaikan(){
         DB::beginTransaction();
 
         try {
-            $ext_file_pemberitahuan = $this->file_pemberitahuan->getclientOriginalExtension();
-            $file_pemberitahuan_path = $this->file_pemberitahuan->storeAs('berita_acara', 'file_pemberitahuan_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_file_pemberitahuan, 'public');
+            $ext_file_pemberitahuan_perbaikan = $this->file_pemberitahuan_perbaikan->getclientOriginalExtension();
+            $file_pemberitahuan_perbaikan_path = $this->file_pemberitahuan_perbaikan->storeAs('berita_acara', 'file_pemberitahuan_perbaikan_'.Auth::user()->id.$this->permohonan->id.date('now').'.'.$ext_file_pemberitahuan_perbaikan, 'public');
 
             if($this->status_rekomendasi == 1){
                 $status = Status_permohonan::where('name', 'direkomendasi')->first()->id;
+
+                $permohonan = $this->permohonan->update([
+                    'id_status' => $status,
+                    'file_pemberitahuan_perbaikan' => $file_pemberitahuan_perbaikan_path
+                ]);
             }else if($this->status_rekomendasi == 2){
                 $status = Status_permohonan::where('name', 'koreksi')->first()->id;
+                
+                $permohonan = $this->permohonan->update([
+                    'id_status' => $status,
+                    'status_rekomendasi' => $this->status_rekomendasi,
+                    'nominal_rekomendasi' => $this->nominal_rekomendasi,
+                    'tanggal_rekomendasi' => $this->tanggal_rekomendasi,
+                    'catatan_rekomendasi' => $this->catatan_rekomendasi,
+                    'file_pemberitahuan_perbaikan' => $file_pemberitahuan_perbaikan_path
+                ]);
             }else if($this->status_rekomendasi == 1){
                 $status = Status_permohonan::where('name', 'ditolak')->first()->id;
+                
+                $permohonan = $this->permohonan->update([
+                    'id_status' => $status,
+                    'catatan_rekomendasi' => $this->catatan_rekomendasi,
+                ]);
             }
-
-            $permohonan = $this->permohonan->update([
-                'id_status' => $status,
-                'status_rekomendasi' => $this->status_rekomendasi,
-                'nominal_rekomendasi' => $this->nominal_rekomendasi,
-                'tanggal_rekomendasi' => $this->tanggal_rekomendasi,
-                'catatan_rekomendasi' => $this->catatan_rekomendasi,
-                'file_pemberitahuan' => $file_pemberitahuan_path
-            ]);
 
             DB::commit();
 

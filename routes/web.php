@@ -72,7 +72,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-
+Route::get('/testing-pdf', function(){
+    return view('pdf.nphd');
+});
 // Route::get('/testing', function () {
 //     $user = auth()->user();
 

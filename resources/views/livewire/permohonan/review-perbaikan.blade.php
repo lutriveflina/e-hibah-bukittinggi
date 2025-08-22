@@ -774,11 +774,11 @@
 
                     <div wire:ignore.self class="mt-3 d-none" id="notif_row">
                         <label class="form-label">Surat Pemberitahuan</label>
-                        <input type="file" wire:model='file_pemberitahuan' class="form-control">
+                        <input type="file" wire:model='file_pemberitahuan_perbaikan' class="form-control">
                     </div>
 
                     <div wire:ignore.self class="mt-4 d-none" id="save_status_button">
-                        <button wire:click='store_pemberitahuan' id="store_pemberitahuan"
+                        <button wire:click='store_pemberitahuan_perbaikan' id="store_pemberitahuan_perbaikan"
                             class="btn btn-primary w-100">Simpan</button>
                     </div>
                 </div>
@@ -870,7 +870,7 @@
                 state = 3
             });
 
-            $("#store_pemberitahuan").on("click", function() {
+            $("#store_pemberitahuan_perbaikan").on("click", function() {
                 console.log("clicked");
 
                 $wire.store_pemberitahuan(state);
