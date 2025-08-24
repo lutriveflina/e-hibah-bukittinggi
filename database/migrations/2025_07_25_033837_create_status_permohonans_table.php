@@ -27,7 +27,7 @@ return new class extends Migration
                 'description' => 'Permohonan telah Dibuat oleh Lemabaga.', 
                 'status_button' => json_encode([
                     'color' => 'primary', 
-                    'text' => 'Lanjutkan Isi Data pendukung', 
+                    'text' => 'Lanjutkan Isi Data Pendukung', 
                     'url' => 'permohonan.isi_pendukung', 
                     'permission' => 'view_dukung'
                 ]), 
@@ -42,7 +42,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Didukung', 
-                'description' => 'Permohonan telah Ditambah data dukung.', 
+                'description' => 'Permohonan telah ditambahkan data dukung.', 
                 'status_button' => json_encode([
                     'color' => 'primary', 
                     'text' => 'Lanjutkan Isi RAB', 
@@ -100,7 +100,7 @@ return new class extends Migration
                         [
                             'color' => 'warning', 
                             'icon' => 'bi bi-search', 
-                            'url' => 'permohonan.edit', 
+                            'url' => 'permohonan.review', 
                             'permission' => 'review'
                         ],
                     ]
@@ -121,7 +121,7 @@ return new class extends Migration
                         [
                             'color' => 'warning', 
                             'icon' => 'bi bi-pencil-square', 
-                            'url' => 'permohonan.edit', 
+                            'url' => 'permohonan.review', 
                             'permission' => 'review'
                         ],
                         [

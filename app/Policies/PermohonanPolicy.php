@@ -13,7 +13,7 @@ class PermohonanPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return $user->hasPermissionTo('View Any Permohonan');
     }
 
     /**
@@ -29,7 +29,7 @@ class PermohonanPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->hasPermissionTo('Create Permohonan');
     }
 
     /**

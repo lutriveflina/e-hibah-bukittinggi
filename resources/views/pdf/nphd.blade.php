@@ -7,7 +7,7 @@
             <td style="width: 10%;">Nomor</td>
             <td style="width: 1%;">:</td>
             <td style="width: 39%;"></td>
-            <td class="text-end">22 Agustus 2025</td>
+            <td class="text-end">{{ App\Helpers\General::getIndoDate(now()) }}</td>
         </tr>
         <tr>
             <td>Sifat</td>
@@ -64,7 +64,7 @@
                 <td>{{ $data->lembaga?->alamat }}</td>
             </tr>
             <tr>
-                <td>Nommal Sekolah</td>
+                <td>Nominal Sekolah</td>
                 <td>:</td>
                 <td>Rp. 21.250.000</td>
             </tr>

@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KabKota;
+use App\Models\Kecamatan;
+use App\Models\Kelurahan;
 use App\Models\Lembaga;
+use App\Models\Propinsi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,6 +36,10 @@ class LembagaController extends Controller
 
     public function create()
     {
+        $propinsis = Propinsi::all();
+        $all_kabkotas = KabKota::all();
+        $all_kecamatans = Kecamatan::all();
+        $all_kelurahans = Kelurahan::all();
         // Logic to show the form for creating a new lembaga
         return view('pages.lembaga.create');
     }
@@ -101,7 +109,6 @@ class LembagaController extends Controller
             return redirect()->route('lembaga.admin', ['id_lembaga' => $lembaga->id])->with('success', 'Lembaga created successfully.');
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }
     }

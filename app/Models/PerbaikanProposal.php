@@ -34,4 +34,8 @@ class PerbaikanProposal extends Model
     {
         return $this->belongsTo(permohonan::class, 'id_permohonan');
     }
+
+    public function perbaikan_rab(){
+        return $this->hasMany(PerbaikanRab::class, 'id_perbaikan');
+    }
 }

@@ -13,13 +13,9 @@ class ChangePassword extends Component
 {
     public $id_user;
 
-    #[Validate('required')]
     public $current_password;
-    #[Validate('required')]
-    public $new_password;
-    public $confirm_new_password;
-
-    public $is_confirm = false;
+    public $password;
+    public $password_confirmation;
 
     protected $listeners = ['confirm_password'];
 
@@ -32,23 +28,58 @@ class ChangePassword extends Component
         return view('livewire.user.change-password');
     }
 
-    #[On('confirm_passowrd')]
-    public function confirmingNewPassword(){
-        $this->is_confirm = $this->new_password == $this->confirm_new_password;
+    public $rulesStatus = [
+        'min_length' => false,
+        'uppercase' => false,
+        'lowercase' => false,
+        'number' => false,
+        'symbol' => false,
+        'match' => false,
+    ];
+
+    public function updatedPassword($value)
+    {
+        $this->rulesStatus['min_length'] = strlen($value) >= 8;
+        $this->rulesStatus['uppercase']  = preg_match('/[A-Z]/', $value);
+        $this->rulesStatus['lowercase']  = preg_match('/[a-z]/', $value);
+        $this->rulesStatus['number']     = preg_match('/[0-9]/', $value);
+        $this->rulesStatus['symbol']     = preg_match('/[\W_]/', $value);
+
+        $this->rulesStatus['match'] = $value === $this->password_confirmation;
+    }
+
+    public function updatedPasswordConfirmation($value)
+    {
+        $this->rulesStatus['match'] = $this->password === $value;
     }
 
     public function update(){
-        $this->validate();
+        
+        $this->validate([
+            'current_password' => ['required', 'current_password'],
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[A-Z]/',   // huruf besar
+                'regex:/[a-z]/',   // huruf kecil
+                'regex:/[0-9]/',   // angka
+                'regex:/[\W_]/',   // simbol
+                'confirmed',
+            ],
+        ], [
+            'password.regex' => 'Password harus mengandung huruf besar, huruf kecil, angka, dan simbol.',
+        ]);
 
         if (!Hash::check($this->current_password, Auth::user()->password)) {
             return session()->flash('error', 'Password lama salah.');
         }
 
-        Auth::user()->update([
-            'password' => Hash::make($this->new_password),
+        auth()->user()->update([
+            'password' => Hash::make($this->password),
         ]);
 
         session()->flash('success', 'Password berhasil diperbarui.');
-        $this->reset(['current_password', 'new_password', 'confirm_new_password']);
+        $this->reset(['current_password', 'password', 'password_confirmation']);
     }
 }

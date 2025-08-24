@@ -26,6 +26,7 @@ class AuthController extends Controller
             try {
                 session()->regenerate();
             } catch (\Throwable $th) {
+                dd($th);
                 return redirect()->route('login')->with($th);
             }
             return redirect()->route('dashboard');

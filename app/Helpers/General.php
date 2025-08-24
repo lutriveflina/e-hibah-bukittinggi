@@ -162,4 +162,9 @@ class General {
             'tahun' => $year
         ];
     }
+
+    public static function getIndoDate($date){
+        $data = self::convertDateToIndo($date);
+        return $data['tanggal'].' '.$data['bulan'].' '.$data['tahun'];
+    }
 }

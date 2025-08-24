@@ -32,24 +32,47 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="new_password" class="form-label">Password Baru</label>
-                        <input type="password" wire:model='new_password' type="text" class="form-control"
-                            id="new_password" placeholder="Masukkan Password Baru">
+                        <label for="password" class="form-label">Password Baru</label>
+                        <input type="password" wire:model.live='password' type="text" class="form-control" id="password"
+                            placeholder="Masukkan Password Baru">
                         @error('current_password')
                         <span>{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="confirm_new_password" class="form-label">Konfirmasi Password Baru</label>
-                        <input type="password" wire:model='confirm_new_password' type="text" class="form-control"
-                            id="confirm_new_password" placeholder="Masukan Ulang Password Baru">
+                        <!-- Daftar aturan password -->
+                        <ul class="list-unstyled">
+                            <li class="{{ $rulesStatus['min_length'] ? 'text-success' : 'text-danger' }}">
+                                Minimal 8 karakter
+                            </li>
+                            <li class="{{ $rulesStatus['uppercase'] ? 'text-success' : 'text-danger' }}">
+                                Ada huruf besar (A-Z)
+                            </li>
+                            <li class="{{ $rulesStatus['lowercase'] ? 'text-success' : 'text-danger' }}">
+                                Ada huruf kecil (a-z)
+                            </li>
+                            <li class="{{ $rulesStatus['number'] ? 'text-success' : 'text-danger' }}">
+                                Ada angka (0-9)
+                            </li>
+                            <li class="{{ $rulesStatus['symbol'] ? 'text-success' : 'text-danger' }}">
+                                Ada simbol (!@#$%^&*)
+                            </li>
+                            <li class="{{ $rulesStatus['match'] ? 'text-success' : 'text-danger' }}">
+                                Konfirmasi password sesuai
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label">Konfirmasi Password Baru</label>
+                        <input type="password" wire:model.live='password_confirmation' type="text" class="form-control"
+                            id="password_confirmation" placeholder="Masukan Ulang Password Baru">
                         @error('current_password')
                         <span>{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="mb-3">
                         <button wire:click='update' class="btn btn-warning w-100" id="update_password"
-                            @disabled(!$is_confirm)><i class="bi bi-floppy"></i>
+                            @disabled(!$rulesStatus['match'])><i class="bi bi-floppy"></i>
                             Ubah
                             Password</button>
                     </div>

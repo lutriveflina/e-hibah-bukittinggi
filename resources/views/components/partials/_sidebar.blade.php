@@ -72,8 +72,10 @@
                         class="list-group-item"><i class="bi bi-building"></i>
                         Lembaga</a>
                     @endcan
+                    @can('viewAny', App\Models\Permohonan::class)
                     <a href="{{ route('permohonan') }}" class="list-group-item"><i
                             class="bi bi-chat-left-text"></i>Permohonan</a>
+                    @endcan
                     <a href="{{ route('nphd') }}" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
                         Manager</a>
                     <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-ruled"></i>Laporan</a>

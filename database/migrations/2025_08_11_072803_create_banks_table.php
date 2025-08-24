@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('kode_bank');
             $table->string('name');
-            $table->string('acrconym');
+            $table->string('acronym');
             $table->timestamps();
             $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();

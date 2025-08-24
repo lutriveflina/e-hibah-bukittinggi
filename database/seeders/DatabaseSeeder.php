@@ -65,6 +65,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Reviewed Permohonan', 'guard_name' => 'web'],
             ['name' => 'Confirm Permohonan', 'guard_name' => 'web'],
             ['name' => 'Upload Rab Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Revision Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Confirm Review Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Revised Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Confirm Perbaikan Permohonan', 'guard_name' => 'web'],
+            ['name' => 'Upload Rab Permohonan', 'guard_name' => 'web'],
 
             // Skpd
             ['name' => 'View Any Skpd', 'guard_name' => 'web'],
@@ -94,25 +99,26 @@ class DatabaseSeeder extends Seeder
 
         Role::create(['name' => 'Super Admin', 'guard_name' => 'web'])->syncPermissions($permission_for_super_admin);
         Role::create(['name' => 'Admin SKPD', 'guard_name' => 'web'])->syncPermissions([
+            'View Any User',
+            'Create User',
+            'Update User',
             'View Any Lembaga',
             'View Lembaga',
             'View Any Permohonan',
             'Check Permohonan',
-            'Review Permohonan',
-            'Reviewed Permohonan',
-            'Reviewed Permohonan',
         ]);
         Role::create(['name' => 'Reviewer', 'guard_name' => 'web'])->syncPermissions([
             'View Any Permohonan',
-            'Check Permohonan',
             'Review Permohonan',
             'Send Permohonan',
+            'Review Permohonan',
+            'Reviewed Permohonan',
+            'Reviewed Permohonan',
         ]);
         Role::create(['name' => 'Verifikator', 'guard_name' => 'web'])->syncPermissions([
             'View Any Permohonan',
-            'Check Permohonan',
-            'Review Permohonan',
-            'Send Permohonan',
+            'Confirm Review Permohonan',
+            'Confirm Perbaikan Permohonan',
         ]);
         Role::create(['name' => 'Admin Lembaga', 'guard_name' => 'web'])->syncPermissions([
             'View Admin Lembaga',
@@ -124,6 +130,8 @@ class DatabaseSeeder extends Seeder
             'View Rab Permohonan',
             'Check Permohonan',
             'Send Permohonan',
+            'Revision Permohonan',
+            'Revised Permohonan',
         ]);
         
         // contoh user superadmin
