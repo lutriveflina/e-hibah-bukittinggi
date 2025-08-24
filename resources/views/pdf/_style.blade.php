@@ -1,12 +1,4 @@
 <style>
-    @page {
-        size: A4;
-        margin: 2cm 2.5cm 2cm 2.5cm;
-    }
-
-
-    @charset "UTF-8";
-
     /*!
  * Bootstrap v5.0.1 (https://getbootstrap.com/)
  * Copyright 2011-2021 The Bootstrap Authors

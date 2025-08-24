@@ -122,8 +122,8 @@ class ReviewPerbaikan extends Component
                 'id_perbaikan' => $this->id_perbaikan,
                 'id_pertanyaan' => $item->id,
                 'question' => $item->question,
-                'is_ada' => (bool) $jawab->is_ada ?? false,
-                'is_sesuai' => (bool) $jawab->is_sesuai ?? false,
+                'is_ada' => (bool) ($jawab->is_ada ?? false),
+                'is_sesuai' => (bool) ($jawab->is_sesuai ?? false),
                 'keterangan' => $jawab->keterangan ?? '',
             ];
         })->toArray();
@@ -241,7 +241,7 @@ class ReviewPerbaikan extends Component
                     'catatan_rekomendasi' => $this->catatan_rekomendasi,
                     'file_pemberitahuan_perbaikan' => $file_pemberitahuan_perbaikan_path
                 ]);
-            }else if($this->status_rekomendasi == 1){
+            }else if($this->status_rekomendasi == 3){
                 $status = Status_permohonan::where('name', 'ditolak')->first()->id;
                 
                 $permohonan = $this->permohonan->update([

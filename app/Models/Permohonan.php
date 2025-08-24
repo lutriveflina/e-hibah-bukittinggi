@@ -34,6 +34,7 @@ class Permohonan extends Model
         'tanggal_rekomendasi',
         'catatan_rekomendasi',
         'file_pemberitahuan',
+        'file_nphd',
         'deleted_at',
         'created_by',
         'updated_by',
@@ -46,6 +47,10 @@ class Permohonan extends Model
 
     public function skpd(){
         return $this->belongsTo(Skpd::class, 'id_skpd');
+    }
+
+    public function urusan_skpd(){
+        return $this->belongsTo(UrusanSkpd::class, 'urusan');
     }
 
     public function status(){

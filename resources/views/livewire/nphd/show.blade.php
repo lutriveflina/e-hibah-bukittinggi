@@ -77,9 +77,13 @@
             <div class="card-body">
                 <h3 class="font-semibold mt-6 mb-2">RAB</h3>
                 <div class="mb-3">
+                    @if ($permohonan->file_nphd)
                     <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                        data-bs-target="#fileModal"
-                        data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Download Surat</button>
+                        data-bs-target="#fileModal" data-file-url="{{ Storage::url($permohonan->file_nphd) }}">Download
+                        Surat</button>
+                    @else
+                    <button wire:click='generate_pdf' class="btn btn-sm btn-success">Download Surat</button>
+                    @endif
                 </div>
                 <div class="mb-3">
                     <lable class="form-label">Surat permohonan penandatanganan NPHD Hibah Berupa uang</lable>
@@ -135,6 +139,10 @@
                 } else {
                     modalContent.innerHTML = `<p class="text-danger">Jenis file tidak didukung.</p>`;
                 }
+            });
+
+            Livewire.on('pdf-ready', function(data){
+                window.open(data[0].url, '_blank');
             });
 
             Livewire.on('close-modal', function() {
