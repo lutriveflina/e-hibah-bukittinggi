@@ -11,9 +11,12 @@ use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Livewire\WithFileUploads;
 
 class Show extends Component
 {
+    use WithFileUploads;
+
     public $permohonan;
     public $satuans;
     public $count_perbaikan = 1;
@@ -91,12 +94,18 @@ class Show extends Component
         // 2) Simpan PDF langsung ke disk 'public'
         Storage::disk('public')->put("{$dir}/{$filename}", $pdf->output());
 
+        $this->permohonan->update([
+            'file_nphd' => $dir.'/'.$filename
+        ]);
+
         // 3) (opsional) URL publik via symlink `public/storage`
         $url = asset("storage/{$dir}/{$filename}");
 
         $this->dispatch('pdf-ready', [
             'url' => $url
         ]);
+
+        $this->permohonan->refresh();
     }
 
     public function store(){

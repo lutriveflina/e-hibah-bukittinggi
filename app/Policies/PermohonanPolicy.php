@@ -114,5 +114,9 @@ class PermohonanPolicy
     public function confirm_revisi(User $user) : bool {
         return $user->hasPermissionTo('Confirm Perbaikan Permohonan');
     }
+
+    public function viewNphd(User $user) : bool {
+        return $user->hasPermissionTo('View Nphd Permohonan');
+    }
     
 }

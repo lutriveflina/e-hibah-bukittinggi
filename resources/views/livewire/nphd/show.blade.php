@@ -5,9 +5,9 @@
             <div class="card-body">
 
                 @if (session()->has('warning_rab'))
-                <div class="alert alert-secondary" role="alert">
-                    {{ session('message') }}
-                </div>
+                    <div class="alert alert-secondary" role="alert">
+                        {{ session('message') }}
+                    </div>
                 @endif
                 <h3 class="font-semibold mt-6 mb-2">RAB</h3>
                 <div class="row mb-4">
@@ -40,29 +40,28 @@
                             </thead>
                             <tbody>
                                 @foreach ($kegiatans as $kegiatan)
-                                <tr class="bg-warning">
-                                    <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
-                                    <td class="text-end">
-                                        {{ number_format(
-                                        collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) =>
-                                        is_numeric($val))->sum(),
-                                        0,
-                                        ',',
-                                        '.',
-                                        ) }}
-                                    </td>
-                                </tr>
-                                @foreach ($kegiatan->rincian as $rincian)
-                                <tr class="">
-                                    <td class="text-start">{{ $rincian->keterangan }}</td>
-                                    <td>{{ $rincian->volume }}</td>
-                                    <td class="text-start">{{ $rincian->satuan->name }}</td>
-                                    <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
-                                    </td>
-                                    <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
-                                    </td>
-                                </tr>
-                                @endforeach
+                                    <tr class="bg-warning">
+                                        <td colspan="4" class="text-start">{{ $kegiatan->nama_kegiatan }}</td>
+                                        <td class="text-end">
+                                            {{ number_format(
+                                                collect($kegiatan->rincian)->pluck('subtotal')->filter(fn($val) => is_numeric($val))->sum(),
+                                                0,
+                                                ',',
+                                                '.',
+                                            ) }}
+                                        </td>
+                                    </tr>
+                                    @foreach ($kegiatan->rincian as $rincian)
+                                        <tr class="">
+                                            <td class="text-start">{{ $rincian->keterangan }}</td>
+                                            <td>{{ $rincian->volume }}</td>
+                                            <td class="text-start">{{ $rincian->satuan->name }}</td>
+                                            <td class="text-end">{{ number_format($rincian->harga, 0, ',', '.') }}
+                                            </td>
+                                            <td class="text-end">{{ number_format($rincian->subtotal, 0, ',', '.') }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
                                 @endforeach
                             </tbody>
                         </table>
@@ -78,24 +77,25 @@
                 <h3 class="font-semibold mt-6 mb-2">RAB</h3>
                 <div class="mb-3">
                     @if ($permohonan->file_nphd)
-                    <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                        data-bs-target="#fileModal" data-file-url="{{ Storage::url($permohonan->file_nphd) }}">Download
-                        Surat</button>
+                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
+                            data-bs-target="#fileModal"
+                            data-file-url="{{ Storage::url($permohonan->file_nphd) }}">Download
+                            Surat</button>
                     @else
-                    <button wire:click='generate_pdf' class="btn btn-sm btn-success">Download Surat</button>
+                        <button wire:click='generate_pdf' class="btn btn-sm btn-success">Download Surat</button>
                     @endif
                 </div>
                 <div class="mb-3">
                     <lable class="form-label">Surat permohonan penandatanganan NPHD Hibah Berupa uang</lable>
                     <input type="file" wire:model='file_nphd' class="form-control">
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button wire:click.prevent='store' type="button" class="btn btn-danger">Hapus
+                        Pengguna</button>
+                </div>
             </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button wire:click.prevent='store' type="button" class="btn btn-danger">Hapus
-                    Pengguna</button>
-            </div>
         </div>
     </div>
 
@@ -117,8 +117,8 @@
 </div>
 
 @push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             const fileModal = document.getElementById('fileModal');
             const modalContent = document.getElementById('modalFileContent');
 
@@ -141,7 +141,7 @@
                 }
             });
 
-            Livewire.on('pdf-ready', function(data){
+            Livewire.on('pdf-ready', function(data) {
                 window.open(data[0].url, '_blank');
             });
 
@@ -149,5 +149,5 @@
                 $("#update_rab_modal").modal('hide');
             })
         });
-</script>
+    </script>
 @endpush
