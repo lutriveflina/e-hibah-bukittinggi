@@ -2,43 +2,30 @@
 
 namespace App\Livewire\Nphd;
 
-use App\Models\Nphd;
-use App\Models\PerbaikanRab;
 use App\Models\Permohonan;
 use App\Models\RabPermohonan;
-use App\Models\Satuan;
-use Livewire\Attributes\Validate;
-use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Livewire\WithFileUploads;
+use Livewire\Component;
 
-class Show extends Component
+class Review extends Component
 {
-    use WithFileUploads;
-
     public $permohonan;
-    public $satuans;
-    public $count_perbaikan = 1;
 
+    public $step = 1;
+    
     public $nominal_rab;
     public $total_kegiatan = 0;
     public $kegiatans = [];
-    #[Validate('required')]
     public $kegiatan_rab = [];
-    public $rincian = [];
 
-    public $file_permintaan_nphd;
-    
-    public $listeners = ['pdf-ready','close-modal'];
+    public $file_nphd;
 
     public function mount($id_permohonan){
-        $this->permohonan = Permohonan::with(['lembaga', 'skpd', 'urusan_skpd', 'pendukung'])->where('id', $id_permohonan)->first();
+        $this->permohonan = Permohonan::findOrFail($id_permohonan);
         $this->nominal_rab = $this->permohonan->nominal_rab;
-        $perbaikan_rab = PerbaikanRab::where('id_permohonan', $id_permohonan)->get();
-        
+
         $this->kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', $this->permohonan->id)->get();
             if($this->kegiatans){
                 $grand = 0;
@@ -66,22 +53,41 @@ class Show extends Component
                     ];
                 }
             }
-        $this->satuans = Satuan::orderBy('name')->get();
     }
+
+    protected $step_rules = [
+        1 => [],
+        2 => [],
+        3 => [
+            'file_nphd' => 'required'
+        ]
+    ];
+    
+    public $listeners = ['pdf-ready','close-modal'];
 
     public function render()
     {
-        return view('livewire.nphd.show');
+        return view('livewire.nphd.review');
     }
 
-    public function generate_pdf(){
-        // $pdf = Pdf::loadView('pdf.nphd', ['data' => $this->permohonan])->setPaper('A4', 'portrait');
+    public function nextStep(){
+        if (!empty($this->rules[$this->step])) {
+            $this->validate($this->rules[$this->step]);
+        }
 
-        $dir = 'draft_permintaan_nphd';
-        $filename = 'permintaan_nphd_'.$this->permohonan->id.$this->permohonan->tahun_apbd.'.pdf';
+        $this->step++;
+    }
 
-        if(!Storage::disk('public')->exists($dir.'/'.$filename)){
-            $pdf = Pdf::loadView('pdf.permohonan_nphd', ['data' => $this->permohonan])
+    public function prevStep(){
+        $this->step--;
+    }
+
+    public function generate_pdf() : void {
+        $dir = 'draft_nphd';
+        $filename = 'nphd_'.$this->permohonan->id.$this->permohonan->tahun_apbd.'.pdf';
+
+        // if(!Storage::disk('public')->exists($dir.'/'.$filename)){
+            $pdf = Pdf::loadView('pdf.nphd', ['data' => $this->permohonan, 'kegiatans' => $this->kegiatans, 'nominal_rab' => $this->nominal_rab])
                 ->setPaper('A4', 'portrait');
 
             // Pastikan folder ada (di disk 'public' = storage/app/public)
@@ -97,44 +103,12 @@ class Show extends Component
             // Simpan PDF langsung ke disk 'public'
             Storage::disk('public')->put("{$dir}/{$filename}", $pdf->output());
 
-        }
+        // }
 
         $url = asset("storage/{$dir}/{$filename}");
 
         $this->dispatch('pdf-ready', [
             'url' => $url
         ]);
-
-        $this->permohonan->refresh();
-    }
-
-    public function store(){
-        $dir = 'permintaan_nphd';
-        $filename = 'permintaan_nphd'.$this->permohonan->id.$this->permohonan->tahun_apbd.'.pdf';
-        $path = $dir.'/'.$filename;
-
-        DB::beginTransaction();
-
-        try {
-            if(Storage::disk('public')->exists($path)){
-                Storage::disk('public')->delete($path);
-            }
-            
-            $ext_permintaan_nphd = $this->file_permintaan_nphd->getclientOriginalExtension();
-            $permintaan_nphd_path = $this->file_permintaan_nphd->storeAs($dir, $filename.'.'.$ext_permintaan_nphd, 'public');
-            
-            $add_permintaan_nphd = $this->permohonan->update([
-                'file_permintaan_nphd' => $permintaan_nphd_path,
-            ]);
-
-
-            DB::commit();
-
-            return redirect()->route('nphd');
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            dd($th);
-            session()->flash('danger', 'Gagal menyimpan permintaan nphd : '.$th->message);
-        }
     }
 }

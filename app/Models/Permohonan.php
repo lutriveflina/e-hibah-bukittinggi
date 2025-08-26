@@ -34,7 +34,7 @@ class Permohonan extends Model
         'tanggal_rekomendasi',
         'catatan_rekomendasi',
         'file_pemberitahuan',
-        'file_nphd',
+        'file_permintaan_nphd',
         'deleted_at',
         'created_by',
         'updated_by',

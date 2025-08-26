@@ -70,6 +70,11 @@ class DatabaseSeeder extends Seeder
             ['name' => 'Revised Permohonan', 'guard_name' => 'web'],
             ['name' => 'Confirm Perbaikan Permohonan', 'guard_name' => 'web'],
             ['name' => 'Upload Rab Permohonan', 'guard_name' => 'web'],
+            
+            //NPHD
+            ['name' => 'View Any NPHD', 'guard_name' => 'web'],
+            ['name' => 'View NPHD', 'guard_name' => 'web'],
+            ['name' => 'Review NPHD', 'guard_name' => 'web'],
 
             // Skpd
             ['name' => 'View Any Skpd', 'guard_name' => 'web'],

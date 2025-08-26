@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('nphds', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_permhonan');
+            $table->unsignedBigInteger('id_permohonan');
             $table->string('file_nphd');
             $table->string('no_nphd');
             $table->date('tanggal_nphd');

@@ -3,12 +3,6 @@
     <div class="mb-4">
         <div class="card">
             <div class="card-body">
-
-                @if (session()->has('warning_rab'))
-                    <div class="alert alert-secondary" role="alert">
-                        {{ session('message') }}
-                    </div>
-                @endif
                 <h3 class="font-semibold mt-6 mb-2">RAB</h3>
                 <div class="row mb-4">
 
@@ -76,23 +70,14 @@
             <div class="card-body">
                 <h3 class="font-semibold mt-6 mb-2">RAB</h3>
                 <div class="mb-3">
-                    @if ($permohonan->file_nphd)
-                        <button type="button" class="btn btn-sm btn-success" data-bs-toggle="modal"
-                            data-bs-target="#fileModal"
-                            data-file-url="{{ Storage::url($permohonan->file_nphd) }}">Download
-                            Surat</button>
-                    @else
-                        <button wire:click='generate_pdf' class="btn btn-sm btn-success">Download Surat</button>
-                    @endif
+                    <button wire:click='generate_pdf' class="btn btn-sm btn-success">Download Surat</button>
                 </div>
                 <div class="mb-3">
                     <lable class="form-label">Surat permohonan penandatanganan NPHD Hibah Berupa uang</lable>
-                    <input type="file" wire:model='file_nphd' class="form-control">
+                    <input type="file" wire:model='file_permintaan_nphd' class="form-control">
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button wire:click.prevent='store' type="button" class="btn btn-danger">Hapus
-                        Pengguna</button>
+                    <button wire:click.prevent='store' type="button" class="btn btn-primary">Simpan Permintaan</button>
                 </div>
             </div>
 

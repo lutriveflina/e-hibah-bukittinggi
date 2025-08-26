@@ -115,8 +115,16 @@ class PermohonanPolicy
         return $user->hasPermissionTo('Confirm Perbaikan Permohonan');
     }
 
+    public function viewAnyNphd(User $user) : bool {
+        return $user->hasPermissionTo('View Any Nphd');
+    }
+
     public function viewNphd(User $user) : bool {
-        return $user->hasPermissionTo('View Nphd Permohonan');
+        return $user->hasPermissionTo('View Nphd');
+    }
+
+    public function reviewNphd(User $user) : bool {
+        return $user->hasPermissionTo('Review Nphd');
     }
     
 }

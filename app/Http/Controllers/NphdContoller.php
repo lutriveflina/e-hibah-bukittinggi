@@ -29,4 +29,10 @@ class NphdContoller extends Controller
             'permohonan' => $permohonan
         ]);
     }
+
+    public function sendNphd($id_permohonan){
+        $permohonan = Permohonan::where('id', $id_permohonan)->update([
+            'id_status' => 14
+        ]);
+    }
 }

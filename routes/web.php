@@ -26,6 +26,7 @@ use App\Livewire\User;
 use App\Livewire\User\ChangePassword;
 use App\Models\Lembaga;
 use App\Models\Permission;
+use App\Models\RabPermohonan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role as ModelsRole;
@@ -69,12 +70,44 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/nphd', [NphdContoller::class, 'index'])->name('nphd');
     Route::get('/nphd/show/{id_permohonan}', \App\Livewire\Nphd\Show::class)->name('nphd.show');
+    Route::get('/nphd/review/{id_permohonan}', \App\Livewire\Nphd\Review::class)->name('nphd.show');
 
 });
 
 
 Route::get('/testing-pdf', function(){
-    return view('pdf.nphd');
+    $kegiatan_rab = [];
+    $kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', 3)->get();
+            if($kegiatans){
+                $grand = 0;
+                foreach ($kegiatans as $k1 => $item) {
+                    foreach ($item->rincian as $k2 => $child) {
+                        $grand += $child->subtotal;
+                    }
+                }
+                $total_kegiatan = $grand;
+            }
+            foreach ($kegiatans as $k1 => $item) {
+                $kegiatan_rab[$k1] = [
+                    'id_kegiatan' => $item->id,
+                    'nama_kegiatan' => $item->nama_kegiatan,
+                    'total_kegiatan' => 0
+                ];
+                foreach($item->rincian as $k2 => $child){
+                    $kegiatan_rab[$k1]['rincian'][$k2] = [
+                        'id_rincian' => $child->id,
+                        'kegiatan' => $child->keterangan,
+                        'volume' => $child->volume,
+                        'satuan' => $child->id_satuan,
+                        'harga_satuan' => $child->harga,
+                        'subtotal' => $child->subtotal,
+                    ];
+                }
+            }
+    return view('pdf.nphd', [
+        'kegiatans' => $kegiatans,
+        'nominal_rab' => 5000000,
+    ]);
 });
 // Route::get('/testing', function () {
 //     $user = auth()->user();

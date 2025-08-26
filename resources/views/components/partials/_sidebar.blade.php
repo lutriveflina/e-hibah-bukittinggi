@@ -76,7 +76,7 @@
                         <a href="{{ route('permohonan') }}" class="list-group-item"><i
                                 class="bi bi-chat-left-text"></i>Permohonan</a>
                     @endcan
-                    @can('viewNphd', App\Models\Permohonan::class)
+                    @can('viewAnyNphd', App\Models\Permohonan::class)
                         <a href="{{ route('nphd') }}" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
                             Manager</a>
                     @endcan
