@@ -44,8 +44,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div x-show="$wire.role == 2 || $wire.role == 3 || $wire.role == 4"
-                                            class="mb-3">
+                                        <div x-show="[2,3,4].includes(Number($wire.role))" class="mb-3">
                                             <label for="skpd" class="form-label">SKPD {{ $skpd }}</label>
                                             <select wire:model='skpd' id="skpd" class="form-select">
                                                 <option value="">--- Pilih SKPD ---</option>
@@ -55,7 +54,7 @@
                                             </select>
                                         </div>
                                         @if($urusans && $urusans->count())
-                                        <div>
+                                        <div x-show="![1,2,5].includes(Number($wire.role))">
                                             <label for="urusan" class="form-label">Urusan</label>
                                             <select wire:model='urusan' id="urusan" class="form-select">
                                                 <option value="">--- Pilih Urusan ---</option>
@@ -102,6 +101,8 @@
                                 <button wire:click='edit({{ $user->id }})' class="btn btn-sm btn-warning"><i
                                         class="bi bi-pencil-square"></i>
                                     Edit</button>
+                                <button wire:click='reset_password({{ $user->id }})' class="btn btn-sm btn-secondary"><i
+                                        class="bi bi-key"></i> Reset Password</button>
                                 <button wire:click='verifyDelete({{ $user->id }})' class="btn btn-sm btn-danger"><i
                                         class="bi bi-trash"></i> Hapus</button>
                             </td>

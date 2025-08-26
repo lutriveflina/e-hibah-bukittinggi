@@ -65,7 +65,6 @@ class IsiPendukung extends Component
 
             $create_pendukung_permohonan = PendukungPermohonan::create([
                 'id_permohonan' => $this->id_permohonan,
-                'id_status' => $this->id_status->didukung,
                 'file_pernyataan_tanggung_jawab' => $tanggung_jawab_path,
                 'struktur_pengurus' => $pengurus_path,
                 'file_rab' => $rab_path,
@@ -73,6 +72,10 @@ class IsiPendukung extends Component
                 'no_tidak_tumpang_tindih' => $this->no_tidak_tumpang_tindih,
                 'tanggal_tidak_tumpang_tindih' => $this->tanggal_tidak_tumpang_tindih,
                 'file_tidak_tumpang_tindih' => $tidak_tumpang_tindih_path,
+            ]);
+
+            Permohonan::findOrFail($this->id_permohonan)->update([
+                'id_status' => $this->id_status_didukung
             ]);
             
             DB::commit();

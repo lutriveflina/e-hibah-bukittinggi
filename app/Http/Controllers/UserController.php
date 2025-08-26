@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -22,5 +23,13 @@ class UserController extends Controller
     public function create(){
         // Logic to show the form for creating a new user
         return view('pages.user.create');
+    }
+
+    public function resetPassword(User $user) {
+        $user->update([
+            'password' => Hash::make('bukittinggi2025')
+        ]);
+
+        return redirect()->route('user')->with('success', 'Berhasil Reset Password');
     }
 }

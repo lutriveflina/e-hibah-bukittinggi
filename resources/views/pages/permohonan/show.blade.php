@@ -330,7 +330,7 @@
                         <label for="surat_domisili" class="label-form">Surat Penyataan Tidak Tumpang
                             Tindih</label><br>
                         <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
-                            data-file-url="{{ Storage::url($permohonan->lembaga->file_pernyataan) }}">Lihat
+                            data-file-url="{{ Storage::url($permohonan->pendukung->file_tidak_tumpang_tindih) }}">Lihat
                             Dokumen</button>
                     </div>
                 </div>
@@ -342,97 +342,105 @@
                     <div class="col-4">
                         <div class="mb-3">
                             <label for="surat_domisili" class="label-form">Surat Pertanggung Jawaban</label><br>
-                            <button class="btn btn-warning w-100">Lihat Dokumen</button>
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Lihat
+                                Dokumen</button>
                         </div>
                         <div class="mb-3">
                             <label for="surat_domisili" class="label-form">Proposal</label><br>
                             <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
-                                data-file-url="{{ Storage::url($permohonan->file_proposal) }}"">Lihat
-                                    Dokumen</button>
-                            </div>
+                                data-file-url="{{ Storage::url($permohonan->file_proposal) }}">Lihat
+                                Dokumen</button>
                         </div>
-                        <div class=" col-4">
-                                <div class="mb-3">
-                                    <label for="surat_domisili" class="label-form">Struktur Organisasi</label><br>
-                                    <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="surat_domisili" class="label-form">Berkas RAB</label><br>
-                                    <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                                </div>
+                    </div>
+                    <div class=" col-4">
+                        <div class="mb-3">
+                            <label for="surat_domisili" class="label-form">Struktur Organisasi</label><br>
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                data-file-url="{{ Storage::url($permohonan->pendukung->struktur_pengurus) }}">Lihat
+                                Dokumen</button>
                         </div>
-                        <div class="col-4">
-                            <div class="mb-3">
-                                <label for="surat_domisili" class="label-form">Foto Kondisi Saat Ini</label><br>
-                                <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                            </div>
-                            <div class="mb-3">
-                                <label for="surat_domisili" class="label-form">Saldo Akhir Rekening Bank</label><br>
-                                <button class="btn btn-warning w-100">Lihat Dokumen</button>
-                            </div>
+                        <div class="mb-3">
+                            <label for="surat_domisili" class="label-form">Berkas RAB</label><br>
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                data-file-url="{{ Storage::url($permohonan->pendukung->file_rab) }}">Lihat
+                                Dokumen</button>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-3">
+                            <label for="surat_domisili" class="label-form">Foto Kondisi Saat Ini</label><br>
+                            <button class="btn btn-warning w-100">Lihat Dokumen</button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="surat_domisili" class="label-form">Saldo Akhir Rekening Bank</label><br>
+                            <button class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#fileModal"
+                                data-file-url="{{ Storage::url($permohonan->pendukung->saldo_akhir_rek) }}">Lihat
+                                Dokumen</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div wire:ignore.self class="tab-pane fade @if($permohonan->status_rekomendasi == 0) d-none @endif" id="status"
-        role="tabpanel">
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                @if ($permohonan->status_rekomendasi == 1)
-                <h3>Permohonan Diterima dan Direkomendasikan</h3>
-                @elseif($permohonan->status_rekomendasi == 2)
-                <h3>Permohonan Butuh Perbaikan</h3>
-                @elseif($permohonan->status_rekomendasi == 3)
-                <h3>Permohonan Ditolak</h3>
-                @endif
-                @if ($permohonan->status_rekomendasi == 2)
-                <div wire:ignore.self class="row g-2" id="recomendation_row">
-                    <div class="col-md-6">
-                        <label class="form-label">Nominal Rekomendasi <span class="text-danger">*</span></label>
-                        <div class="input-group">
-                            <span class="input-group-text">Rp</span>
-                            <input type="hidden" id="state_permohonan">
-                            <input type="number" value="{{ $permohonan->nominal_rekomendasi }}" class="form-control"
-                                placeholder="Nominal" disabled>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label class="form-label">Tanggal Rekomendasi <span class="text-danger">*</span></label>
-                        <input type="date" value="{{ $permohonan->tanggal_rekomendasi }}" class="form-control" disabled>
+</div>
+<div wire:ignore.self class="tab-pane fade @if($permohonan->status_rekomendasi == 0) d-none @endif" id="status"
+    role="tabpanel">
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            @if ($permohonan->status_rekomendasi == 1)
+            <h3>Permohonan Diterima dan Direkomendasikan</h3>
+            @elseif($permohonan->status_rekomendasi == 2)
+            <h3>Permohonan Butuh Perbaikan</h3>
+            @elseif($permohonan->status_rekomendasi == 3)
+            <h3>Permohonan Ditolak</h3>
+            @endif
+            @if ($permohonan->status_rekomendasi == 2)
+            <div wire:ignore.self class="row g-2" id="recomendation_row">
+                <div class="col-md-6">
+                    <label class="form-label">Nominal Rekomendasi <span class="text-danger">*</span></label>
+                    <div class="input-group">
+                        <span class="input-group-text">Rp</span>
+                        <input type="hidden" id="state_permohonan">
+                        <input type="number" value="{{ $permohonan->nominal_rekomendasi }}" class="form-control"
+                            placeholder="Nominal" disabled>
                     </div>
                 </div>
-                @endif
-
-                @if ($permohonan->status_rekomendasi == 2 || $permohonan->status_rekomendasi == 3)
-                <div wire:ignore.self class="mt-3" id="note_row">
-                    <label class="form-label">Catatan <span class="text-danger">*</span></label>
-                    <textarea wire:model='catatan_rekomendasi' class="form-control" rows="2"
-                        disabled>{{ $permohonan->catatan_rekomendasi }}</textarea>
+                <div class="col-md-6">
+                    <label class="form-label">Tanggal Rekomendasi <span class="text-danger">*</span></label>
+                    <input type="date" value="{{ $permohonan->tanggal_rekomendasi }}" class="form-control" disabled>
                 </div>
-                @endif
-
-                <div class="mt-3" id="notif_row">
-                    <label class="form-label">Surat Pemberitahuan</label>
-                    <div>
-                        <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#fileModal"
-                            data-file-url="{{ Storage::url($permohonan->file_pemberitahuan) }}">Lihat
-                            Dokumen</button>
-                    </div>
-                </div>
-
-                @if ($permohonan->status_rekomendasi == 2)
-                <div class="mt-4" id="revisi_permohonan">
-                    <a href="{{ route('permohonan.revisi', ['id_permohonan' => $permohonan->id]) }}">
-                        <button id="revisi_permohonan_button" class="btn btn-primary w-100">Lakukan Perbaikan</button>
-                    </a>
-                </div>
-                @endif
             </div>
-        </div>
+            @endif
 
+            @if ($permohonan->status_rekomendasi == 2 || $permohonan->status_rekomendasi == 3)
+            <div wire:ignore.self class="mt-3" id="note_row">
+                <label class="form-label">Catatan <span class="text-danger">*</span></label>
+                <textarea wire:model='catatan_rekomendasi' class="form-control" rows="2"
+                    disabled>{{ $permohonan->catatan_rekomendasi }}</textarea>
+            </div>
+            @endif
+
+            <div class="mt-3" id="notif_row">
+                <label class="form-label">Surat Pemberitahuan</label>
+                <div>
+                    <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#fileModal"
+                        data-file-url="{{ Storage::url($permohonan->file_pemberitahuan) }}">Lihat
+                        Dokumen</button>
+                </div>
+            </div>
+
+            @if ($permohonan->status_rekomendasi == 2)
+            <div class="mt-4" id="revisi_permohonan">
+                <a href="{{ route('permohonan.revisi', ['id_permohonan' => $permohonan->id]) }}">
+                    <button id="revisi_permohonan_button" class="btn btn-primary w-100">Lakukan Perbaikan</button>
+                </a>
+            </div>
+            @endif
+        </div>
     </div>
+
+</div>
 </div>
 
 <div class="modal fade" id="fileModal" tabindex="-1" aria-hidden="true">

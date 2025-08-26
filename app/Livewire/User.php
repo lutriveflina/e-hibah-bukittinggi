@@ -10,6 +10,7 @@ use App\Models\UrusanSkpd;
 use App\Models\User as ModelsUser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
@@ -74,11 +75,7 @@ class User extends Component
         $role = Role::findOrFail($this->role);
 
         // Optionally, send an email with the password
-        if($role->name == 'Admin Lembaga'){
-            Mail::to($this->email)->queue(new SendUserPassword($new_password));
-        }else{
-            $new_password = 'bukittinggi2025';
-        }
+        Mail::to($this->email)->queue(new SendUserPassword($new_password));
 
         ModelsUser::create([
             'name' => $this->name,
@@ -125,6 +122,14 @@ class User extends Component
         $this->reset(['role','name', 'email', 'role']);
         session()->flash('message', 'User created successfully.');
         $this->dispatch('closeModal');
+    }
+
+    public function reset_password($id){
+        $user = ModelsUser::findOrFail($id);
+        $user->update([
+            'password' => Hash::make('bukittinggi2025')
+        ]);
+        session()->flash('message', 'User reset password successfully.');
     }
 
     public function delete()

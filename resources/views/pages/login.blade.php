@@ -1,6 +1,10 @@
 @extends('components.layouts.outer-page')
 
 @section('content')
+
+<div class="col-lg-6 bg-login d-flex align-items-center justify-content-center">
+    <img src="/assets/images/error/login-img.jpg" class="img-fluid" alt="">
+</div>
 <div class="col-lg-6">
     <div class="card-body p-4 p-sm-5">
         <h4 class="card-title">E-<span class="text-primary">HIBAH</span></h4>
@@ -46,7 +50,7 @@
                             Me</label>
                     </div>
                 </div>
-                <div class="col-6 text-end"> <a href="javascript:">Forgot Password ?</a>
+                <div class="col-6 text-end"> <a href="{{ route('user.forgot_password') }}">Forgot Password ?</a>
                 </div>
                 <div class="col-12">
                     <div class="d-grid">

@@ -33,6 +33,9 @@ use Spatie\Permission\Models\Role as ModelsRole;
 
 Route::get('/', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate')->middleware('guest');
+Route::get('/forgot_password', [AuthController::class, 'forgot_password'])->name('user.forgot_password');
+Route::get('/reset_password_link', [AuthController::class, 'reset_password_link'])->name('reset_password_link');
+Route::get('/reset_password', [AuthController::class, 'reset_password'])->name('reset_password');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
@@ -43,6 +46,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user', User::class)->name('user.index');
     Route::get('/user/change_password', ChangePassword::class)->name('user.change_password');
     Route::get('/user-create', [UserController::class, 'create'])->name('user.create');
+    Route::get('/user_reset_password/{id_user}', [UserController::class, 'reset_password'])->name('user.reset_password');
     Route::get('/pertanyaan', PertanyaanKelengkapan::class)->name('pertanyaan');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
     Route::get('/lembaga/create', [LembagaController::class, 'create'])->name('lembaga.create');
