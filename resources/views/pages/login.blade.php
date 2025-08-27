@@ -9,8 +9,13 @@
             <h4 class="card-title">E-<span class="text-primary">HIBAH</span></h4>
             <p class="card-text mb-5">Silahkan Login!</p>
             @error('error')
-                <p class="text-danger">{{ $message }}</p>
+                <div class="alert-danger">{{ $message }}</div>
             @enderror
+            @if (session()->has('danger'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('danger') }}
+                </div>
+            @endif
             <form action="{{ route('authenticate') }}" method="post">
                 @csrf
                 <div class="row g-3">
