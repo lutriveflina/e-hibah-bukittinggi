@@ -86,8 +86,10 @@ class Review extends Component
         $dir = 'draft_nphd';
         $filename = 'nphd_'.$this->permohonan->id.$this->permohonan->tahun_apbd.'.pdf';
 
+        $pimpinan_lembaga = $this->permohonan->lembaga?->pengurus->where('jabatan', 'Pimpinan')->first();
+
         // if(!Storage::disk('public')->exists($dir.'/'.$filename)){
-            $pdf = Pdf::loadView('pdf.nphd', ['data' => $this->permohonan, 'kegiatans' => $this->kegiatans, 'nominal_rab' => $this->nominal_rab])
+            $pdf = Pdf::loadView('pdf.nphd', ['data' => $this->permohonan, 'kegiatans' => $this->kegiatans, 'nominal_rab' => $this->nominal_rab, 'pimpinan_lembaga' => $pimpinan_lembaga])
                 ->setPaper('A4', 'portrait');
 
             // Pastikan folder ada (di disk 'public' = storage/app/public)

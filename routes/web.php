@@ -26,6 +26,7 @@ use App\Livewire\User;
 use App\Livewire\User\ChangePassword;
 use App\Models\Lembaga;
 use App\Models\Permission;
+use App\Models\Permohonan;
 use App\Models\RabPermohonan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -80,6 +81,12 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/testing-pdf', function(){
+    $data = Permohonan::with(['lembaga' => function($query){
+        $query->with(['skpd', 'urusan', 'pengurus' => function($query){
+            $query->where('jabatan', 'Pimpinan');
+        }]);
+    }])->where('id', 3)->first();
+    $pimpinan_lembaga = $data->lembaga?->pengurus->first();
     $kegiatan_rab = [];
     $kegiatans = RabPermohonan::with(['rincian.satuan'])->where('id_permohonan', 3)->get();
             if($kegiatans){
@@ -109,6 +116,8 @@ Route::get('/testing-pdf', function(){
                 }
             }
     return view('pdf.nphd', [
+        'data' => $data,
+        'pimpinan_lembaga' => $pimpinan_lembaga,
         'kegiatans' => $kegiatans,
         'nominal_rab' => 5000000,
     ]);

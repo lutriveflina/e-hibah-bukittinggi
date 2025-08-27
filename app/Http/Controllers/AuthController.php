@@ -28,15 +28,11 @@ class AuthController extends Controller
         $remember = $request->boolean('remember');
         
         if(Auth::attempt($credentials, $remember)) {
-            try {
-                $regenerate = session()->regenerate();
-            } catch (\Throwable $th) {
-                return redirect()->route('login')->with("danger", $th->getMessage());
-            }
+            $regenerate = session()->regenerate();
             return redirect()->route('dashboard');
         }
 
-        session()->flash('error', 'Email atau Password yang dimasukan munkin salah, silahkan ulangi lagi!');
+        return redirect()->route('login')->with('danger', 'Login gagal, Email atau password yang dimasukkan munkin salah');
     }
 
     public function forgot_password(){
