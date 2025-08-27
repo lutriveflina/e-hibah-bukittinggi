@@ -6,8 +6,8 @@ $(function() {
 // chart 1
 var options = {
     series: [{
-        name: "Users",
-        data: [450, 650, 440, 160, 350, 414, 555, 257, 400, 555, 257]
+        name: "Pencairan",
+        data: [450, 650, 440, 160, 350]
     }],
     chart: {
         foreColor: '#9a9797',
@@ -69,7 +69,7 @@ var options = {
     },
     colors: ["#12bf24"],
     xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        categories: ["2021", "2022", "2023", "2024", "2025"]
     },
     tooltip: {
         theme: 'dark',
