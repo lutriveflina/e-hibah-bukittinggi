@@ -74,11 +74,11 @@
                     @endcan
                     @can('viewAny', App\Models\Permohonan::class)
                         <a href="{{ route('permohonan') }}" class="list-group-item"><i
-                                class="bi bi-chat-left-text"></i>Permohonan</a>
+                                class="bi bi-chat-left-text"></i>Permohonan Hibah</a>
                     @endcan
                     @can('viewAnyNphd', App\Models\Permohonan::class)
-                        <a href="{{ route('nphd') }}" class="list-group-item"><i class="bi bi-file-earmark-post"></i>NPHD
-                            Manager</a>
+                        <a href="{{ route('nphd') }}" class="list-group-item"><i
+                                class="bi bi-file-earmark-post"></i>Pengajuan NPHD</a>
                     @endcan
                     {{-- <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-ruled"></i>Laporan</a> --}}
                 </div>

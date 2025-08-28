@@ -34,9 +34,8 @@ use Spatie\Permission\Models\Role as ModelsRole;
 
 Route::get('/', [AuthController::class, 'login'])->name('login')->middleware('guest');
 Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('authenticate')->middleware('guest');
-Route::get('/forgot_password', [AuthController::class, 'forgot_password'])->name('user.forgot_password');
-Route::get('/reset_password_link', [AuthController::class, 'reset_password_link'])->name('reset_password_link');
-Route::get('/reset_password', [AuthController::class, 'reset_password'])->name('reset_password');
+Route::get('/forgot_password', [AuthController::class, 'forgot_password'])->name('auth.forgot_password');
+Route::post('/reset_password', [AuthController::class, 'reset_password'])->name('auth.reset_password');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

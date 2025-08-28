@@ -74,9 +74,6 @@ class User extends Component
 
         $role = Role::findOrFail($this->role);
 
-        // Optionally, send an email with the password
-        Mail::to($this->email)->queue(new SendUserPassword($new_password));
-
         ModelsUser::create([
             'name' => $this->name,
             'email' => $this->email,
@@ -85,6 +82,8 @@ class User extends Component
             'id_skpd' => $this->skpd ? $this->skpd : null,
             'id_urusan' => $this->urusan ? $this->urusan : null,
         ])->assignRole([$role->name]);
+        
+        Mail::to($this->email)->queue(new SendUserPassword($new_password));
 
         $this->reset(['name', 'email', 'role', 'skpd', 'urusans', 'urusan']);
         session()->flash('message', 'User created successfully.');

@@ -8,9 +8,11 @@
         <div class="card-body p-4 p-sm-5">
             <h4 class="card-title">E-<span class="text-primary">HIBAH</span></h4>
             <p class="card-text mb-5">Silahkan Login!</p>
-            @error('error')
-                <div class="alert-danger">{{ $message }}</div>
-            @enderror
+            @if (session()->has('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             @if (session()->has('danger'))
                 <div class="alert alert-danger" role="alert">
                     {{ session('danger') }}
@@ -54,7 +56,7 @@
                                 Me</label>
                         </div>
                     </div>
-                    <div class="col-6 text-end"> <a href="{{ route('user.forgot_password') }}">Forgot Password ?</a>
+                    <div class="col-6 text-end"> <a href="{{ route('auth.forgot_password') }}">Forgot Password ?</a>
                     </div>
                     <div class="col-12">
                         <div class="d-grid">

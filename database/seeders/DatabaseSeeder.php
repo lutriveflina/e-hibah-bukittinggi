@@ -111,6 +111,12 @@ class DatabaseSeeder extends Seeder
             'View Lembaga',
             'View Any Permohonan',
             'Check Permohonan',
+            'View Any Nphd',
+        ]);
+        Role::create(['name' => 'Verifikator', 'guard_name' => 'web'])->syncPermissions([
+            'View Any Permohonan',
+            'Confirm Review Permohonan',
+            'Confirm Perbaikan Permohonan',
         ]);
         Role::create(['name' => 'Reviewer', 'guard_name' => 'web'])->syncPermissions([
             'View Any Permohonan',
@@ -119,11 +125,8 @@ class DatabaseSeeder extends Seeder
             'Review Permohonan',
             'Reviewed Permohonan',
             'Reviewed Permohonan',
-        ]);
-        Role::create(['name' => 'Verifikator', 'guard_name' => 'web'])->syncPermissions([
-            'View Any Permohonan',
-            'Confirm Review Permohonan',
-            'Confirm Perbaikan Permohonan',
+            'View Any Nphd',
+            'Review Nphd',
         ]);
         Role::create(['name' => 'Admin Lembaga', 'guard_name' => 'web'])->syncPermissions([
             'View Admin Lembaga',
@@ -137,6 +140,8 @@ class DatabaseSeeder extends Seeder
             'Send Permohonan',
             'Revision Permohonan',
             'Revised Permohonan',
+            'View Any Nphd',
+            'View Nphd',
         ]);
         
         // contoh user superadmin

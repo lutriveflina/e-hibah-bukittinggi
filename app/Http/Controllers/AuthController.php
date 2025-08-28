@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\General;
+use App\Mail\SendUserPassword;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 
 class AuthController extends Controller
@@ -39,16 +43,32 @@ class AuthController extends Controller
         return view('pages.forgot_password');
     }
 
-    public function reset_password_link(Request $request){
-        $request->validate(['email' => 'required|email']);
+    public function reset_password(Request $request){
+        $user = User::where('email', $request->email)->first();
 
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        if(!$user){
+            return redirect()->route('auth.forgot_password')->with('danger', 'Email yang anda masukan tidak ditemukan');
+        }
 
-        return $status === Password::RESET_LINK_SENT
-            ? back()->with(['status' => __($status)])
-            : back()->withErrors(['email' => __($status)]);
+        DB::beginTransaction();
+
+        try {
+            $new_password = General::GeneratePassword(10);
+
+            $user->update([
+                'password' => Hash::make($new_password)
+            ]);
+
+            Mail::to($request->email)->queue(new SendUserPassword($new_password));
+
+            DB::commit();
+
+            return redirect()->route('login')->with('success', 'Berhasil memperbaharui password, silahkan lihat email anda!');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return redirect()->route('auth.forgot_password')->with('danger', 'gagal ubah password karena: '.$th->getMessage());
+        }
     }
 
     public function logout(Request $request){
