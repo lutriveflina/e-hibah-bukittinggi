@@ -3,6 +3,7 @@
 use App\Models\Status_permohonan;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -56,8 +57,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('status_permohonans', function (Blueprint $table) {
-            //
-        });
+        DB::table('status_permohonans')
+        ->orderBy('id', 'desc')   // urutkan dari paling baru
+        ->limit(1)                // ambil 3 terakhir
+        ->delete();               // hapus
     }
 };

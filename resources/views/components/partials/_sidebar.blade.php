@@ -33,7 +33,7 @@
                         Dashboard</a>
                     <a href="{{ route('user.change_password') }}" class="list-group-item"><i class="bi bi-key"></i>
                         Ubah Sandi</a>
-                    @can('viewAny', Auth::user())
+                    @can('viewAny', App\Models\Permission::class)
                         <a href="{{ route('permission') }}" class="list-group-item"><i class="bi bi-person-lock"></i>
                             Permission</a>
                     @endcan
@@ -73,12 +73,16 @@
                             Lembaga</a>
                     @endcan
                     @can('viewAny', App\Models\Permohonan::class)
-                        <a href="{{ route('permohonan') }}" class="list-group-item"><i
-                                class="bi bi-chat-left-text"></i>Permohonan Hibah</a>
+                        @if (!auth()->user()->hasRole('Admin Lembaga') || auth()->user()->id_lembaga != null)
+                            <a href="{{ route('permohonan') }}" class="list-group-item"><i
+                                    class="bi bi-chat-left-text"></i>Permohonan Hibah</a>
+                        @endif
                     @endcan
                     @can('viewAnyNphd', App\Models\Permohonan::class)
-                        <a href="{{ route('nphd') }}" class="list-group-item"><i
-                                class="bi bi-file-earmark-post"></i>Pengajuan NPHD</a>
+                        @if (!auth()->user()->hasRole('Admin Lembaga') || auth()->user()->id_lembaga != null)
+                            <a href="{{ route('nphd') }}" class="list-group-item"><i
+                                    class="bi bi-file-earmark-post"></i>Pengajuan NPHD</a>
+                        @endif
                     @endcan
                     {{-- <a href="javascript::" class="list-group-item"><i class="bi bi-file-earmark-ruled"></i>Laporan</a> --}}
                 </div>

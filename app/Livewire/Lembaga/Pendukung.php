@@ -41,7 +41,7 @@ class Pendukung extends Component
             $this->photo_rek = $lembaga->photo_rek;
         }
 
-        $this->banks = Bank::orderBy('acrconym')->get();
+        $this->banks = Bank::orderBy('acronym')->get();
     }
 
     public function render()

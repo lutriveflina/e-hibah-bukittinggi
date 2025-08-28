@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('id_skpd')->constraint('skpds');
             $table->string('email');
-            $table->integer('phone')->length(15);
+            $table->bigInteger('phone');
             $table->text('alamat');
-            $table->integer('npwp')->length(20);
+            $table->bigInteger('npwp');
             $table->string('no_akta_kumham');
             $table->date('date_akta_kumham');
             $table->string('file_akta_kumham');

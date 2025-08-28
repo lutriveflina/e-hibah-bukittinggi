@@ -10,12 +10,15 @@ class Lembaga extends BaseModel
     use SoftDeletes, Blameable;
     protected $fillable = [
         'name',
+        'acronym',
         'id_skpd',
         'id_urusan',
         'email',
         'phone',
         'id_kelurahan',
         'alamat',
+        'photo',
+        'photo',
         'npwp',
         'no_akta_kumham',
         'date_akta_kumham',

@@ -9,31 +9,45 @@
                 Form Pendaftaran Lembaga
             </div>
             <div class="card-body">
-                <div class="mb-3">
-                    <label for="name" class="form-label">Nama Badan/ Lembaga atau Sebutan Lainnya <span
-                            class="text-danger">*</span></label>
-                    <input type="text" class="form-control" wire:model='nama_lembaga' value="{{ old('name_lembaga') }}"
-                        required>
-                    @error('name_lembaga')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
-                    @enderror
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nama Badan/ Lembaga atau Sebutan Lainnya <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" wire:model='name_lembaga'
+                                wire:model='name_lembaga' required>
+                            @error('nama_lembaga')
+                                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Singkatan <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" wire:model='acronym' required>
+                            @error('acronym')
+                                <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            @enderror
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" wire:model='email' id="email"
-                            value="{{ old('email') }}" required>
+                        <input type="email" class="form-control" wire:model='email' id="email" wire:model='email'
+                            required>
                         @error('email')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="phone" class="form-label">No. Telp <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" wire:model='phone' id="phone" value="{{ old('phone') }}"
+                        <input type="text" class="form-control" wire:model='phone' id="phone" wire:model='phone'
                             required>
                         @error('phone')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -46,7 +60,7 @@
                             <select wire:model.live='id_skpd' class="form-control">
                                 <option value="">--- Pilih SKPD ---</option>
                                 @foreach ($skpd as $key => $item)
-                                <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -57,7 +71,7 @@
                             <select wire:model='id_urusan' class="form-control">
                                 <option value="">--- Pilih Urusan ---</option>
                                 @foreach ($urusan as $key => $item)
-                                <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
+                                    <option value="{{ $item->id }}">{{ $item->nama_urusan }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -69,11 +83,11 @@
                         <option selected>Pilih Propinsi</option>
                         <!-- Tambahkan Propinsi -->
                         @foreach ($propinsis as $item)
-                        <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                            <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                         @endforeach
                     </select>
                     @error('propinsi')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -83,11 +97,11 @@
                         <option selected>Pilih Kota/Kabupaten</option>
                         <!-- Tambahkan Kota -->
                         @foreach ($all_kabkotas as $item)
-                        <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                            <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                         @endforeach
                     </select>
                     @error('kota')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -96,32 +110,39 @@
                         <label for="kecamatan" class="form-label">Kecamatan</label>
                         <select wire:model.live='kecamatan' class="form-select" id="kecamatan">
                             @foreach ($all_kecamatans as $item)
-                            <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                                <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                             @endforeach
                         </select>
                         @error('kecamatan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="kelurahan" class="form-label">Kelurahan <span class="text-danger">*</span></label>
                         <select wire:model.live='kelurahan' class="form-select" id="kecamatan">
                             @foreach ($all_kelurahans as $item)
-                            <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
+                                <option value="{{ $item->id }}">{{ ucwords($item->name) }}</option>
                             @endforeach
                         </select>
                         @error('kelurahan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label for="alamat" class="form-label">Alamat <span class="text-danger">*</span></label>
-                    <textarea class="form-control" name="alamat" id="alamat" rows="2"
-                        required>{{ old('alamat') }}</textarea>
+                    <textarea wire:model='alamat' class="form-control" name="alamat" id="alamat" rows="2" required></textarea>
                     @error('alamat')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="photo" class="form-label"></label>
+                    <input type="file" wire:model='photo' id="photo" class="form-control">
+                    @error('photo')
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -135,9 +156,10 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="npwp" class="form-label">No. NPWP <span class="text-danger">*</span></label>
-                    <input type="text" class="form-control" name="npwp" id="npwp" value="{{ old('npwp') }}" required>
+                    <input type="text" class="form-control" name="npwp" id="npwp" wire:model='npwp'
+                        required>
                     @error('npwp')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -145,26 +167,26 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="form-label">Akta Kumham/ SK Lembaga <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="no_akta_kumham"
-                            value="{{ old('no_akta_kumham') }}" required>
+                        <input type="text" class="form-control" name="no_akta_kumham" wire:model='no_akta_kumham'
+                            required>
                         @error('no_akta_kumham')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Tanggal <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" name="date_akta_kumham"
-                            value="{{ old('date_akta_kumham') }}" required>
+                            wire:model='date_akta_kumham' required>
                         @error('date_akta_kumham')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">Scan Dokumen <span class="text-danger">*</span></label>
                         <input class="form-control" type="file" name="file_akta_kumham"
-                            value="{{ old('file_akta_kumham') }}" required>
+                            wire:model='file_akta_kumham' required>
                         @error('file_akta_kumham')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -173,26 +195,26 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="form-label">Surat Domisili <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="no_domisili" value="{{ old('no_domisili') }}"
+                        <input type="text" class="form-control" name="no_domisili" wire:model='no_domisili'
                             required>
                         @error('no_domisili')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Tanggal <span class="text-danger">*</span></label>
-                        <input type="date" class="form-control" name="date_domisili" value="{{ old('date_domisili') }}"
+                        <input type="date" class="form-control" name="date_domisili" wire:model='date_domisili'
                             required>
                         @error('date_domisili')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">Scan Dokumen <span class="text-danger">*</span></label>
-                        <input class="form-control" type="file" name="file_domisili" value="{{ old('file_domisili') }}"
+                        <input class="form-control" type="file" name="file_domisili" wire:model='file_domisili'
                             required>
                         @error('file_domisili')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -202,26 +224,26 @@
                     <div class="col-md-4">
                         <label class="form-label">Izin Operasional/ Tanda Daftar Lembaga <span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="no_operasional"
-                            value="{{ old('no_operasional') }}" required>
+                        <input type="text" class="form-control" name="no_operasional" wire:model='no_operasional'
+                            required>
                         @error('no_operasional')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Tanggal <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" name="date_operasional"
-                            value="{{ old('date_operasional') }}" required>
+                            wire:model='date_operasional' required>
                         @error('date_operasional')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">Scan Dokumen <span class="text-danger">*</span></label>
                         <input class="form-control" type="file" name="file_operasional"
-                            value="{{ old('file_operasional') }}" required>
+                            wire:model='file_operasional' required>
                         @error('file_operasional')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -231,26 +253,26 @@
                     <div class="col-md-4">
                         <label class="form-label">Surat Pernyataan Tidak Tumpang Tindih <span
                                 class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="no_pernyataan" value="{{ old('no_pernyataan') }}"
+                        <input type="text" class="form-control" name="no_pernyataan" wire:model='no_pernyataan'
                             required>
                         @error('no_pernyataan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Tanggal <span class="text-danger">*</span></label>
                         <input type="date" class="form-control" name="date_pernyataan"
-                            value="{{ old('date_pernyataan') }}" required>
+                            wire:model='date_pernyataan' required>
                         @error('date_pernyataan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-5">
                         <label class="form-label">Scan Dokumen <span class="text-danger">*</span></label>
                         <input class="form-control" type="file" name="file_pernyataan"
-                            value="{{ old('file_pernyataan') }}" required>
+                            wire:model='file_pernyataan' required>
                         @error('file_pernyataan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -265,18 +287,16 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <label class="form-label">Nama <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="name_pimpinan" value="{{ old('name_pimpinan') }}"
-                            required>
+                        <input type="text" class="form-control" wire:model='name_pimpinan' required>
                         @error('name_pimpinan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-6">
                         <label class="form-label">Email <span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" name="email_pimpinan"
-                            value="{{ old('email_pimpinan') }}" required>
+                        <input type="email" class="form-control" wire:model='email_pimpinan' required>
                         @error('email_pimpinan')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
@@ -284,33 +304,32 @@
                 <div class="row mb-3">
                     <div class="col-md-4">
                         <label class="form-label">NIK <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="nik" value="{{ old('nik') }}" required>
+                        <input type="text" class="form-control" wire:model='nik' required>
                         @error('nik')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">No. Telp/HP <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" name="no_hp" value="{{ old('no_hp') }}" required>
+                        <input type="text" class="form-control" wire:model='no_hp' required>
                         @error('no_hp')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">Scan KTP <span class="text-danger">*</span></label>
-                        <input type="file" class="form-control" name="scan_ktp" value="{{ old('scan_ktp') }}" required>
+                        <input type="file" wire:model='scan_ktp' class="form-control" required>
                         @error('scan_ktp')
-                        <div class="alert alert-danger mt-2">{{ $message }}</div>
+                            <div class="alert alert-danger mt-2">{{ $message }}</div>
                         @enderror
                     </div>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Alamat <span class="text-danger">*</span></label>
-                    <textarea class="form-control" rows="2" name="alamat_pimpinan"
-                        required>{{ old('alamat_pimpinan') }}</textarea>
+                    <textarea wire:model='alamat_pimpinan' class="form-control" rows="2" name="alamat_pimpinan" required></textarea>
                     @error('alamat_pimpinan')
-                    <div class="alert alert-danger mt-2">{{ $message }}</div>
+                        <div class="alert alert-danger mt-2">{{ $message }}</div>
                     @enderror
                 </div>
 
@@ -329,7 +348,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Simpan</button>
+                <button wire:click='store' type="submit" class="btn btn-primary w-100">Simpan</button>
             </div>
         </div>
     </div>

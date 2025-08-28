@@ -10,6 +10,7 @@ use App\Models\UrusanSkpd;
 use App\Models\User as ModelsUser;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Attributes\On;
@@ -42,15 +43,28 @@ class User extends Component
     {
         // Authorize the user to view any user
         $this->authorize('viewAny', User::class);
-        $this->roles = Role::all();
-        $this->skpds = Skpd::orderBy('id', 'ASC')->get();
+        
+        if(auth()->user()->hasRole('Super Admin')){
+            $this->roles = Role::all();
+            $this->skpds = Skpd::orderBy('id', 'ASC')->get();
+        }else if(auth()->user()->hasRole('Admin SKPD')){
+            $this->roles = Role::where('id', '>', 2)->get();
+            $this->skpds = Skpd::where('id', auth()->user()->id_skpd)->get();
+        }
+
         $this->urusans = [];
 
     }
 
     public function render()
     {
-        $this->users = ModelsUser::with('has_role', 'lembaga', 'skpd')->orderBy('id_role', 'ASC')->get();
+        
+        if(auth()->user()->hasRole('Super Admin')){
+            $this->users = ModelsUser::with('has_role', 'lembaga', 'skpd')->orderBy('id_role', 'ASC')->get();
+        }else if(auth()->user()->hasRole('Admin SKPD')){
+            $this->users = ModelsUser::with('has_role', 'lembaga', 'skpd')->where('id_skpd', auth()->user()->id_skpd)->orderBy('id_role', 'ASC')->get();
+        }
+        
         return view('livewire.user');
     }
 
@@ -60,11 +74,15 @@ class User extends Component
         $this->dispatch('createModal');
     }
 
-    #[On('updatedSkpd')]
     public function updatedSkpd(){
         if(!empty($this->skpd)){
             $this->urusans = UrusanSkpd::where('id_skpd', $this->skpd)->get();
         }
+    }
+
+    public function updatedRole($value){
+        $this->skpd = null;
+        $this->urusan = null;
     }
 
     public function store(){
@@ -74,20 +92,31 @@ class User extends Component
 
         $role = Role::findOrFail($this->role);
 
-        ModelsUser::create([
-            'name' => $this->name,
-            'email' => $this->email,
-            'id_role' => $this->role,
-            'password' => bcrypt($new_password),
-            'id_skpd' => $this->skpd ? $this->skpd : null,
-            'id_urusan' => $this->urusan ? $this->urusan : null,
-        ])->assignRole([$role->name]);
-        
-        Mail::to($this->email)->queue(new SendUserPassword($new_password));
+        DB::beginTransaction();
 
-        $this->reset(['name', 'email', 'role', 'skpd', 'urusans', 'urusan']);
-        session()->flash('message', 'User created successfully.');
-        $this->dispatch('closeModal');
+        try {
+            ModelsUser::create([
+                'name' => $this->name,
+                'email' => $this->email,
+                'id_role' => $this->role,
+                'password' => bcrypt($new_password),
+                'id_skpd' => $this->skpd ? $this->skpd : null,
+                'id_urusan' => $this->urusan ? $this->urusan : null,
+            ])->assignRole([$role->name]);
+            
+            Mail::to($this->email)->queue(new SendUserPassword($new_password));
+
+            DB::commit();
+
+            $this->reset(['name', 'email', 'role', 'skpd', 'urusans', 'urusan']);
+            session()->flash('message', 'User created successfully.');
+            $this->dispatch('closeModal');
+            $this->refresh('users');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return session()->flash('danger', 'Gagal menambahkan Pengguna: '.$th->getMessage());
+        }
     }
 
     public function edit($id)
@@ -108,27 +137,34 @@ class User extends Component
         $role = Role::findOrFail($this->role);
         
         $user = ModelsUser::findOrFail($this->userId);
-        
-        $user->update([
-            'name' => $this->name,
-            'email' => $this->email,
-            'id_role' => $this->role,
-            'id_skpd' => $this->skpd ? $this->skpd : null,
-        ]);
+        DB::beginTransaction();
 
-        $user->assignRole([$role->name]);
+        try {
+            $user->update([
+                'name' => $this->name,
+                'email' => $this->email,
+                'id_role' => $this->role,
+                'id_skpd' => $this->skpd ? $this->skpd : null,
+            ]);
 
-        $this->reset(['role','name', 'email', 'role']);
-        session()->flash('message', 'User created successfully.');
-        $this->dispatch('closeModal');
+            $user->assignRole([$role->name]);
+
+            DB::commit();
+
+            $this->reset(['role','name', 'email', 'role']);
+            session()->flash('message', 'User created successfully.');
+            $this->dispatch('closeModal');
+        } catch (\Throwable $th) {
+            DB::rollBack();
+
+            return session()->flash('danger', 'Gagal mengubah Pengguna: '.$th->getMessage());
+        }
     }
 
-    public function reset_password($id){
-        $user = ModelsUser::findOrFail($id);
-        $user->update([
-            'password' => Hash::make('bukittinggi2025')
-        ]);
-        session()->flash('message', 'User reset password successfully.');
+    public function verifyDelete($id)
+    {
+        $this->user = ModelsUser::with(['has_role', 'skpd', 'lembaga'])->where('id', $id)->first();
+        $this->dispatch('verifyingDelete');
     }
 
     public function delete()
@@ -138,12 +174,6 @@ class User extends Component
         $this->reset(['user']);
         session()->flash('message', 'User deleted successfully.');
         $this->dispatch('closeModal');
-    }
-
-    public function verifyDelete($id)
-    {
-        $this->user = ModelsUser::with(['has_role', 'skpd', 'lembaga'])->where('id', $id)->first();
-        $this->dispatch('verifyingDelete');
     }
 
 

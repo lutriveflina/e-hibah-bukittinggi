@@ -49,8 +49,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/user_reset_password/{id_user}', [UserController::class, 'reset_password'])->name('user.reset_password');
     Route::get('/pertanyaan', PertanyaanKelengkapan::class)->name('pertanyaan');
     Route::get('/lembaga', [LembagaController::class, 'index'])->name('lembaga');
-    Route::get('/lembaga/create', [LembagaController::class, 'create'])->name('lembaga.create');
-    // Route::get('/lembaga/create', App\Livewire\Lembaga\Create::class)->name('lembaga.create');
+    // Route::get('/lembaga/create', [LembagaController::class, 'create'])->name('lembaga.create');
+    Route::get('/lembaga/create', App\Livewire\Lembaga\Create::class)->name('lembaga.create');
     Route::get('/lembaga/admin/{id_lembaga}', [LembagaController::class, 'admin'])->name('lembaga.admin');
     Route::get('/lembaga/update/profile/{id_lembaga}', Profile::class)->name('lembaga.update.profile');
     Route::get('/lembaga/update/pendukung/{id_lembaga}', Pendukung::class)->name('lembaga.update.pendukung');
