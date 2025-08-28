@@ -7,6 +7,8 @@ use App\Models\Skpd;
 use App\Models\UrusanSkpd;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -72,7 +74,7 @@ class CreateOrUpdate extends Component
         $user = User::with(['lembaga'])->find(Auth::user()->id);
         $this->id_lembaga = $user->lembaga->id;
         $this->skpds = Skpd::all();
-        $this->all_urusans = UrusanSkpd::all();
+        $this->urusans = UrusanSkpd::all();
 
         if($id){
             $permohonan = Permohonan::find($id);
@@ -102,8 +104,8 @@ class CreateOrUpdate extends Component
             }
         }
 
-            $this->id_skpd = Auth::user()->lembaga?->skpd?->id;
-            $this->urusan = Auth::user()->lembaga?->urusan?->id;
+            $this->id_skpd = Auth::user()->id_skpd;
+            $this->urusan = Auth::user()->id_urusan;
     }
     
     public function render()
@@ -136,9 +138,9 @@ class CreateOrUpdate extends Component
         $ext_proposal = $this->file_proposal->getclientOriginalExtension();
         $proposal_path = $this->file_mohon->storeAs('permohonan', 'proposal_permohonan_'.Auth::user()->id.$this->id_lembaga.date('now').'.'.$ext_proposal, 'public');
 
-        Permohonan::updateOrCreate(
-            ['id' => $this->id_permohonan],
-            [
+        DB::beginTransaction();
+        try {
+            $permohonan = Permohonan::create([
                 'id_lembaga' => $this->id_lembaga,
                 'tahun_apbd' => $this->usulan_apbd,
                 'no_mohon' => $this->no_mohon,
@@ -162,9 +164,23 @@ class CreateOrUpdate extends Component
                 'tanggal_rekomendasi' => $this->tanggal_rekomendasi,
                 'catatan_rekomendasi' => $this->catatan_rekomendasi,
                 'file_pemberitahuan' => $this->file_pemberitahuan,
-            ]
-            );
+            ]);
+            DB::commit();
+            return redirect()->route('permohonan.isi_pendukung', ['id_permohonan' => $permohonan->id])->with('success', 'Berhasil menambahkan permohonan hibah, lanjutkan dengan Isi Data Pendukung');
+        } catch (\Throwable $th) {
+            DB::rollBack();
 
-        return redirect()->route('permohonan');
+            if(Storage::disk('public')->exists($mohon_path)){
+                Storage::disk('public')->delete($mohon_path);
+            }
+
+            if(Storage::disk('public')->exists($proposal_path)){
+                Storage::disk('public')->delete($proposal_path);
+            }
+
+            session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
+        }
+        
+
     }
 }

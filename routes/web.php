@@ -38,7 +38,7 @@ Route::get('/forgot_password', [AuthController::class, 'forgot_password'])->name
 Route::post('/reset_password', [AuthController::class, 'reset_password'])->name('auth.reset_password');
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::delete('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/dashboard', [MainController::class, 'dasboard'])->name('dashboard');
     Route::get('/permission', LivewirePermission::class)->name('permission');
     Route::get('/role', LivewireRole::class)->name('role');

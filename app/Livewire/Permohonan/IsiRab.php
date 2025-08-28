@@ -175,7 +175,7 @@ class IsiRab extends Component
             $this->getGrandTotal();
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
+            
             session()->flash('error', 'Kegiatan dan Rincian gagal dihapus :'.$th);
         }
 

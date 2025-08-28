@@ -22,7 +22,8 @@ class Create extends Component
     use WithFileUploads;
 
     public $skpd;
-    public $urusan;
+    public $all_urusan = [];
+    public $urusan = [];
     public $propinsis = [];
     public $all_kabkotas = [];
     public $kabkotas = [];
@@ -100,9 +101,9 @@ class Create extends Component
     #[Validate('required|mimetypes:application/pdf')]
     public $file_pernyataan;
 
+    public $nama_pimpinan; 
     #[Validate('required')]
-    public $nama_pimpinan;
-    public $name_pimpinan = 'uum';
+    public $name_pimpinan;
     #[Validate('required|email')]
     public $email_pimpinan;
     #[Validate('required')]
@@ -121,7 +122,7 @@ class Create extends Component
         $this->all_kelurahans = Kelurahan::all();
         
         $this->skpd = Skpd::all();
-        $this->urusan = UrusanSkpd::all();
+        $this->all_urusan = UrusanSkpd::all();
     }
     
     public function render()
@@ -130,7 +131,7 @@ class Create extends Component
     }
     
     public function updatedIdSkpd($value){
-        $this->kabkotas = collect($this->urusan)->where('id_skpd', $value)->values()->toArray();
+        $this->urusan = collect($this->all_urusan)->where('id_skpd', $value)->values()->toArray();
     }
     
     public function updatedPropinsi($value){
@@ -146,7 +147,7 @@ class Create extends Component
     }
 
     public function store(){
-        // $this->validate();
+        $this->validate();
 
         DB::beginTransaction();
         
@@ -234,8 +235,6 @@ class Create extends Component
             if(Storage::disk('public')->exists($scan_ktp_path)){
                 Storage::disk('public')->delete($scan_ktp_path);
             }
-
-            dd($th);
 
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }

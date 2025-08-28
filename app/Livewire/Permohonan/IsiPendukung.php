@@ -7,6 +7,7 @@ use App\Models\Permohonan;
 use App\Models\Status_permohonan;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -47,7 +48,7 @@ class IsiPendukung extends Component
 
         DB::beginTransaction();
 
-        try {
+        
             $ext_tanggung_jawab = $this->file_pernyataan_tanggung_jawab->getclientOriginalExtension();
             $tanggung_jawab_path = $this->file_pernyataan_tanggung_jawab->storeAs('dukung_permohonan', 'tanggung_jawab_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_tanggung_jawab, 'public');
 
@@ -63,6 +64,7 @@ class IsiPendukung extends Component
             $ext_tidak_tumpang_tindih = $this->file_tidak_tumpang_tindih->getclientOriginalExtension();
             $tidak_tumpang_tindih_path = $this->file_tidak_tumpang_tindih->storeAs('dukung_permohonan', 'tidak_tumpang_tindih_'.Auth::user()->id.$this->id_permohonan.date('now').'.'.$ext_tidak_tumpang_tindih, 'public');
 
+        try {
             $create_pendukung_permohonan = PendukungPermohonan::create([
                 'id_permohonan' => $this->id_permohonan,
                 'file_pernyataan_tanggung_jawab' => $tanggung_jawab_path,
@@ -80,10 +82,30 @@ class IsiPendukung extends Component
             
             DB::commit();
 
-            return redirect()->route('permohonan');
+            return redirect()->route('permohonan.isi_rab', ['id_permohonan' => $this->id_permohonan])->with('success', 'Berhasil menambahkan data pendukung, silahkan lanjutkan dengan mengisi data RAB!');
         } catch (\Throwable $th) {
             DB::rollBack();
-            dd($th);
+            
+            if(Storage::disk('public')->exists($tanggung_jawab_path)){
+                Storage::disk('public')->delete($tanggung_jawab_path);
+            }
+            
+            if(Storage::disk('public')->exists($pengurus_path)){
+                Storage::disk('public')->delete($pengurus_path);
+            }
+            
+            if(Storage::disk('public')->exists($rab_path)){
+                Storage::disk('public')->delete($rab_path);
+            }
+            
+            if(Storage::disk('public')->exists($saldo_akhir_rek_path)){
+                Storage::disk('public')->delete($saldo_akhir_rek_path);
+            }
+            
+            if(Storage::disk('public')->exists($tidak_tumpang_tindih_path)){
+                Storage::disk('public')->delete($tidak_tumpang_tindih_path);
+            }
+
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }
 
