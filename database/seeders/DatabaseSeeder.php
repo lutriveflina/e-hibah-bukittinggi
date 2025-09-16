@@ -65,15 +65,15 @@ class DatabaseSeeder extends Seeder
             'View Any Nphd',
             'View Nphd',
         ]);
-        
-        // contoh user superadmin
+
+        // contoh user superadmi[permohonann
         User::create([
             'name' => 'Admin Utama',
             'email' => 'admin@example.com',
             'password' => Hash::make('@zaq123qwerty'),
             'id_role' => 1,
         ])->assignRole('Super Admin');
-    
+
         $data = [
             ['name' => 'Ampul'], ['name' => 'Bal'], ['name' => 'Batang'], ['name' => 'Biji'],
             ['name' => 'Bungkus'], ['name' => 'Buah'], ['name' => 'Butir'], ['name' => 'Botol'],

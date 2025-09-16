@@ -69,7 +69,7 @@ class CreateOrUpdate extends Component
     public $file_pemberitahuan;
 
     protected $listeners = ['id_skpd_updated'];
-    
+
     public function mount($id = null){
         $user = User::with(['lembaga'])->find(Auth::user()->id);
         $this->id_lembaga = $user->lembaga->id;
@@ -107,7 +107,7 @@ class CreateOrUpdate extends Component
             $this->id_skpd = Auth::user()->id_skpd;
             $this->urusan = Auth::user()->id_urusan;
     }
-    
+
     public function render()
     {
         return view('livewire.permohonan.create-or-update');
@@ -180,7 +180,7 @@ class CreateOrUpdate extends Component
 
             session()->flash('error', 'Gagal menyimpan data: ' . $th->getMessage());
         }
-        
+
 
     }
 }
